@@ -23,7 +23,7 @@ public class CommandLineUserLayer implements UserLayer {
 
         for (Piece p: board.getPieces()) {
             if (p != null)
-                boardRep[p.getPosition().y][p.getPosition().x] = representations[p.getType().ordinal()] + (p.getPlayer() ? 'a' : 'b');
+                boardRep[p.getPosition().y][p.getPosition().x] = representations[p.getType().ordinal()] + p.getPlayer().representation;
         }
 
         for (String[] line: boardRep) {

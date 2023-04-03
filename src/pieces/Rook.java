@@ -1,6 +1,7 @@
 package pieces;
 
 import main.Coordinate;
+import players.Player;
 
 public class Rook extends Piece {
     @Override
@@ -8,7 +9,7 @@ public class Rook extends Piece {
         return true;
     }
 
-    public Rook(boolean player, Coordinate position) {
+    public Rook(Player player, Coordinate position) {
         super(player, position, PieceType.ROOK);
     }
 }

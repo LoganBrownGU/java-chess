@@ -3,13 +3,14 @@ package main;
 import observer.Observer;
 import observer.Subject;
 import pieces.Piece;
-import pieces.Rook;
+import players.Player;
 import userlayers.CommandLineUserLayer;
 
 import java.util.ArrayList;
 
 public class Board implements Observer, Subject {
     private ArrayList<Piece> pieces;
+    private ArrayList<Player> players;
     private Observer observer = null;
     public final int maxX, maxY;
 
@@ -45,6 +46,7 @@ public class Board implements Observer, Subject {
 
     public Board(int maxX, int maxY) {
         this.pieces = new ArrayList<>();
+        this.players = new ArrayList<>();
         observer = new CommandLineUserLayer(this);
 
         this.maxX = maxX;
@@ -53,6 +55,10 @@ public class Board implements Observer, Subject {
 
     public void addPiece(Piece p) {
         pieces.add(p);
+    }
+
+    public void addPlayer(Player p) {
+        players.add(p);
     }
 
     public ArrayList<Piece> getPieces() {

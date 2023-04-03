@@ -1,6 +1,7 @@
 package pieces;
 
 import main.Coordinate;
+import players.Player;
 
 public class King extends Piece {
     @Override
@@ -8,7 +9,7 @@ public class King extends Piece {
         return true;
     }
 
-    public King(boolean player, Coordinate position) {
+    public King(Player player, Coordinate position) {
         super(player, position, PieceType.KING);
     }
 }

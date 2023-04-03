@@ -1,6 +1,7 @@
 package pieces;
 
 import main.Coordinate;
+import players.Player;
 
 public class Queen extends Piece {
 
@@ -9,7 +10,7 @@ public class Queen extends Piece {
         return false;
     }
 
-    public Queen(boolean player, Coordinate position) {
+    public Queen(Player player, Coordinate position) {
         super(player, position, PieceType.QUEEN);
     }
 }

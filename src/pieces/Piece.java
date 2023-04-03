@@ -3,13 +3,14 @@ package pieces;
 import main.Coordinate;
 import observer.Observer;
 import observer.Subject;
+import players.Player;
 
 import java.util.ArrayList;
 
 public abstract class Piece implements PieceStrategy, Subject {
     private ArrayList<Coordinate> previousMoves;
     private ArrayList<Observer> observers;
-    private final boolean player; // false = black, true = white
+    private final Player player; // false = black, true = white
     private PieceType type;
     private Coordinate position;
 
@@ -33,7 +34,7 @@ public abstract class Piece implements PieceStrategy, Subject {
             o.update(this);
     }
 
-    public Piece(boolean player, Coordinate position, PieceType type) {
+    public Piece(Player player, Coordinate position, PieceType type) {
         this.previousMoves = new ArrayList<>();
         this.observers = new ArrayList<>();
         this.player = player;
@@ -41,7 +42,7 @@ public abstract class Piece implements PieceStrategy, Subject {
         this.type = type;
     }
 
-    public boolean getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
