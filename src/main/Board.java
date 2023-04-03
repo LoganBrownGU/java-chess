@@ -4,6 +4,7 @@ import observer.Observer;
 import observer.Subject;
 import pieces.Piece;
 import pieces.Rook;
+import userlayers.CommandLineUserLayer;
 
 import java.util.ArrayList;
 
@@ -44,13 +45,14 @@ public class Board implements Observer, Subject {
 
     public Board(int maxX, int maxY) {
         this.pieces = new ArrayList<>();
-        this.pieces.add(new Rook(true, new Coordinate(0, 0)));
-        this.pieces.add(new Rook(true, new Coordinate(0, 7)));
-        this.pieces.add(new Rook(false, new Coordinate(7, 0)));
-        this.pieces.add(new Rook(false, new Coordinate(7, 7)));
+        observer = new CommandLineUserLayer(this);
 
         this.maxX = maxX;
         this.maxY = maxY;
+    }
+
+    public void addPiece(Piece p) {
+        pieces.add(p);
     }
 
     public ArrayList<Piece> getPieces() {

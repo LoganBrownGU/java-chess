@@ -5,6 +5,7 @@ import main.Coordinate;
 import observer.Subject;
 import pieces.Piece;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class CommandLineUserLayer implements UserLayer {
@@ -12,14 +13,18 @@ public class CommandLineUserLayer implements UserLayer {
     private Scanner sc = new Scanner(System.in);
     private Board board;
     private static final String representations[] = {
-            "rok", "knt", "bsp", "kng", "qun", "pwn"
+            "rk", "kt", "bp", "kg", "qn", "pn"
     };
 
     @Override
     public void update(Subject s) {
-        String boardRep[][] = new String[board.maxX][board.maxY];
-        for (Piece p: board.getPieces())
-            boardRep[p.getPosition().x][p.getPosition().y] = representations[p.getType().ordinal()];
+        String boardRep[][] = new String[board.maxY][board.maxX];
+        for (String[] strings : boardRep) Arrays.fill(strings, "   ");
+
+        for (Piece p: board.getPieces()) {
+            if (p != null)
+                boardRep[p.getPosition().y][p.getPosition().x] = representations[p.getType().ordinal()] + (p.getPlayer() ? 'a' : 'b');
+        }
 
         for (String[] line: boardRep) {
             for (String str: line)
@@ -48,5 +53,9 @@ public class CommandLineUserLayer implements UserLayer {
         }
 
         return movePosition;
+    }
+
+    public CommandLineUserLayer(Board board) {
+        this.board = board;
     }
 }
