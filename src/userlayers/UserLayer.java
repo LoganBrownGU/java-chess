@@ -1,10 +1,11 @@
 package userlayers;
 
 import main.Coordinate;
-import observer.Observer;
 import pieces.Piece;
 
-public interface UserLayer extends Observer {
+public interface UserLayer {
     Piece getPiece();
     Coordinate getMove(Piece pieceToMove);
+
+    void update();
 }

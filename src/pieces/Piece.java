@@ -1,37 +1,28 @@
 package pieces;
 
+import main.Board;
 import main.Coordinate;
-import observer.Observer;
-import observer.Subject;
 import players.Player;
 
 import java.util.ArrayList;
 
-public abstract class Piece implements PieceStrategy, Subject {
+public abstract class Piece implements PieceStrategy {
     private ArrayList<Coordinate> previousMoves;
-    private ArrayList<Observer> observers;
-    private final Player player; // false = black, true = white
+    private final Player player;
     private PieceType type;
     private Coordinate position;
+    protected Board board;
 
     public Coordinate getLastMove() {
         return previousMoves.get(0);
     }
 
-    @Override
-    public void register(Observer o) {
-        observers.add(o);
+    public void register(Board b) {
+        this.board = b;
     }
 
-    @Override
-    public void deregister(Observer o) {
-        observers.remove(o);
-    }
-
-    @Override
-    public void updateObservers() {
-        for (Observer o: observers)
-            o.update(this);
+    public void updateBoard() {
+        board.update();
     }
 
     @Override
@@ -41,7 +32,6 @@ public abstract class Piece implements PieceStrategy, Subject {
 
     public Piece(Player player, Coordinate position, PieceType type) {
         this.previousMoves = new ArrayList<>();
-        this.observers = new ArrayList<>();
         this.player = player;
         this.position = position;
         this.type = type;
@@ -61,6 +51,11 @@ public abstract class Piece implements PieceStrategy, Subject {
 
     public void setPosition(Coordinate position) {
         this.position = position;
-        updateObservers();
+        previousMoves.add(position);
+        updateBoard();
+    }
+
+    public ArrayList<Coordinate> getPreviousMoves() {
+        return previousMoves;
     }
 }

@@ -16,8 +16,7 @@ public class CommandLineUserLayer implements UserLayer {
             "rk", "kt", "bp", "kg", "qn", "pn"
     };
 
-    @Override
-    public void update(Subject s) {
+    public void update() {
         String boardRep[][] = new String[board.maxY][board.maxX];
         for (String[] strings : boardRep) Arrays.fill(strings, "   ");
 
@@ -52,7 +51,7 @@ public class CommandLineUserLayer implements UserLayer {
 
         Coordinate movePosition = null;
 
-        while (movePosition == null && pieceToMove.move(movePosition)) {
+        while (movePosition == null || !pieceToMove.move(movePosition)) {
             System.out.print("Enter position to move piece to: ");
             String input = sc.nextLine();
             movePosition = Coordinate.chessCoordToCoordinate(input);

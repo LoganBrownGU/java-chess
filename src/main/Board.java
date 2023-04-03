@@ -1,15 +1,12 @@
 package main;
 
-import observer.Observer;
-import observer.Subject;
 import pieces.Piece;
 import players.Player;
-import userlayers.CommandLineUserLayer;
 import userlayers.UserLayer;
 
 import java.util.ArrayList;
 
-public class Board implements Observer, Subject {
+public class Board {
     private ArrayList<Piece> pieces;
     private ArrayList<Player> players;
     private UserLayer userLayer = null;
@@ -26,25 +23,14 @@ public class Board implements Observer, Subject {
         return null;
     }
 
-    @Override
-    public void update(Subject s) {
+    public void update() {
         // todo do something with s
-        updateObservers();
+        updateUserLayer();
     }
 
-    @Override
-    public void register(Observer o) {
-        return;
-    }
 
-    @Override
-    public void deregister(Observer o) {
-        return;
-    }
-
-    @Override
-    public void updateObservers() {
-        if (userLayer != null) userLayer.update(this);
+    public void updateUserLayer() {
+        if (userLayer != null) userLayer.update();
         else throw new RuntimeException("USERLAYER IN BOARD HAS NOT BEEN INITIALISED");
     }
 
@@ -59,7 +45,13 @@ public class Board implements Observer, Subject {
     public void addPiece(Piece p) {
         pieces.add(p);
 
-        if (userLayer != null) userLayer.update(this);
+        if (userLayer != null) userLayer.update();
+    }
+
+    public void removePiece(Piece p) {
+        pieces.remove(p);
+
+        userLayer.update();
     }
 
     public void addPlayer(Player p) {

@@ -16,7 +16,7 @@ public class HumanPlayer extends Player {
         return board.getUserLayer().getMove(pieceToMove);
     }
 
-    public HumanPlayer(char representation, Board board) {
-        super(representation, board);
+    public HumanPlayer(char representation, Board board, int direction) {
+        super(representation, board, direction);
     }
 }

@@ -8,12 +8,14 @@ public abstract class Player {
 
     public final char representation;
     public final Board board;
+    public final int direction;
 
     public abstract Piece getPiece();
     public abstract Coordinate getMove(Piece pieceToMove);
 
-    public Player(char representation, Board board) {
+    public Player(char representation, Board board, int direction) {
         this.representation = representation;
         this.board = board;
+        this.direction = direction;
     }
 }

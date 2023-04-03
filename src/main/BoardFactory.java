@@ -9,8 +9,8 @@ public class BoardFactory {
     public static Board standardBoard() {
         Board board = new Board(8, 8);
 
-        Player black = new HumanPlayer('b', board);
-        Player white = new HumanPlayer('w', board);
+        Player black = new HumanPlayer('b', board, -1);
+        Player white = new HumanPlayer('w', board, 1);
 
         board.addPlayer(black);
         board.addPlayer(white);
@@ -49,7 +49,7 @@ public class BoardFactory {
 
         for (Piece p: board.getPieces())
             p.register(board);
-        
+
         board.setUserLayer(new CommandLineUserLayer(board));
 
         return board;
