@@ -5,20 +5,23 @@ import observer.Subject;
 import pieces.Piece;
 import players.Player;
 import userlayers.CommandLineUserLayer;
+import userlayers.UserLayer;
 
 import java.util.ArrayList;
 
 public class Board implements Observer, Subject {
     private ArrayList<Piece> pieces;
     private ArrayList<Player> players;
-    private Observer observer = null;
+    private UserLayer userLayer = null;
     public final int maxX, maxY;
 
     public Piece pieceAt(Coordinate coords) {
         if (coords == null) return null;
 
-        for (Piece p: pieces)
-            if (p.getPosition().equals(coords)) return p;
+        for (Piece p: pieces) {
+            if (p.getPosition().equals(coords))
+                return p;
+        }
 
         return null;
     }
@@ -26,28 +29,28 @@ public class Board implements Observer, Subject {
     @Override
     public void update(Subject s) {
         // todo do something with s
+        updateObservers();
     }
 
     @Override
     public void register(Observer o) {
-        observer = o;
+        return;
     }
 
     @Override
     public void deregister(Observer o) {
-        observer = null;
+        return;
     }
 
     @Override
     public void updateObservers() {
-        if (observer != null) observer.update(this);
-        else throw new RuntimeException("OBSERVER IN BOARD HAS NOT BEEN INITIALISED");
+        if (userLayer != null) userLayer.update(this);
+        else throw new RuntimeException("USERLAYER IN BOARD HAS NOT BEEN INITIALISED");
     }
 
     public Board(int maxX, int maxY) {
         this.pieces = new ArrayList<>();
         this.players = new ArrayList<>();
-        observer = new CommandLineUserLayer(this);
 
         this.maxX = maxX;
         this.maxY = maxY;
@@ -55,6 +58,8 @@ public class Board implements Observer, Subject {
 
     public void addPiece(Piece p) {
         pieces.add(p);
+
+        if (userLayer != null) userLayer.update(this);
     }
 
     public void addPlayer(Player p) {
@@ -63,5 +68,17 @@ public class Board implements Observer, Subject {
 
     public ArrayList<Piece> getPieces() {
         return pieces;
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public UserLayer getUserLayer() {
+        return userLayer;
+    }
+
+    public void setUserLayer(UserLayer userLayer) {
+        this.userLayer = userLayer;
     }
 }

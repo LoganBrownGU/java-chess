@@ -3,13 +3,14 @@ package main;
 import pieces.*;
 import players.HumanPlayer;
 import players.Player;
+import userlayers.CommandLineUserLayer;
 
 public class BoardFactory {
     public static Board standardBoard() {
         Board board = new Board(8, 8);
 
-        Player black = new HumanPlayer('b');
-        Player white = new HumanPlayer('w');
+        Player black = new HumanPlayer('b', board);
+        Player white = new HumanPlayer('w', board);
 
         board.addPlayer(black);
         board.addPlayer(white);
@@ -46,6 +47,10 @@ public class BoardFactory {
             board.addPiece(new Pawn(black, new Coordinate(i, 6)));
         }
 
+        for (Piece p: board.getPieces())
+            p.register(board);
+        
+        board.setUserLayer(new CommandLineUserLayer(board));
 
         return board;
     }

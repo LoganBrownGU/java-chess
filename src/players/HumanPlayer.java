@@ -1,14 +1,22 @@
 package players;
 
+import main.Board;
 import main.Coordinate;
+import pieces.Piece;
 
 public class HumanPlayer extends Player {
+
     @Override
-    public Coordinate getMove() {
-        return null;
+    public Piece getPiece() {
+        return board.getUserLayer().getPiece();
     }
 
-    public HumanPlayer(char representation) {
-        super(representation);
+    @Override
+    public Coordinate getMove(Piece pieceToMove) {
+        return board.getUserLayer().getMove(pieceToMove);
+    }
+
+    public HumanPlayer(char representation, Board board) {
+        super(representation, board);
     }
 }

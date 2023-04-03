@@ -34,10 +34,8 @@ public class CommandLineUserLayer implements UserLayer {
     }
 
     @Override
-    public Coordinate getMove() {
-
+    public Piece getPiece() {
         Coordinate piecePosition = null;
-        Coordinate movePosition = null;
         Piece piece;
 
         while ((piece = board.pieceAt(piecePosition)) == null && piecePosition == null) {
@@ -46,7 +44,15 @@ public class CommandLineUserLayer implements UserLayer {
             piecePosition = Coordinate.chessCoordToCoordinate(input);
         }
 
-        while (movePosition == null && piece.move(movePosition)) {
+        return piece;
+    }
+
+    @Override
+    public Coordinate getMove(Piece pieceToMove) {
+
+        Coordinate movePosition = null;
+
+        while (movePosition == null && pieceToMove.move(movePosition)) {
             System.out.print("Enter position to move piece to: ");
             String input = sc.nextLine();
             movePosition = Coordinate.chessCoordToCoordinate(input);

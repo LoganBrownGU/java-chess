@@ -34,6 +34,11 @@ public abstract class Piece implements PieceStrategy, Subject {
             o.update(this);
     }
 
+    @Override
+    public String toString() {
+        return type + " belonging to " + player.representation + " at " + position;
+    }
+
     public Piece(Player player, Coordinate position, PieceType type) {
         this.previousMoves = new ArrayList<>();
         this.observers = new ArrayList<>();
@@ -52,5 +57,10 @@ public abstract class Piece implements PieceStrategy, Subject {
 
     public Coordinate getPosition() {
         return position;
+    }
+
+    public void setPosition(Coordinate position) {
+        this.position = position;
+        updateObservers();
     }
 }
