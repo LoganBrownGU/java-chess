@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class Coordinate {
 
-    public int x, y;
+    public final int x, y;
 
     public static Coordinate chessCoordToCoordinate(String chessCoord) {
         String positions[] = chessCoord.split(" ");
@@ -59,6 +59,13 @@ public class Coordinate {
 
     public boolean sameFile(Coordinate other) {
         return this.x == other.x;
+    }
+
+    public boolean sameDiagonal(Coordinate other) {
+        int x = Math.abs(this.x - other.x);
+        int y = Math.abs(this.y - other.y);
+
+        return x == y;
     }
 
     public boolean adjacent(Coordinate other) {

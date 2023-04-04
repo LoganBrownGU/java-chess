@@ -7,7 +7,10 @@ import players.Player;
 public class King extends Piece {
     @Override
     public boolean move(Coordinate coords) {
-        return true;
+
+        if (coords == null || this.getPosition().equals(coords)) return false;
+
+        return this.getPosition().adjacent(coords) || this.getPosition().adjacentDiagonally(coords);
     }
 
     public King(Player player, Coordinate position) {

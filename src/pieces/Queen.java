@@ -1,6 +1,5 @@
 package pieces;
 
-import main.Board;
 import main.Coordinate;
 import players.Player;
 
@@ -8,7 +7,12 @@ public class Queen extends Piece {
 
     @Override
     public boolean move(Coordinate coords) {
-        return false;
+
+        Coordinate pos = this.getPosition();
+
+        if (coords == null || pos.equals(coords) || pos.lineOfSight(coords, this.board)) return false;
+
+        return pos.sameRank(coords) || pos.sameFile(coords) || pos.sameDiagonal(coords);
     }
 
     public Queen(Player player, Coordinate position) {
