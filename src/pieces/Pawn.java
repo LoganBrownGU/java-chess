@@ -44,6 +44,7 @@ public class Pawn extends Piece {
             // if taking a piece normally
             if (board.pieceAt(coords) != null) return true;
 
+            // todo not quite right; need to check if potentialEnPassant just moved
             // if taking a piece en passant
             Piece potentialEnPassant = board.pieceAt(new Coordinate(coords.x, coords.y - direction));
             Coordinate lastMove = potentialEnPassant.getLastMove();
