@@ -3,6 +3,8 @@ package pieces;
 import main.Coordinate;
 import players.Player;
 
+import java.util.ArrayList;
+
 public class Knight extends Piece {
     @Override
     public boolean move(Coordinate coords) {
@@ -12,6 +14,15 @@ public class Knight extends Piece {
         int y = Math.abs(this.getPosition().y - coords.y);
 
         return (x == 1 && y == 2) || (x == 2 && y == 1);
+    }
+
+    @Override
+    public ArrayList<Coordinate> possibleMoves() {
+        ArrayList<Coordinate> moves = new ArrayList<>();
+
+        
+
+        return moves;
     }
 
     public Knight(Player player, Coordinate position) {

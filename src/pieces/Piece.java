@@ -31,6 +31,39 @@ public abstract class Piece implements PieceStrategy {
         return this.previousMoves.size() != 0;
     }
 
+    public ArrayList<Coordinate> rankMoves() {
+        ArrayList<Coordinate> moves = new ArrayList<>();
+
+        moves.addAll(position.coordsBetween(new Coordinate(0, position.y), board));
+        moves.addAll(position.coordsBetween(new Coordinate(board.maxX, position.y), board));
+
+        return moves;
+    }
+
+    public ArrayList<Coordinate> fileMoves() {
+        ArrayList<Coordinate> moves = new ArrayList<>();
+
+        moves.addAll(position.coordsBetween(new Coordinate(position.x, 0), board));
+        moves.addAll(position.coordsBetween(new Coordinate(position.x, board.maxY), board));
+
+        return moves;
+    }
+
+    public ArrayList<Coordinate> diagonalMoves() {
+        ArrayList<Coordinate> moves = new ArrayList<>();
+
+        Coordinate min = new Coordinate(position.x - board.maxX, position.y - board.maxY);
+        Coordinate max = new Coordinate(position.x + board.maxX, position.y + board.maxY);
+        moves.addAll(position.coordsBetween(min, board));
+        moves.addAll(position.coordsBetween(max, board));
+        min = new Coordinate(min.x, -min.y);
+        max = new Coordinate(max.x, -max.y);
+        moves.addAll(position.coordsBetween(min, board));
+        moves.addAll(position.coordsBetween(max, board));
+
+        return moves;
+    }
+
     @Override
     public String toString() {
         return type + " belonging to " + player.representation + " at " + position;

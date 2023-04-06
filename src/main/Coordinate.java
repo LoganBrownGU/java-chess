@@ -6,6 +6,7 @@ package main;
 
 import board.Board;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Coordinate {
@@ -18,6 +19,39 @@ public class Coordinate {
         int y = Integer.parseInt(positions[1]);
 
         return new Coordinate(x, y);
+    }
+
+    // finds all coordinates between two coordinates on the same rank, file or diagonal.
+    // only adds if there is line of sight
+    public ArrayList<Coordinate> coordsBetween(Coordinate other, Board board) {
+        if (!(this.sameDiagonal(other) || this.sameRank(other) || this.sameFile(other))) return null;
+
+        ArrayList<Coordinate> coords = new ArrayList<>();
+
+        if (this.sameFile(other)) {
+            for (int i = Math.min(this.y, other.y) + 1; i < Math.max(this.y, other.y); i++) {
+                Coordinate coord = new Coordinate(this.x, i);
+                if (this.lineOfSight(other, board)) coords.add(coord);
+            }
+        } else if (this.sameRank(other)) {
+            for (int i = Math.min(this.x, other.x) + 1; i < Math.max(this.x, other.x); i++) {
+                Coordinate coord = new Coordinate(i, this.y);
+                if (this.lineOfSight(other, board)) coords.add(coord);
+            }
+        } else {
+            int i = Math.min(this.x, other.x) + 1, j = Math.min(this.y, other.y) + 1;
+            int max = Math.max(this.x, other.x);
+
+            while (i < max) {
+                Coordinate coord = new Coordinate(i, j);
+                if (this.lineOfSight(other, board)) coords.add(coord);
+
+                i++;
+                j++;
+            }
+        }
+
+        return coords;
     }
 
     // checks if there are no pieces between coords. Note that if the coordinates are not on the same rank, file, or diagonal,

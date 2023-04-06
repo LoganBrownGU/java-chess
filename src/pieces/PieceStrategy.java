@@ -2,6 +2,10 @@ package pieces;
 
 import main.Coordinate;
 
+import java.util.ArrayList;
+
 public interface PieceStrategy {
-    public boolean move(Coordinate coords);
+    boolean move(Coordinate coords);
+
+    ArrayList<Coordinate> possibleMoves();
 }

@@ -5,10 +5,13 @@ import main.Coordinate;
 import pieces.Piece;
 import players.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class CommandLineUserLayer implements UserLayer {
+
+    // todo make getPiece and getMove independent of userlayer.
 
     private Scanner sc = new Scanner(System.in);
     private Board board;
@@ -51,8 +54,9 @@ public class CommandLineUserLayer implements UserLayer {
     public Coordinate getMove(Piece pieceToMove) {
 
         Coordinate movePosition = null;
+        ArrayList<Coordinate> moves = pieceToMove.possibleMoves();
 
-        while (movePosition == null || !pieceToMove.move(movePosition)) {
+        while (movePosition == null || !moves.contains(movePosition)) {
             System.out.print("Enter position to move piece to: ");
             String input = sc.nextLine();
             movePosition = Coordinate.chessCoordToCoordinate(input);
