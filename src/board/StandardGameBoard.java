@@ -6,7 +6,7 @@ import players.Player;
 
 public class StandardGameBoard extends Board {
 
-    private boolean check(Player player) {      // todo check not working
+    private boolean check(Player player) {
         for (Player other: this.getPlayers()) {
             if (other == player) continue;
 
