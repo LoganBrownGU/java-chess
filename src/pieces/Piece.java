@@ -56,8 +56,8 @@ public abstract class Piece implements PieceStrategy {
         Coordinate max = new Coordinate(position.x + board.maxX, position.y + board.maxY);
         moves.addAll(position.coordsBetween(min, board));
         moves.addAll(position.coordsBetween(max, board));
-        min = new Coordinate(min.x, -min.y);
-        max = new Coordinate(max.x, -max.y);
+        min = new Coordinate(position.x + board.maxX, position.y - board.maxY);
+        max = new Coordinate(position.x - board.maxX, position.y + board.maxY);
         moves.addAll(position.coordsBetween(min, board));
         moves.addAll(position.coordsBetween(max, board));
 

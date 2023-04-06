@@ -6,7 +6,7 @@ import players.Player;
 
 public class StandardGameBoard extends Board {
 
-    private boolean check(Player player) {
+    private boolean check(Player player) {      // todo check not working
         for (Player other: this.getPlayers()) {
             if (other == player) continue;
 
@@ -14,12 +14,12 @@ public class StandardGameBoard extends Board {
                 if (piece.getPlayer() != player) continue;
 
                 for (Coordinate move: piece.possibleMoves())
-                    if (move.equals(other.getSovereign().getPosition())) return false;
+                    if (move.equals(other.getSovereign().getPosition())) return true;
 
             }
         }
 
-        return true;
+        return false;
     }
 
     private Player checkWin() {
@@ -32,6 +32,8 @@ public class StandardGameBoard extends Board {
             // todo main game logic here
 
             for (Player player: super.getPlayers()) {
+                if (check(player)) System.out.println("CHECK");
+
                 Piece pieceToMove = player.getPiece();
                 Coordinate move = player.getMove(pieceToMove);
                 Piece pieceAtMove = super.pieceAt(move);
