@@ -15,6 +15,9 @@ public abstract class Board implements BoardStrategy {
     private UserLayer userLayer = null;
     public final int maxX, maxY;
 
+    public boolean onBoard(Coordinate coord) {
+        return coord.x >= 0 && coord.y >= 0 && coord.x < maxX && coord.y < maxY;
+    }
     public Piece pieceAt(Coordinate coords) {
         if (coords == null) return null;
 

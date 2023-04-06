@@ -19,8 +19,12 @@ public class Knight extends Piece {
     @Override
     public ArrayList<Coordinate> possibleMoves() {
         ArrayList<Coordinate> moves = new ArrayList<>();
+        Coordinate position = this.getPosition();
 
-        
+        moves.add(new Coordinate(position.x + 2, position.y + 1));
+        moves.add(new Coordinate(position.x - 2, position.y - 1));
+        moves.add(new Coordinate(position.x + 2, position.y - 1));
+        moves.add(new Coordinate(position.x - 2, position.y + 1));
 
         return moves;
     }

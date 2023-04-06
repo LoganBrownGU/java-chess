@@ -3,6 +3,8 @@ package pieces;
 import main.Coordinate;
 import players.Player;
 
+import java.util.ArrayList;
+
 public class King extends Piece {
 
     private boolean checked = false;
@@ -13,6 +15,23 @@ public class King extends Piece {
         if (coords == null || this.getPosition().equals(coords)) return false;
 
         return this.getPosition().adjacent(coords) || this.getPosition().adjacentDiagonally(coords);
+    }
+
+    @Override
+    public ArrayList<Coordinate> possibleMoves() {
+        ArrayList<Coordinate> moves = new ArrayList<>();
+        Coordinate position = this.getPosition();
+
+        moves.add(new Coordinate(position.x, position.y + 1));
+        moves.add(new Coordinate(position.x, position.y - 1));
+        moves.add(new Coordinate(position.x + 1, position.y));
+        moves.add(new Coordinate(position.x - 1, position.y));
+        moves.add(new Coordinate(position.x - 1, position.y - 1));
+        moves.add(new Coordinate(position.x + 1, position.y + 1));
+        moves.add(new Coordinate(position.x + 1, position.y - 1));
+        moves.add(new Coordinate(position.x - 1, position.y + 1));
+
+        return moves;
     }
 
     public King(Player player, Coordinate position) {
