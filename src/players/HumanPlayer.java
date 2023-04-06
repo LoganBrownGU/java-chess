@@ -8,7 +8,7 @@ public class HumanPlayer extends Player {
 
     @Override
     public Piece getPiece() {
-        return board.getUserLayer().getPiece();
+        return board.getUserLayer().getPiece(this);
     }
 
     @Override

@@ -3,6 +3,7 @@ package userlayers;
 import board.Board;
 import main.Coordinate;
 import pieces.Piece;
+import players.Player;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -32,12 +33,13 @@ public class CommandLineUserLayer implements UserLayer {
     }
 
     @Override
-    public Piece getPiece() {
+    public Piece getPiece(Player p) {
         Coordinate piecePosition = null;
         Piece piece;
 
-        while ((piece = board.pieceAt(piecePosition)) == null && piecePosition == null) {
-            System.out.print("Enter position of piece to move: ");
+        while ((piece = board.pieceAt(piecePosition)) == null || piecePosition == null || piece.getPlayer() != p) {
+
+            System.out.print(p.representation + ": Enter position of piece to move: ");
             String input = sc.nextLine();
             piecePosition = Coordinate.chessCoordToCoordinate(input);
         }

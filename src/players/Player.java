@@ -11,6 +11,7 @@ public abstract class Player {
     public final char representation;
     public final Board board;
     public final int direction;
+    private Piece sovereign;
 
     public abstract Piece getPiece();
     public abstract Coordinate getMove(Piece pieceToMove);
@@ -19,5 +20,13 @@ public abstract class Player {
         this.representation = representation;
         this.board = board;
         this.direction = direction;
+    }
+
+    public Piece getSovereign() {
+        return sovereign;
+    }
+
+    public void setSovereign(Piece sovereign) {
+        this.sovereign = sovereign;
     }
 }

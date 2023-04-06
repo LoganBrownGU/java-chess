@@ -7,6 +7,8 @@ import players.Player;
 import java.util.ArrayList;
 
 public abstract class Piece implements PieceStrategy {
+    // todo for pieces that do special moves, make sure there is no piece at the point they are moving to
+
     private ArrayList<Coordinate> previousMoves;
     private final Player player;
     private PieceType type;

@@ -2,7 +2,6 @@ package main;
 
 import board.Board;
 import board.BoardFactory;
-import pieces.Piece;
 import userlayers.CommandLineUserLayer;
 
 public class Main {
@@ -11,7 +10,7 @@ public class Main {
         Board board = BoardFactory.standardBoard(new CommandLineUserLayer());
         board.updateUserLayer();
 
-        Piece piece = board.getPlayers().get(0).getPiece();
+        /*Piece piece = board.getPlayers().get(0).getPiece();
         System.out.println(piece);
         Coordinate newCoords = board.getPlayers().get(0).getMove(piece);
         System.out.println(newCoords);
@@ -19,6 +18,8 @@ public class Main {
 
         piece = board.getPlayers().get(0).getPiece();
         newCoords = board.getPlayers().get(0).getMove(piece);
-        piece.setPosition(newCoords);
+        piece.setPosition(newCoords);*/
+
+        board.play();
     }
 }

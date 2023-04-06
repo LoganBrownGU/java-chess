@@ -12,6 +12,8 @@ public class BoardFactory {
 
         Player black = new HumanPlayer('b', board, -1);
         Player white = new HumanPlayer('w', board, 1);
+        black.setSovereign(new King(black, new Coordinate(3, 7)));
+        white.setSovereign(new King(white, new Coordinate(4, 0)));
 
         board.addPlayer(black);
         board.addPlayer(white);
@@ -34,13 +36,13 @@ public class BoardFactory {
         board.addPiece(new Bishop(black, new Coordinate(2, 7)));
         board.addPiece(new Bishop(black, new Coordinate(5, 7)));
 
-        // add kings
-        board.addPiece(new King(white, new Coordinate(4, 0)));
-        board.addPiece(new King(black, new Coordinate(3, 7)));
-
         // add queens
         board.addPiece(new Queen(white, new Coordinate(3, 0)));
         board.addPiece(new Queen(white, new Coordinate(4, 7)));
+
+        // add kings
+        board.addPiece(black.getSovereign());
+        board.addPiece(white.getSovereign());
         
         //add pawns
         for (int i = 0; i < 8; i++) {
