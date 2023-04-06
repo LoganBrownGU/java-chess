@@ -1,10 +1,12 @@
 package pieces;
 
-import main.Board;
 import main.Coordinate;
 import players.Player;
 
 public class King extends Piece {
+
+    private boolean checked = false;
+
     @Override
     public boolean move(Coordinate coords) {
 
@@ -15,5 +17,13 @@ public class King extends Piece {
 
     public King(Player player, Coordinate position) {
         super(player, position, PieceType.KING);
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }

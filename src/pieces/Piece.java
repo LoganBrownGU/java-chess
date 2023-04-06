@@ -25,6 +25,10 @@ public abstract class Piece implements PieceStrategy {
         board.update();
     }
 
+    public boolean hasMoved() {
+        return this.previousMoves.size() != 0;
+    }
+
     @Override
     public String toString() {
         return type + " belonging to " + player.representation + " at " + position;

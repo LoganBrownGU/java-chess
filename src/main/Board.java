@@ -1,6 +1,8 @@
 package main;
 
+import pieces.King;
 import pieces.Piece;
+import pieces.PieceType;
 import players.Player;
 import userlayers.UserLayer;
 
@@ -24,10 +26,15 @@ public class Board {
     }
 
     public void update() {
-        // todo do something with s
         updateUserLayer();
     }
 
+    public King getKing(Player player) {
+        for (Piece p: pieces)
+            if (p.getType() == PieceType.KING && p.getPlayer() == player) return (King) p;
+
+        return null;
+    }
 
     public void updateUserLayer() {
         if (userLayer != null) userLayer.update();

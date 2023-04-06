@@ -6,6 +6,8 @@ import pieces.Piece;
 
 public abstract class Player {
 
+    // todo write tests
+
     public final char representation;
     public final Board board;
     public final int direction;
