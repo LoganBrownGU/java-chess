@@ -7,14 +7,19 @@ import players.Player;
 public class StandardGameBoard extends Board {
 
     private boolean check(Player player) {
-        for (Piece p: super.getPieces()) {
-            if (p.getPlayer() != player) continue;
+        for (Player other: this.getPlayers()) {
+            if (other == player) continue;
 
+            for (Piece piece: super.getPieces()) {
+                if (piece.getPlayer() != player) continue;
 
+                for (Coordinate move: piece.possibleMoves())
+                    if (move.equals(other.getSovereign().getPosition())) return false;
 
+            }
         }
 
-        return false;
+        return true;
     }
 
     private Player checkWin() {
