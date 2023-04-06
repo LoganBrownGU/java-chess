@@ -1,6 +1,6 @@
 package players;
 
-import main.Board;
+import board.Board;
 import main.Coordinate;
 import pieces.Piece;
 

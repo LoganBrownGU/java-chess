@@ -1,5 +1,6 @@
 package userlayers;
 
+import board.Board;
 import main.Coordinate;
 import pieces.Piece;
 
@@ -8,4 +9,6 @@ public interface UserLayer {
     Coordinate getMove(Piece pieceToMove);
 
     void update();
+
+    void setBoard(Board board);
 }

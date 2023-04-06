@@ -1,5 +1,6 @@
-package main;
+package board;
 
+import main.Coordinate;
 import pieces.King;
 import pieces.Piece;
 import pieces.PieceType;
@@ -8,7 +9,7 @@ import userlayers.UserLayer;
 
 import java.util.ArrayList;
 
-public class Board {
+public abstract class Board implements BoardStrategy {
     private ArrayList<Piece> pieces;
     private ArrayList<Player> players;
     private UserLayer userLayer = null;

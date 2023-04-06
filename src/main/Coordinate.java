@@ -4,6 +4,8 @@ package main;
 * All the functions will return true if the pieces are at the same position
 */
 
+import board.Board;
+
 import java.util.Objects;
 
 public class Coordinate {

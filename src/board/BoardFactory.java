@@ -1,13 +1,14 @@
-package main;
+package board;
 
+import main.Coordinate;
 import pieces.*;
 import players.HumanPlayer;
 import players.Player;
-import userlayers.CommandLineUserLayer;
+import userlayers.UserLayer;
 
 public class BoardFactory {
-    public static Board standardBoard() {
-        Board board = new Board(8, 8);
+    public static Board standardBoard(UserLayer userLayer) {
+        Board board = new StandardGameBoard();
 
         Player black = new HumanPlayer('b', board, -1);
         Player white = new HumanPlayer('w', board, 1);
@@ -50,7 +51,8 @@ public class BoardFactory {
         for (Piece p: board.getPieces())
             p.register(board);
 
-        board.setUserLayer(new CommandLineUserLayer(board));
+        board.setUserLayer(userLayer);
+        userLayer.setBoard(board);
 
         return board;
     }

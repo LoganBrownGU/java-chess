@@ -1,13 +1,14 @@
 package main;
 
-import pieces.Pawn;
+import board.Board;
+import board.BoardFactory;
 import pieces.Piece;
-import players.HumanPlayer;
+import userlayers.CommandLineUserLayer;
 
 public class Main {
     public static void main(String[] args) {
 
-        Board board = BoardFactory.standardBoard();
+        Board board = BoardFactory.standardBoard(new CommandLineUserLayer());
         board.updateUserLayer();
 
         Piece piece = board.getPlayers().get(0).getPiece();

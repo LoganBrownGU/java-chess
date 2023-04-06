@@ -1,8 +1,7 @@
 package userlayers;
 
-import main.Board;
+import board.Board;
 import main.Coordinate;
-import observer.Subject;
 import pieces.Piece;
 
 import java.util.Arrays;
@@ -60,7 +59,8 @@ public class CommandLineUserLayer implements UserLayer {
         return movePosition;
     }
 
-    public CommandLineUserLayer(Board board) {
+    @Override
+    public void setBoard(Board board) {
         this.board = board;
     }
 }
