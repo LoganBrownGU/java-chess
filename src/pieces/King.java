@@ -10,14 +10,6 @@ public class King extends Piece {
     private boolean checked = false;
 
     @Override
-    public boolean move(Coordinate coords) {
-
-        if (coords == null || this.getPosition().equals(coords)) return false;
-
-        return this.getPosition().adjacent(coords) || this.getPosition().adjacentDiagonally(coords);
-    }
-
-    @Override
     public ArrayList<Coordinate> possibleMoves() {
         ArrayList<Coordinate> moves = new ArrayList<>();
         Coordinate position = this.getPosition();

@@ -15,8 +15,8 @@ public class BoardFactory {
         black.setSovereign(new King(black, new Coordinate(3, 7)));
         white.setSovereign(new King(white, new Coordinate(4, 0)));
 
-        board.addPlayer(black);
         board.addPlayer(white);
+        board.addPlayer(black);
 
         // add rooks
         board.addPiece(new Rook(white, new Coordinate(0, 0)));

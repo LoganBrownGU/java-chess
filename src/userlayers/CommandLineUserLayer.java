@@ -5,6 +5,7 @@ import main.Coordinate;
 import pieces.Piece;
 import players.Player;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -13,6 +14,8 @@ public class CommandLineUserLayer implements UserLayer {
 
     // todo make getPiece and getMove independent of userlayer.
 
+    private final String clear = "\n".repeat(50);
+
     private Scanner sc = new Scanner(System.in);
     private Board board;
     private static final String representations[] = {
@@ -20,6 +23,8 @@ public class CommandLineUserLayer implements UserLayer {
     };
 
     public void update() {
+        System.out.println(clear);
+
         String boardRep[][] = new String[board.maxY][board.maxX];
         for (String[] strings : boardRep) Arrays.fill(strings, "   ");
 
@@ -28,11 +33,20 @@ public class CommandLineUserLayer implements UserLayer {
                 boardRep[p.getPosition().y][p.getPosition().x] = representations[p.getType().ordinal()] + p.getPlayer().representation;
         }
 
+        StringBuilder sb = new StringBuilder();
+
+        for (char c = 'a'; c < 'a' + 8; c++)
+            sb.append("| ").append(c).append(" ");
+        sb.append("|\n");
+
+        int i = 0;
         for (String[] line: boardRep) {
             for (String str: line)
-                System.out.print("|" + str);
-            System.out.println("|");
+                sb.append("|").append(str);
+            sb.append("| ").append(i++).append("\n");
         }
+
+        System.out.println(sb.toString());
     }
 
     @Override
@@ -69,4 +83,5 @@ public class CommandLineUserLayer implements UserLayer {
     public void setBoard(Board board) {
         this.board = board;
     }
+
 }

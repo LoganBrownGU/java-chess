@@ -11,6 +11,7 @@ public class StandardGameBoard extends Board {
             if (p.getPlayer() != player) continue;
 
 
+
         }
 
         return false;
@@ -22,12 +23,12 @@ public class StandardGameBoard extends Board {
 
     @Override
     public void play() {
-        while (checkWin() == null) {
+        while (true) {
             // todo main game logic here
 
-            for (Player p: super.getPlayers()) {
-                Piece pieceToMove = p.getPiece();
-                Coordinate move = p.getMove(pieceToMove);
+            for (Player player: super.getPlayers()) {
+                Piece pieceToMove = player.getPiece();
+                Coordinate move = player.getMove(pieceToMove);
                 Piece pieceAtMove = super.pieceAt(move);
 
                 if (pieceAtMove != null) super.removePiece(pieceAtMove);
