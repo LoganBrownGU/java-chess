@@ -29,22 +29,22 @@ public class Coordinate {
         ArrayList<Coordinate> coords = new ArrayList<>();
 
         if (this.sameFile(other)) {
-            for (int i = Math.min(this.y, other.y) + 1; i < Math.max(this.y, other.y); i++) {
+            for (int i = Math.min(this.y, other.y); i <= Math.max(this.y, other.y); i++) {
                 Coordinate coord = new Coordinate(this.x, i);
-                if (this.lineOfSight(other, board)) coords.add(coord);
+                if (coords.isEmpty() || coords.get(coords.size() - 1).lineOfSight(this, board)) coords.add(coord);
             }
         } else if (this.sameRank(other)) {
-            for (int i = Math.min(this.x, other.x) + 1; i < Math.max(this.x, other.x); i++) {
+            for (int i = Math.min(this.x, other.x); i <= Math.max(this.x, other.x); i++) {
                 Coordinate coord = new Coordinate(i, this.y);
-                if (this.lineOfSight(other, board)) coords.add(coord);
+                if (coords.isEmpty() || coords.get(coords.size() - 1).lineOfSight(this, board)) coords.add(coord);
             }
         } else {
-            int i = Math.min(this.x, other.x) + 1, j = Math.min(this.y, other.y) + 1;
+            int i = Math.min(this.x, other.x), j = Math.min(this.y, other.y);
             int max = Math.max(this.x, other.x);
 
-            while (i < max) {
+            while (i <= max) {
                 Coordinate coord = new Coordinate(i, j);
-                if (this.lineOfSight(other, board)) coords.add(coord);
+                if (coords.isEmpty() || coords.get(coords.size() - 1).lineOfSight(this, board)) coords.add(coord);
 
                 i++;
                 j++;
@@ -58,27 +58,28 @@ public class Coordinate {
     // the function will return FALSE
     public boolean lineOfSight(Coordinate other, Board board) {
         if (sameRank(other)) {
-            for (int i = Math.min(this.x, other.x) + 1; i < Math.max(this.x, other.x); i++)
+            for (int i = Math.min(this.x, other.x); i < Math.max(this.x, other.x); i++)
                 if (board.pieceAt(new Coordinate(i, this.y)) != null) return false;
 
             return true;
         }
 
         if (sameFile(other)) {
-            for (int i = Math.min(this.y, other.y) + 1; i < Math.max(this.y, other.y); i++)
+            for (int i = Math.min(this.y, other.y); i <= Math.max(this.y, other.y); i++)
                 if (board.pieceAt(new Coordinate(this.x, i)) != null) return false;
 
             return true;
         }
 
-        // todo this DOES NOT work. There needs to be a check to see if there are pieces on either side of the line of travel
+        // todo i think this works but not sure
         if (Math.abs(this.x - other.x) == Math.abs(this.y - other.y)) {
-            int i = Math.min(this.x, other.x) + 1;
-            int j = Math.min(this.y, other.y) + 1;
+            int i = Math.min(this.x, other.x);
+            int j = Math.min(this.y, other.y);
 
-            while (i < Math.max(this.x, other.x)) {
+            while (i <= Math.max(this.x, other.x)) {
                 if (board.pieceAt(new Coordinate(i, j)) != null) return false;
-
+                if (board.pieceAt(new Coordinate(i+1, j)) != null && board.pieceAt(new Coordinate(i, j+1)) != null) return false;
+                
                 i++;
                 j++;
             }

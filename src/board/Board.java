@@ -10,6 +10,7 @@ import userlayers.UserLayer;
 import java.util.ArrayList;
 
 public abstract class Board implements BoardStrategy {
+    // todo put board in piece constructor
     private ArrayList<Piece> pieces;
     private ArrayList<Player> players;
     private UserLayer userLayer = null;
