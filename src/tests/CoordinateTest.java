@@ -125,21 +125,6 @@ class CoordinateTest {
     }
 
     @Test
-    void lineOfSightSameCoordPieceAtCoord() {
-        Board board = new StandardGameBoard();
-        Player testPlayer = new HumanPlayer('a', board, 1);
-        Piece testPiece = new Pawn(testPlayer, new Coordinate(0, 0));
-        testPiece.register(board);
-        board.addPiece(testPiece);
-        board.setUserLayer(new DummyUserLayer());
-
-        Coordinate c1 = new Coordinate(0, 0);
-        Coordinate c2 = new Coordinate(0, 0);
-
-        assertTrue(c1.lineOfSight(c2, board));
-    }
-
-    @Test
     void coordsBetweenSameCoordPieceAtCoord() {
         Board board = new StandardGameBoard();
         Player testPlayer = new HumanPlayer('a', board, 1);

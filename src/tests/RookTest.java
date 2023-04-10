@@ -22,4 +22,19 @@ class RookTest {
 
         assertTrue(taker.possibleMoves().contains(toTake.getPosition()));
     }
+
+    @Test
+    public void testSameRankTake() {
+        Board board = new StandardGameBoard();
+
+        Piece toTake = new Queen(new HumanPlayer('a', board, 1), new Coordinate(0, 0));
+        toTake.register(board);
+        board.addPiece(toTake);
+        Piece taker = new Rook(new HumanPlayer('b', board, 1), new Coordinate(5, 0));
+        taker.register(board);
+
+        assertTrue(taker.possibleMoves().contains(toTake.getPosition()));
+    }
+
+    // todo write castling tests
 }

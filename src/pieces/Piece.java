@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public abstract class Piece implements PieceStrategy {
     // todo for pieces that do special moves, make sure there is no piece at the point they are moving to
+    // todo could use player's instance of board rather than storing its own
 
     private ArrayList<Coordinate> previousMoves;
     private final Player player;

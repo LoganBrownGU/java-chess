@@ -29,25 +29,29 @@ public class Coordinate {
         ArrayList<Coordinate> coords = new ArrayList<>();
 
         if (this.sameFile(other)) {
-            for (int i = Math.min(this.y, other.y); i <= Math.max(this.y, other.y); i++) {
+            int travelDirection = this.y < other.y ? 1 : -1;
+
+            for (int i = this.y; i != other.y + travelDirection; i += travelDirection) {
                 Coordinate coord = new Coordinate(this.x, i);
                 if (coords.isEmpty() || coords.get(coords.size() - 1).lineOfSight(this, board)) coords.add(coord);
             }
         } else if (this.sameRank(other)) {
-            for (int i = Math.min(this.x, other.x); i <= Math.max(this.x, other.x); i++) {
+            int travelDirection = this.x < other.x ? 1 : -1;
+
+            for (int i = this.x; i != other.x + travelDirection; i += travelDirection) {
                 Coordinate coord = new Coordinate(i, this.y);
                 if (coords.isEmpty() || coords.get(coords.size() - 1).lineOfSight(this, board)) coords.add(coord);
             }
         } else {
-            int i = Math.min(this.x, other.x), j = Math.min(this.y, other.y);
-            int max = Math.max(this.x, other.x);
+            int travelDirectionX = this.x < other.x ? 1 : -1, travelDirectionY = this.y < other.y ? 1 : -1;
+            int i = this.x, j = this.y;
 
-            while (i <= max) {
+            while (i != other.x + travelDirectionX) {
                 Coordinate coord = new Coordinate(i, j);
                 if (coords.isEmpty() || coords.get(coords.size() - 1).lineOfSight(this, board)) coords.add(coord);
 
-                i++;
-                j++;
+                i += travelDirectionX;
+                j += travelDirectionY;
             }
         }
 
@@ -58,7 +62,7 @@ public class Coordinate {
     // the function will return FALSE
     public boolean lineOfSight(Coordinate other, Board board) {
         if (sameRank(other)) {
-            for (int i = Math.min(this.x, other.x); i < Math.max(this.x, other.x); i++)
+            for (int i = Math.min(this.x, other.x); i <= Math.max(this.x, other.x); i++)
                 if (board.pieceAt(new Coordinate(i, this.y)) != null) return false;
 
             return true;
