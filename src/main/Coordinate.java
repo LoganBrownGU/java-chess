@@ -33,7 +33,8 @@ public class Coordinate {
 
             for (int i = this.y; i != other.y + travelDirection; i += travelDirection) {
                 Coordinate coord = new Coordinate(this.x, i);
-                if (coords.isEmpty() || coords.get(coords.size() - 1).lineOfSight(this, board)) coords.add(coord);
+                if (coords.isEmpty() || coords.get(coords.size() - 1).lineOfSight(this, board))
+                    coords.add(coord);
             }
         } else if (this.sameRank(other)) {
             int travelDirection = this.x < other.x ? 1 : -1;
@@ -61,6 +62,8 @@ public class Coordinate {
     // checks if there are no pieces between coords. Note that if the coordinates are not on the same rank, file, or diagonal,
     // the function will return FALSE
     public boolean lineOfSight(Coordinate other, Board board) {
+        if (this.equals(other)) return true;
+
         if (sameRank(other)) {
             for (int i = Math.min(this.x, other.x); i <= Math.max(this.x, other.x); i++)
                 if (board.pieceAt(new Coordinate(i, this.y)) != null) return false;
@@ -69,9 +72,11 @@ public class Coordinate {
         }
 
         if (sameFile(other)) {
-            for (int i = Math.min(this.y, other.y); i <= Math.max(this.y, other.y); i++)
-                if (board.pieceAt(new Coordinate(this.x, i)) != null) return false;
-
+            for (int i = Math.min(this.y, other.y); i <= Math.max(this.y, other.y); i++) {
+                Coordinate coord = new Coordinate(this.x, i);
+                if (board.pieceAt(coord) != null && !coord.equals(this) && !coord.equals(other))
+                    return false;
+            }
             return true;
         }
 
@@ -95,11 +100,11 @@ public class Coordinate {
     }
 
     public boolean sameRank(Coordinate other) {
-        return this.y == other.y;
+        return this.y == other.y && this.x != other.x;
     }
 
     public boolean sameFile(Coordinate other) {
-        return this.x == other.x;
+        return this.x == other.x && this.y != other.y;
     }
 
     public boolean sameDiagonal(Coordinate other) {

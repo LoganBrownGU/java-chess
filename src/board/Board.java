@@ -61,7 +61,7 @@ public abstract class Board implements BoardStrategy {
     }
 
     public void removePiece(Piece p) {
-        pieces.remove(p);
+        if (!pieces.remove(p)) throw new RuntimeException("Piece " + p + " does not exist");
 
         userLayer.update();
     }

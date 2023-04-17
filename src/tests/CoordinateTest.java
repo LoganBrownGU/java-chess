@@ -1,6 +1,7 @@
 package tests;
 
 import board.Board;
+import board.BoardFactory;
 import board.StandardGameBoard;
 import main.Coordinate;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import pieces.Pawn;
 import pieces.Piece;
 import players.HumanPlayer;
 import players.Player;
+import userlayers.CommandLineUserLayer;
 import userlayers.DummyUserLayer;
 
 import java.util.ArrayList;
@@ -222,7 +224,18 @@ class CoordinateTest {
     }
 
     @Test
-    void coordsBetweenSameFileWithPiece() {
+    public void recreateAllSameCoordBugFullBoard() {
+        Board board = BoardFactory.standardBoard(new CommandLineUserLayer());
 
+        Piece pieceToTake = board.pieceAt(new Coordinate(3, 1));
+        pieceToTake.setPosition(new Coordinate(4, 3));
+        board.removePiece(board.pieceAt(new Coordinate(4, 6)));
+        board.updateUserLayer();
+        Piece taker = board.pieceAt(new Coordinate(4, 7));
+
+        ArrayList<Coordinate> coords = taker.getPosition().coordsBetween(new Coordinate(taker.getPosition().x, 0), board);
+        assertTrue(taker.getPosition().lineOfSight(new Coordinate(4, 5), board));
+        assertTrue(coords.contains(pieceToTake.getPosition()));
+        assertFalse(coords.contains(board.pieceAt(new Coordinate(4, 1)).getPosition()));
     }
 }

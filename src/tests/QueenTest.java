@@ -1,6 +1,7 @@
 package tests;
 
 import board.Board;
+import board.BoardFactory;
 import board.StandardGameBoard;
 import main.Coordinate;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,10 @@ import pieces.Piece;
 import pieces.Queen;
 import pieces.Rook;
 import players.HumanPlayer;
+import userlayers.CommandLineUserLayer;
+import userlayers.DummyUserLayer;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -100,4 +105,18 @@ class QueenTest {
         assertFalse(taker.possibleMoves().contains(toTake.getPosition()));
     }
 
+    @Test
+    public void recreateAllSameCoordBugFullBoard() {
+        Board board = BoardFactory.standardBoard(new CommandLineUserLayer());
+
+        Piece pieceToTake = board.pieceAt(new Coordinate(3, 1));
+        pieceToTake.setPosition(new Coordinate(4, 3));
+        board.removePiece(board.pieceAt(new Coordinate(4, 6)));
+        board.updateUserLayer();
+        Piece taker = board.pieceAt(new Coordinate(4, 7));
+
+        ArrayList<Coordinate> moves = taker.diagonalMoves();
+
+        assertTrue(taker.possibleMoves().contains(pieceToTake.getPosition()));
+    }
 }

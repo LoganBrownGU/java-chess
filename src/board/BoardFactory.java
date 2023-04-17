@@ -38,7 +38,7 @@ public class BoardFactory {
 
         // add queens
         board.addPiece(new Queen(white, new Coordinate(3, 0)));
-        board.addPiece(new Queen(white, new Coordinate(4, 7)));
+        board.addPiece(new Queen(black, new Coordinate(4, 7)));
 
         // add kings
         board.addPiece(black.getSovereign());
