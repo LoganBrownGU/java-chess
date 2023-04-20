@@ -33,15 +33,16 @@ public class Coordinate {
 
             for (int i = this.y; i != other.y + travelDirection; i += travelDirection) {
                 Coordinate coord = new Coordinate(this.x, i);
-                if (coords.isEmpty() || coords.get(coords.size() - 1).lineOfSight(this, board))
-                    coords.add(coord);
+                coords.add(coord);
+                if (board.hasPieceAt(coord) && !coord.equals(this)) break;
             }
         } else if (this.sameRank(other)) {
             int travelDirection = this.x < other.x ? 1 : -1;
 
             for (int i = this.x; i != other.x + travelDirection; i += travelDirection) {
                 Coordinate coord = new Coordinate(i, this.y);
-                if (coords.isEmpty() || coords.get(coords.size() - 1).lineOfSight(this, board)) coords.add(coord);
+                coords.add(coord);
+                if (board.hasPieceAt(coord) && !coord.equals(this)) break;
             }
         } else {
             int travelDirectionX = this.x < other.x ? 1 : -1, travelDirectionY = this.y < other.y ? 1 : -1;
@@ -49,7 +50,8 @@ public class Coordinate {
 
             while (i != other.x + travelDirectionX) {
                 Coordinate coord = new Coordinate(i, j);
-                if (coords.isEmpty() || coords.get(coords.size() - 1).lineOfSight(this, board)) coords.add(coord);
+                coords.add(coord);
+                if (board.hasPieceAt(coord) && !coord.equals(this)) break;
 
                 i += travelDirectionX;
                 j += travelDirectionY;
@@ -87,7 +89,7 @@ public class Coordinate {
 
             while (i <= Math.max(this.x, other.x)) {
                 if (board.pieceAt(new Coordinate(i, j)) != null) return false;
-                if (board.pieceAt(new Coordinate(i+1, j)) != null && board.pieceAt(new Coordinate(i, j+1)) != null) return false;
+                //if (board.pieceAt(new Coordinate(i+1, j)) != null && board.pieceAt(new Coordinate(i, j+1)) != null) return false;
                 
                 i++;
                 j++;

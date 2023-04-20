@@ -6,7 +6,6 @@ import pieces.Piece;
 
 public abstract class Player {
 
-
     public final char representation;
     public final Board board;
     public final int direction;
@@ -27,5 +26,10 @@ public abstract class Player {
 
     public void setSovereign(Piece sovereign) {
         this.sovereign = sovereign;
+    }
+
+    @Override
+    public String toString() {
+        return "player " + representation;
     }
 }

@@ -5,6 +5,7 @@ import board.BoardFactory;
 import board.StandardGameBoard;
 import main.Coordinate;
 import org.junit.jupiter.api.Test;
+import pieces.Pawn;
 import pieces.Piece;
 import pieces.Queen;
 import pieces.Rook;
@@ -118,5 +119,18 @@ class QueenTest {
         ArrayList<Coordinate> moves = taker.diagonalMoves();
 
         assertTrue(taker.possibleMoves().contains(pieceToTake.getPosition()));
+    }
+
+    @Test
+    public void recreateWrongCheckBug() {
+        StandardGameBoard board = BoardFactory.standardBoard(new CommandLineUserLayer());
+        board.removePiece(board.pieceAt(new Coordinate(3, 1)));
+        board.removePiece(board.pieceAt(new Coordinate(4, 6)));
+
+        Piece queen = board.pieceAt(new Coordinate(4, 7));
+        queen.setPosition(new Coordinate(4, 4));
+        board.addPiece(new Pawn(new HumanPlayer('z', board, -1), new Coordinate(4, 6)));
+        ArrayList<Coordinate> moves = queen.possibleMoves();
+        assertFalse(board.check(queen.getPlayer()));
     }
 }

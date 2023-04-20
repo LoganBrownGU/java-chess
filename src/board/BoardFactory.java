@@ -7,8 +7,8 @@ import players.Player;
 import userlayers.UserLayer;
 
 public class BoardFactory {
-    public static Board standardBoard(UserLayer userLayer) {
-        Board board = new StandardGameBoard();
+    public static StandardGameBoard standardBoard(UserLayer userLayer) {
+        StandardGameBoard board = new StandardGameBoard();
 
         Player black = new HumanPlayer('b', board, -1);
         Player white = new HumanPlayer('w', board, 1);

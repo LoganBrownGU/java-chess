@@ -66,6 +66,10 @@ public abstract class Board implements BoardStrategy {
         userLayer.update();
     }
 
+    public boolean hasPieceAt(Coordinate coord) {
+        return this.pieceAt(coord) != null;
+    }
+
     public void addPlayer(Player p) {
         players.add(p);
     }
