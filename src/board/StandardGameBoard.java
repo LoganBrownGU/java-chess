@@ -22,7 +22,7 @@ public class StandardGameBoard extends Board {
         return false;
     }
 
-    private Player checkWin() {
+    public Player checkWinner() {
         return null;
     }
 
@@ -40,6 +40,9 @@ public class StandardGameBoard extends Board {
 
                 if (pieceAtMove != null) super.removePiece(pieceAtMove);
                 pieceToMove.setPosition(move);
+
+                Player winner = checkWinner();
+                if (winner != null) System.out.println(winner + " wins");
             }
         }
     }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Pawn extends Piece {
 
     private boolean canEnPassant = false;
+    public final int direction;
 
     @Override
     public void setPosition(Coordinate position) {
@@ -22,7 +23,6 @@ public class Pawn extends Piece {
     public ArrayList<Coordinate> possibleMoves() {
         ArrayList<Coordinate> moves = new ArrayList<>();
         Coordinate position = this.getPosition();
-        int direction = this.getPlayer().direction;
 
         // moving forward
         Coordinate test = new Coordinate(position.x, position.y + direction);
@@ -41,8 +41,9 @@ public class Pawn extends Piece {
         return moves;
     }
 
-    public Pawn(Player player, Coordinate position) {
+    public Pawn(Player player, Coordinate position, int direction) {
         super(player, position, PieceType.PAWN);
+        this.direction = direction;
     }
 
     public boolean canEnPassant() {

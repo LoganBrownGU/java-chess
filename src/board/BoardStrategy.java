@@ -1,5 +1,9 @@
 package board;
 
+import players.Player;
+
 public interface BoardStrategy {
-    public void play();
+    void play();
+    boolean check(Player player);
+    Player checkWinner();
 }

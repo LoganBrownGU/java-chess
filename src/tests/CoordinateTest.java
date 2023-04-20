@@ -52,8 +52,8 @@ class CoordinateTest {
     @Test
     void lineOfSightNoLineOfSightSameFile() {
         Board board = new StandardGameBoard();
-        Player testPlayer = new HumanPlayer('a', board, 1);
-        Piece testPiece = new Pawn(testPlayer, new Coordinate(0, 2));
+        Player testPlayer = new HumanPlayer('a', board);
+        Piece testPiece = new Pawn(testPlayer, new Coordinate(0, 2), 1);
         testPiece.register(board);
         board.addPiece(testPiece);
         board.setUserLayer(new DummyUserLayer());
@@ -66,8 +66,8 @@ class CoordinateTest {
     @Test
     void lineOfSightNoLineOfSightSameRank() {
         Board board = new StandardGameBoard();
-        Player testPlayer = new HumanPlayer('a', board, 1);
-        Piece testPiece = new Pawn(testPlayer, new Coordinate(2, 0));
+        Player testPlayer = new HumanPlayer('a', board);
+        Piece testPiece = new Pawn(testPlayer, new Coordinate(2, 0), 1);
         testPiece.register(board);
         board.addPiece(testPiece);
         board.setUserLayer(new DummyUserLayer());
@@ -80,8 +80,8 @@ class CoordinateTest {
     @Test
     void lineOfSightNoLineOfSightSameDiagonal() {
         Board board = new StandardGameBoard();
-        Player testPlayer = new HumanPlayer('a', board, 1);
-        Piece testPiece = new Pawn(testPlayer, new Coordinate(2, 2));
+        Player testPlayer = new HumanPlayer('a', board);
+        Piece testPiece = new Pawn(testPlayer, new Coordinate(2, 2), 1);
         testPiece.register(board);
         board.addPiece(testPiece);
         board.setUserLayer(new DummyUserLayer());
@@ -129,8 +129,8 @@ class CoordinateTest {
     @Test
     void coordsBetweenSameCoordPieceAtCoord() {
         Board board = new StandardGameBoard();
-        Player testPlayer = new HumanPlayer('a', board, 1);
-        Piece testPiece = new Pawn(testPlayer, new Coordinate(0, 0));
+        Player testPlayer = new HumanPlayer('a', board);
+        Piece testPiece = new Pawn(testPlayer, new Coordinate(0, 0), 1);
         testPiece.register(board);
         board.addPiece(testPiece);
         board.setUserLayer(new DummyUserLayer());

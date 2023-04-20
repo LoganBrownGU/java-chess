@@ -10,8 +10,8 @@ public class BoardFactory {
     public static StandardGameBoard standardBoard(UserLayer userLayer) {
         StandardGameBoard board = new StandardGameBoard();
 
-        Player black = new HumanPlayer('b', board, -1);
-        Player white = new HumanPlayer('w', board, 1);
+        Player black = new HumanPlayer('b', board);
+        Player white = new HumanPlayer('w', board);
         black.setSovereign(new King(black, new Coordinate(3, 7)));
         white.setSovereign(new King(white, new Coordinate(4, 0)));
 
@@ -46,8 +46,8 @@ public class BoardFactory {
         
         //add pawns
         for (int i = 0; i < 8; i++) {
-            board.addPiece(new Pawn(white, new Coordinate(i, 1)));
-            board.addPiece(new Pawn(black, new Coordinate(i, 6)));
+            board.addPiece(new Pawn(white, new Coordinate(i, 1), 1));
+            board.addPiece(new Pawn(black, new Coordinate(i, 6), -1));
         }
 
         for (Piece p: board.getPieces())
