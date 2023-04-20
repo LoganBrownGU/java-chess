@@ -12,4 +12,6 @@ public interface UserLayer {
     void update();
 
     void setBoard(Board board);
+
+    String dialogue(String message);
 }

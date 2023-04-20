@@ -9,10 +9,16 @@ public class Pawn extends Piece {
 
     private boolean canEnPassant = false;
     public final int direction;
+    public final int promotionRank;
 
     @Override
     public void setPosition(Coordinate position) {
         canEnPassant = Math.abs(position.y - this.getPosition().y) == 2;
+        if (position.y == this.promotionRank) {
+            String piece = board.getUserLayer().dialogue("What piece would you like to promote to?");
+            // todo switch here
+
+        }
 
         super.setPosition(position);
     }
@@ -41,9 +47,10 @@ public class Pawn extends Piece {
         return moves;
     }
 
-    public Pawn(Player player, Coordinate position, int direction) {
+    public Pawn(Player player, Coordinate position, int direction, int promotionRank) {
         super(player, position, PieceType.PAWN);
         this.direction = direction;
+        this.promotionRank = promotionRank;
     }
 
     public boolean canEnPassant() {

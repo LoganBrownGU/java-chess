@@ -46,8 +46,8 @@ public class BoardFactory {
         
         //add pawns
         for (int i = 0; i < 8; i++) {
-            board.addPiece(new Pawn(white, new Coordinate(i, 1), 1));
-            board.addPiece(new Pawn(black, new Coordinate(i, 6), -1));
+            board.addPiece(new Pawn(white, new Coordinate(i, 1), 1, 7));
+            board.addPiece(new Pawn(black, new Coordinate(i, 6), -1, 0));
         }
 
         for (Piece p: board.getPieces())

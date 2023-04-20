@@ -26,4 +26,9 @@ public class DummyUserLayer implements UserLayer {
     public void setBoard(Board board) {
 
     }
+
+    @Override
+    public String dialogue(String message) {
+        return null;
+    }
 }

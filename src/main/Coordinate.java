@@ -82,14 +82,12 @@ public class Coordinate {
             return true;
         }
 
-        // todo i think this works but not sure
         if (Math.abs(this.x - other.x) == Math.abs(this.y - other.y)) {
             int i = Math.min(this.x, other.x);
             int j = Math.min(this.y, other.y);
 
             while (i <= Math.max(this.x, other.x)) {
                 if (board.pieceAt(new Coordinate(i, j)) != null) return false;
-                //if (board.pieceAt(new Coordinate(i+1, j)) != null && board.pieceAt(new Coordinate(i, j+1)) != null) return false;
                 
                 i++;
                 j++;

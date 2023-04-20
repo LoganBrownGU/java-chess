@@ -22,6 +22,7 @@ public class StandardGameBoard extends Board {
         return false;
     }
 
+    // todo implement this
     public Player checkWinner() {
         return null;
     }
@@ -29,8 +30,6 @@ public class StandardGameBoard extends Board {
     @Override
     public void play() {
         while (true) {
-            // todo main game logic here
-
             for (Player player: super.getPlayers()) {
                 if (check(player)) System.out.println("CHECK");
 

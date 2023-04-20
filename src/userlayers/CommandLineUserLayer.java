@@ -84,4 +84,10 @@ public class CommandLineUserLayer implements UserLayer {
         this.board = board;
     }
 
+    @Override
+    public String dialogue(String message) {
+        System.out.print(message + ": ");
+        Scanner sc = new Scanner(System.in);
+        return sc.nextLine();
+    }
 }
