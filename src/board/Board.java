@@ -10,7 +10,6 @@ import userlayers.UserLayer;
 import java.util.ArrayList;
 
 public abstract class Board implements BoardStrategy {
-    // todo put board in piece constructor
     private ArrayList<Piece> pieces;
     private ArrayList<Player> players;
     private UserLayer userLayer = null;
@@ -19,6 +18,7 @@ public abstract class Board implements BoardStrategy {
     public boolean onBoard(Coordinate coord) {
         return coord.x >= 0 && coord.y >= 0 && coord.x < maxX && coord.y < maxY;
     }
+
     public Piece pieceAt(Coordinate coords) {
         if (coords == null) return null;
 
@@ -28,10 +28,6 @@ public abstract class Board implements BoardStrategy {
         }
 
         return null;
-    }
-
-    public void update() {
-        updateUserLayer();
     }
 
     public King getKing(Player player) {
@@ -46,17 +42,21 @@ public abstract class Board implements BoardStrategy {
         else throw new RuntimeException("USERLAYER IN BOARD HAS NOT BEEN INITIALISED");
     }
 
-    public Board(int maxX, int maxY) {
+    public Board(int maxX, int maxY, UserLayer userLayer) {
         this.pieces = new ArrayList<>();
         this.players = new ArrayList<>();
 
         this.maxX = maxX;
         this.maxY = maxY;
+
+        this.userLayer = userLayer;
+        userLayer.setBoard(this);
     }
 
     public void addPiece(Piece p) {
         pieces.add(p);
 
+        // todo can probably remove the not null check
         if (userLayer != null) userLayer.update();
     }
 
@@ -84,9 +84,5 @@ public abstract class Board implements BoardStrategy {
 
     public UserLayer getUserLayer() {
         return userLayer;
-    }
-
-    public void setUserLayer(UserLayer userLayer) {
-        this.userLayer = userLayer;
     }
 }

@@ -16,15 +16,16 @@ public class Pawn extends Piece {
     public void setPosition(Coordinate position) {
         canEnPassant = Math.abs(position.y - this.getPosition().y) == 2;
         if (position.y == this.promotionRank) {
-            String piece = board.getUserLayer().dialogue("What piece would you like to promote to?");
-            // todo switch here
-
+            //String str = board.getUserLayer().dialogue("What piece would you like to promote to?");
+            String str = "QUEEN";
+            Piece piece = PieceFactory.promotePawn(str, this);
+            board.removePiece(this);
+            piece.setPosition(position);
+            board.addPiece(piece);
         }
 
         super.setPosition(position);
     }
-
-    // todo promotion
 
     @Override
     public ArrayList<Coordinate> possibleMoves() {
@@ -51,7 +52,7 @@ public class Pawn extends Piece {
     public Pawn(Player player, Coordinate position, int direction, Board board) {
         super(player, position, PieceType.PAWN, board);
         this.direction = direction;
-        this.promotionRank = direction == 1 ? board.maxY : 0;
+        this.promotionRank = direction == 1 ? board.maxY - 1 : 0;
     }
 
     public boolean canEnPassant() {

@@ -55,7 +55,6 @@ class CoordinateTest {
         Player testPlayer = new HumanPlayer('a', board);
         Piece testPiece = new Pawn(testPlayer, new Coordinate(0, 2), 1, board);
         board.addPiece(testPiece);
-        board.setUserLayer(new DummyUserLayer());
 
         Coordinate c1 = new Coordinate(0, 0);
         Coordinate c2 = new Coordinate(0, 5);
@@ -68,7 +67,6 @@ class CoordinateTest {
         Player testPlayer = new HumanPlayer('a', board);
         Piece testPiece = new Pawn(testPlayer, new Coordinate(2, 0), 1, board);
         board.addPiece(testPiece);
-        board.setUserLayer(new DummyUserLayer());
 
         Coordinate c1 = new Coordinate(0, 0);
         Coordinate c2 = new Coordinate(5, 0);
@@ -81,7 +79,6 @@ class CoordinateTest {
         Player testPlayer = new HumanPlayer('a', board);
         Piece testPiece = new Pawn(testPlayer, new Coordinate(2, 2), 1, board);
         board.addPiece(testPiece);
-        board.setUserLayer(new DummyUserLayer());
 
         Coordinate c1 = new Coordinate(0, 0);
         Coordinate c2 = new Coordinate(5, 5);
@@ -129,7 +126,6 @@ class CoordinateTest {
         Player testPlayer = new HumanPlayer('a', board);
         Piece testPiece = new Pawn(testPlayer, new Coordinate(0, 0), 1, board);
         board.addPiece(testPiece);
-        board.setUserLayer(new DummyUserLayer());
 
         Coordinate c1 = new Coordinate(0, 0);
         Coordinate c2 = new Coordinate(0, 0);

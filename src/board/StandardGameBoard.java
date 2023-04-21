@@ -3,6 +3,8 @@ package board;
 import main.Coordinate;
 import pieces.Piece;
 import players.Player;
+import userlayers.CommandLineUserLayer;
+import userlayers.UserLayer;
 
 public class StandardGameBoard extends Board {
 
@@ -47,6 +49,9 @@ public class StandardGameBoard extends Board {
     }
 
     public StandardGameBoard() {
-        super(8, 8);
+        super(8, 8, new CommandLineUserLayer());
+    }
+    public StandardGameBoard(UserLayer userLayer) {
+        super(8, 8, userLayer);
     }
 }

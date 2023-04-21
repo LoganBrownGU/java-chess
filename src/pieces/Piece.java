@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public abstract class Piece implements PieceStrategy {
     // todo for pieces that do special moves, make sure there is no piece at the point they are moving to
     // todo could use player's instance of board rather than storing its own
+    // todo could add self to board in constructor
 
     private ArrayList<Coordinate> previousMoves;
     private final Player player;
@@ -18,10 +19,6 @@ public abstract class Piece implements PieceStrategy {
 
     public Coordinate getLastMove() {
         return previousMoves.get(0);
-    }
-
-    public void updateBoard() {
-        board.update();
     }
 
     public boolean hasMoved() {
@@ -89,7 +86,7 @@ public abstract class Piece implements PieceStrategy {
     public void setPosition(Coordinate position) {
         this.position = position;
         previousMoves.add(position);
-        updateBoard();
+        board.updateUserLayer();
     }
 
     public ArrayList<Coordinate> getPreviousMoves() {

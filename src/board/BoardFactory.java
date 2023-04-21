@@ -8,7 +8,7 @@ import userlayers.UserLayer;
 
 public class BoardFactory {
     public static StandardGameBoard standardBoard(UserLayer userLayer) {
-        StandardGameBoard board = new StandardGameBoard();
+        StandardGameBoard board = new StandardGameBoard(userLayer);
 
         Player black = new HumanPlayer('b', board);
         Player white = new HumanPlayer('w', board);
@@ -49,9 +49,6 @@ public class BoardFactory {
             board.addPiece(new Pawn(white, new Coordinate(i, 1), 1, board));
             board.addPiece(new Pawn(black, new Coordinate(i, 6), -1, board));
         }
-
-        board.setUserLayer(userLayer);
-        userLayer.setBoard(board);
 
         return board;
     }

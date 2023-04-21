@@ -66,7 +66,6 @@ public class CommandLineUserLayer implements UserLayer {
 
     @Override
     public Coordinate getMove(Piece pieceToMove) {
-
         Coordinate movePosition = null;
         ArrayList<Coordinate> moves = pieceToMove.possibleMoves();
 
