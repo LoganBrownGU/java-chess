@@ -116,6 +116,6 @@ class QueenTest {
         queen.setPosition(new Coordinate(4, 4));
         board.addPiece(new Pawn(new HumanPlayer('z', board), new Coordinate(4, 6), 1, board));
         ArrayList<Coordinate> moves = queen.possibleMoves();
-        assertFalse(board.check(queen.getPlayer()));
+        assertTrue(board.check(queen.getPlayer()) == null);
     }
 }
