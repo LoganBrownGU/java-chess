@@ -1,5 +1,6 @@
 package pieces;
 
+import board.Board;
 import main.Coordinate;
 import players.Player;
 
@@ -20,7 +21,7 @@ public class Knight extends Piece {
         return moves;
     }
 
-    public Knight(Player player, Coordinate position) {
-        super(player, position, PieceType.KNIGHT);
+    public Knight(Player player, Coordinate position, Board board) {
+        super(player, position, PieceType.KNIGHT, board);
     }
 }

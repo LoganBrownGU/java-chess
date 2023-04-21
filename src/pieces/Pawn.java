@@ -1,5 +1,6 @@
 package pieces;
 
+import board.Board;
 import main.Coordinate;
 import players.Player;
 
@@ -47,10 +48,10 @@ public class Pawn extends Piece {
         return moves;
     }
 
-    public Pawn(Player player, Coordinate position, int direction, int promotionRank) {
-        super(player, position, PieceType.PAWN);
+    public Pawn(Player player, Coordinate position, int direction, Board board) {
+        super(player, position, PieceType.PAWN, board);
         this.direction = direction;
-        this.promotionRank = promotionRank;
+        this.promotionRank = direction == 1 ? board.maxY : 0;
     }
 
     public boolean canEnPassant() {

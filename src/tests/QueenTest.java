@@ -21,11 +21,9 @@ class QueenTest {
     public void testSameFileTake() {
         Board board = new StandardGameBoard();
 
-        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0));
-        toTake.register(board);
+        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
         board.addPiece(toTake);
-        Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(0, 5));
-        taker.register(board);
+        Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(0, 5), board);
 
         assertTrue(taker.possibleMoves().contains(toTake.getPosition()));
     }
@@ -34,11 +32,9 @@ class QueenTest {
     public void testSameRankTake() {
         Board board = new StandardGameBoard();
 
-        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0));
-        toTake.register(board);
+        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
         board.addPiece(toTake);
-        Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(5, 0));
-        taker.register(board);
+        Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(5, 0), board);
 
         assertTrue(taker.possibleMoves().contains(toTake.getPosition()));
     }
@@ -47,11 +43,9 @@ class QueenTest {
     public void testSameDiagonalTake() {
         Board board = new StandardGameBoard();
 
-        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0));
-        toTake.register(board);
+        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
         board.addPiece(toTake);
-        Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(5, 5));
-        taker.register(board);
+        Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(5, 5), board);
 
         assertTrue(taker.possibleMoves().contains(toTake.getPosition()));
     }
@@ -60,14 +54,11 @@ class QueenTest {
     public void testSameFileTakePieceInWay() {
         Board board = new StandardGameBoard();
 
-        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0));
-        toTake.register(board);
+        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
         board.addPiece(toTake);
-        Piece blocker = new Queen(new HumanPlayer('c', board), new Coordinate(0,3));
-        blocker.register(board);
+        Piece blocker = new Queen(new HumanPlayer('c', board), new Coordinate(0,3), board);
         board.addPiece(blocker);
-        Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(0, 5));
-        taker.register(board);
+        Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(0, 5), board);
 
         assertFalse(taker.possibleMoves().contains(toTake.getPosition()));
     }
@@ -76,14 +67,11 @@ class QueenTest {
     public void testSameRankTakePieceInWay() {
         Board board = new StandardGameBoard();
 
-        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0));
-        toTake.register(board);
+        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
         board.addPiece(toTake);
-        Piece blocker = new Queen(new HumanPlayer('c', board), new Coordinate(3,0));
-        blocker.register(board);
+        Piece blocker = new Queen(new HumanPlayer('c', board), new Coordinate(3,0), board);
         board.addPiece(blocker);
-        Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(5, 0));
-        taker.register(board);
+        Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(5, 0), board);
 
         assertFalse(taker.possibleMoves().contains(toTake.getPosition()));
     }
@@ -92,14 +80,12 @@ class QueenTest {
     public void testSameDiagonalTakePieceInWay() {
         Board board = new StandardGameBoard();
 
-        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0));
-        toTake.register(board);
+        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
         board.addPiece(toTake);
-        Piece blocker = new Queen(new HumanPlayer('c', board), new Coordinate(3,3));
-        blocker.register(board);
+        Piece blocker = new Queen(new HumanPlayer('c', board), new Coordinate(3,3), board);
         board.addPiece(blocker);
-        Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(5, 5));
-        taker.register(board);
+        Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(5, 5), board);
+
 
         assertFalse(taker.possibleMoves().contains(toTake.getPosition()));
     }
@@ -127,7 +113,7 @@ class QueenTest {
 
         Piece queen = board.pieceAt(new Coordinate(4, 7));
         queen.setPosition(new Coordinate(4, 4));
-        board.addPiece(new Pawn(new HumanPlayer('z', board), new Coordinate(4, 6), 1, 0));
+        board.addPiece(new Pawn(new HumanPlayer('z', board), new Coordinate(4, 6), 1, board));
         ArrayList<Coordinate> moves = queen.possibleMoves();
         assertFalse(board.check(queen.getPlayer()));
     }

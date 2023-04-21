@@ -1,5 +1,6 @@
 package pieces;
 
+import board.Board;
 import main.Coordinate;
 import players.Player;
 
@@ -12,7 +13,7 @@ public class Bishop extends Piece {
         return this.diagonalMoves();
     }
 
-    public Bishop(Player player, Coordinate position) {
-        super(player, position, PieceType.BISHOP);
+    public Bishop(Player player, Coordinate position, Board board) {
+        super(player, position, PieceType.BISHOP, board);
     }
 }

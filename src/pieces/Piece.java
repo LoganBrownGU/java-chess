@@ -20,10 +20,6 @@ public abstract class Piece implements PieceStrategy {
         return previousMoves.get(0);
     }
 
-    public void register(Board b) {
-        this.board = b;
-    }
-
     public void updateBoard() {
         board.update();
     }
@@ -70,11 +66,12 @@ public abstract class Piece implements PieceStrategy {
         return type + " belonging to " + player.representation + " at " + position;
     }
 
-    public Piece(Player player, Coordinate position, PieceType type) {
+    public Piece(Player player, Coordinate position, PieceType type, Board board) {
         this.previousMoves = new ArrayList<>();
         this.player = player;
         this.position = position;
         this.type = type;
+        this.board = board;
     }
 
     public Player getPlayer() {

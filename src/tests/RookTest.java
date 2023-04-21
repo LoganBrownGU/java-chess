@@ -14,11 +14,9 @@ class RookTest {
     public void testSameFileTake() {
         Board board = new StandardGameBoard();
 
-        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0));
-        toTake.register(board);
+        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
         board.addPiece(toTake);
-        Piece taker = new Rook(new HumanPlayer('b', board), new Coordinate(0, 5));
-        taker.register(board);
+        Piece taker = new Rook(new HumanPlayer('b', board), new Coordinate(0, 5), board);
 
         assertTrue(taker.possibleMoves().contains(toTake.getPosition()));
     }
@@ -27,11 +25,9 @@ class RookTest {
     public void testSameRankTake() {
         Board board = new StandardGameBoard();
 
-        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0));
-        toTake.register(board);
+        Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
         board.addPiece(toTake);
-        Piece taker = new Rook(new HumanPlayer('b', board), new Coordinate(5, 0));
-        taker.register(board);
+        Piece taker = new Rook(new HumanPlayer('b', board), new Coordinate(5, 0), board);
 
         assertTrue(taker.possibleMoves().contains(toTake.getPosition()));
     }

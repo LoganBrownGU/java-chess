@@ -1,5 +1,6 @@
 package pieces;
 
+import board.Board;
 import main.Coordinate;
 import players.Player;
 
@@ -26,8 +27,8 @@ public class King extends Piece {
         return moves;
     }
 
-    public King(Player player, Coordinate position) {
-        super(player, position, PieceType.KING);
+    public King(Player player, Coordinate position, Board board) {
+        super(player, position, PieceType.KING, board);
     }
 
     public boolean isChecked() {

@@ -1,5 +1,6 @@
 package pieces;
 
+import board.Board;
 import main.Coordinate;
 import players.Player;
 
@@ -18,7 +19,7 @@ public class Rook extends Piece {
         return moves;
     }
 
-    public Rook(Player player, Coordinate position) {
-        super(player, position, PieceType.ROOK);
+    public Rook(Player player, Coordinate position, Board board) {
+        super(player, position, PieceType.ROOK, board);
     }
 }

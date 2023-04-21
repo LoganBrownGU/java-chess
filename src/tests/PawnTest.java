@@ -9,8 +9,6 @@ import players.HumanPlayer;
 import players.Player;
 import userlayers.CommandLineUserLayer;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class PawnTest {
 
     @Test
@@ -18,8 +16,7 @@ class PawnTest {
         Board board = new StandardGameBoard();
         board.setUserLayer(new CommandLineUserLayer());
         Player player = new HumanPlayer('a', board);
-        Pawn pawn = new Pawn(player, new Coordinate(0, 6), 1, 7);
-        pawn.register(board);
+        Pawn pawn = new Pawn(player, new Coordinate(0, 6), 1, board);
         pawn.setPosition(new Coordinate(0, 7));
     }
 
