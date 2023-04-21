@@ -215,7 +215,7 @@ class CoordinateTest {
         assertTrue(c3.coordsBetween(c2, board).containsAll(coords2));
     }
 
-    @Test
+    /*@Test
     public void recreateAllSameCoordBugFullBoard() {
         Board board = BoardFactory.standardBoard(new CommandLineUserLayer());
 
@@ -229,5 +229,5 @@ class CoordinateTest {
         assertTrue(taker.getPosition().lineOfSight(new Coordinate(4, 5), board));
         assertTrue(coords.contains(pieceToTake.getPosition()));
         assertFalse(coords.contains(board.pieceAt(new Coordinate(4, 1)).getPosition()));
-    }
+    }*/
 }

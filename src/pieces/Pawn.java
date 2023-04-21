@@ -52,11 +52,11 @@ public class Pawn extends Piece {
 
         // taking diagonally
         test = new Coordinate(position.x + 1, position.y + 1);
-        if (board.pieceAt(test) != null) moves.add(test);
+        if (board.pieceAt(test) != null && board.pieceAt(test).getPlayer() != this.getPlayer()) moves.add(test);
         test = new Coordinate(position.x + 1, position.y - 1);
-        if (board.pieceAt(test) != null) moves.add(test);
+        if (board.pieceAt(test) != null && board.pieceAt(test).getPlayer() != this.getPlayer()) moves.add(test);
 
-        // todo en passant
+        // en passant
         Piece rightPiece = board.pieceAt(new Coordinate(this.getPosition().x + 1, this.getPosition().y));
         Piece leftPiece = board.pieceAt(new Coordinate(this.getPosition().x - 1, this.getPosition().y));
         boolean pawnRight = rightPiece instanceof Pawn && rightPiece.getPlayer() != this.getPlayer();
