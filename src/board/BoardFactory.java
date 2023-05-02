@@ -52,4 +52,29 @@ public class BoardFactory {
 
         return board;
     }
+
+    public static StandardGameBoard cloneBoard(Board board) {
+        StandardGameBoard clone = new StandardGameBoard();
+        Player playerClones[] = new Player[board.getPlayers().size()];
+        for (int i = 0; i < playerClones.length; i++) {
+            Player pc = board.getPlayers().get(i);
+            playerClones[i] = new Player(pc.representation, clone) {
+                @Override
+                public Piece getPiece() {
+                    return null;
+                }
+
+                @Override
+                public Coordinate getMove(Piece pieceToMove) {
+                    return null;
+                }
+            };
+            for (Piece piece: board.getPieces()) {
+                if (piece.getPlayer() == board.getPlayers().get(i))
+                    clone.addPiece(PieceFactory.clonePiece(piece, playerClones[i], clone));
+            }
+        }
+
+        return clone;
+    }
 }

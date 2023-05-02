@@ -1,5 +1,8 @@
 package pieces;
 
+import board.Board;
+import players.Player;
+
 public class PieceFactory {
     public static Piece promotePawn(String str, Pawn pawn) {
         Piece piece = null;
@@ -23,5 +26,20 @@ public class PieceFactory {
         }
 
         return piece;
+    }
+
+    public static Piece clonePiece(Piece piece, Player newPlayer, Board newBoard) {
+        Piece clone = null;
+
+        switch (piece.getType()) {
+            case PAWN -> clone = new Pawn(newPlayer, piece.getPosition(), ((Pawn) piece).direction, newBoard);
+            case ROOK -> clone = new Rook(newPlayer, piece.getPosition(), newBoard);
+            case QUEEN -> clone = new Queen(newPlayer, piece.getPosition(), newBoard);
+            case KNIGHT -> clone = new Knight(newPlayer, piece.getPosition(), newBoard);
+            case KING -> clone = new King(newPlayer, piece.getPosition(), newBoard);
+            case BISHOP -> clone = new Bishop(newPlayer, piece.getPosition(), newBoard);
+        }
+
+        return clone;
     }
 }

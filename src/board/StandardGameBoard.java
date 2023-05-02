@@ -2,6 +2,7 @@ package board;
 
 import main.Coordinate;
 import pieces.Piece;
+import pieces.PieceFactory;
 import players.Player;
 import userlayers.CommandLineUserLayer;
 import userlayers.UserLayer;
@@ -44,6 +45,7 @@ public class StandardGameBoard extends Board {
             if (checked == null) continue;
 
             // now need to play every possible move of checked to see if it would prevent p from winning
+            StandardGameBoard clone = BoardFactory.cloneBoard(this);
         }
 
         return null;
