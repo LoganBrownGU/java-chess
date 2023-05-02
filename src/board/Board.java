@@ -10,6 +10,7 @@ import userlayers.UserLayer;
 import java.util.ArrayList;
 
 public abstract class Board implements BoardStrategy {
+    // todo add check to make sure that two players don't have the same rep
     private ArrayList<Piece> pieces;
     private ArrayList<Player> players;
     private UserLayer userLayer = null;
@@ -18,6 +19,21 @@ public abstract class Board implements BoardStrategy {
 
     public boolean onBoard(Coordinate coord) {
         return coord.x >= 0 && coord.y >= 0 && coord.x < maxX && coord.y < maxY;
+    }
+
+    public Player playerWithRep(char representation) {
+        for (Player player : this.getPlayers())
+            if (player.representation == representation) return player;
+
+        return null;
+    }
+
+    public ArrayList<Piece> getPiecesBelongingTo(Player player) {
+        ArrayList<Piece> pieces = new ArrayList<>();
+        for (Piece piece: this.getPieces())
+            if (piece.getPlayer() == player) pieces.add(piece);
+
+        return pieces;
     }
 
     public Piece pieceAt(Coordinate coords) {

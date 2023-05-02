@@ -8,10 +8,11 @@ import userlayers.CommandLineUserLayer;
 import userlayers.UserLayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class StandardGameBoard extends Board {
 
-    // todo this should probably return an arraylist; if there are multiple players then a player could be checking multiple players
+    // todo this should probably return an arraylist; if there are > 1 players then a player could be checking > 1 players
     public Player check(Player player) {        // returns player that player is checking or null if it is not
         for (Player other : this.getPlayers()) {
             if (other == player) continue;
@@ -28,12 +29,34 @@ public class StandardGameBoard extends Board {
         return null;
     }
 
-    public boolean canBlock(Player checking, Player checked) { // returns true if there's a move that would prevent checking from winning
-        // need to clone positions
-        ArrayList<Coordinate> oldCoords = new ArrayList<>();
-        for (Piece p: this.getPieces())
-            oldCoords.add(new Coordinate(p.getPosition().x, p.getPosition().y));
-        
+    public boolean canBlock(char checkingRep, char checkedRep) { // returns true if there's a move that would prevent checking from winning
+        Player checked = playerWithRep(checkedRep);
+
+        for (Piece piece : this.getPiecesBelongingTo(checked)) {
+
+            for (int i = 0; i < piece.possibleMoves().size(); i++) { // need to iterate over piece's possible moves
+                StandardGameBoard clone = new StandardGameBoard();
+                Piece pieceToCheck = null;
+                for (Piece clonePiece : clone.getPieces())
+                    if (clonePiece.equals(piece)) {
+                        pieceToCheck = piece;
+                        break;
+                    }
+
+                // get move to check
+                assert pieceToCheck != null;
+                Coordinate move = pieceToCheck.possibleMoves().get(i);
+
+                // make move
+                if (clone.pieceAt(move) != null) clone.removePiece(clone.pieceAt(move));
+                pieceToCheck.setPosition(move);
+
+                // check if checking is still checking checked
+                Player checkedClone = clone.playerWithRep(checkedRep);
+                Player checkingClone = clone.playerWithRep(checkingRep);
+                if (clone.check(checkingClone) != checkedClone) return true;
+            }
+        }
 
         return false;
     }
@@ -45,8 +68,7 @@ public class StandardGameBoard extends Board {
             if (checked == null) continue;
 
             // now need to play every possible move of checked to see if it would prevent p from winning
-            StandardGameBoard clone = BoardFactory.cloneBoard(this);
-
+            if (canBlock(p.representation, checked.representation)) return null;
         }
 
         return null;

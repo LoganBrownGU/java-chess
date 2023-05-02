@@ -68,7 +68,7 @@ public abstract class Piece implements PieceStrategy {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Piece piece = (Piece) o;
-        return type == piece.type && Objects.equals(position, piece.position);
+        return type == piece.type && Objects.equals(position, piece.position) && player.representation == piece.getPlayer().representation;
     }
 
     @Override

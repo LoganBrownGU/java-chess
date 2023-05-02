@@ -7,6 +7,7 @@ import main.Coordinate;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
 import pieces.Piece;
+import players.HumanPlayer;
 import players.Player;
 import userlayers.CommandLineUserLayer;
 
@@ -17,7 +18,7 @@ class StandardGameBoardTest {
     @Test
     void canBlock() {
         StandardGameBoard board = BoardFactory.standardBoard(new CommandLineUserLayer());
-        board.canBlock(null, null);
+        //board.canBlock(null, null);
     }
 
     @Test
@@ -55,5 +56,16 @@ class StandardGameBoardTest {
             }
             assertTrue(oneEqual);
         }
+    }
+
+    @Test
+    void checkmateHasCheckmate() {
+        StandardGameBoard board = new StandardGameBoard();
+        Player player1 = new HumanPlayer('a', board);
+        Player player2 = new HumanPlayer('b', board);
+        board.addPlayer(player1);
+        board.addPlayer(player2);
+
+
     }
 }

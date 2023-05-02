@@ -119,4 +119,12 @@ class PawnTest {
         assertFalse(pawn.possibleMoves().contains(new Coordinate(0, 3)));
     }
 
+    @Test
+    void cloneWorks() {
+        StandardGameBoard board = new StandardGameBoard();
+        Player player = new HumanPlayer('a', board);
+        Pawn pawn = new Pawn(player, new Coordinate(0, 0), 1, board);
+
+
+    }
 }
