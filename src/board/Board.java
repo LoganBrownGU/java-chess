@@ -13,6 +13,7 @@ public abstract class Board implements BoardStrategy {
     private ArrayList<Piece> pieces;
     private ArrayList<Player> players;
     private UserLayer userLayer = null;
+    private boolean userLayerActive = false;
     public final int maxX, maxY;
 
     public boolean onBoard(Coordinate coord) {
@@ -30,14 +31,8 @@ public abstract class Board implements BoardStrategy {
         return null;
     }
 
-    public King getKing(Player player) {
-        for (Piece p: pieces)
-            if (p.getType() == PieceType.KING && p.getPlayer() == player) return (King) p;
-
-        return null;
-    }
-
     public void updateUserLayer() {
+        if (!userLayerActive) return;
         if (userLayer != null) userLayer.update();
         else throw new RuntimeException("USERLAYER IN BOARD HAS NOT BEEN INITIALISED");
     }
@@ -57,13 +52,13 @@ public abstract class Board implements BoardStrategy {
         pieces.add(p);
 
         // todo can probably remove the not null check
-        if (userLayer != null) userLayer.update();
+        if (userLayer != null) updateUserLayer();
     }
 
     public void removePiece(Piece p) {
         if (!pieces.remove(p)) throw new RuntimeException("Piece " + p + " does not exist");
 
-        userLayer.update();
+        updateUserLayer();
     }
 
     public boolean hasPieceAt(Coordinate coord) {
@@ -84,5 +79,9 @@ public abstract class Board implements BoardStrategy {
 
     public UserLayer getUserLayer() {
         return userLayer;
+    }
+
+    public void setUserLayerActive(boolean userLayerActive) {
+        this.userLayerActive = userLayerActive;
     }
 }

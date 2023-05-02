@@ -5,6 +5,7 @@ import board.BoardFactory;
 import board.StandardGameBoard;
 import main.Coordinate;
 import org.junit.jupiter.api.Test;
+import org.opentest4j.AssertionFailedError;
 import pieces.Piece;
 import players.Player;
 import userlayers.CommandLineUserLayer;
@@ -20,7 +21,7 @@ class StandardGameBoardTest {
     }
 
     @Test
-    void cloneWorks() {
+    void cloneNoneSame() {
         StandardGameBoard board = BoardFactory.standardBoard(new CommandLineUserLayer());
         StandardGameBoard clone = BoardFactory.cloneBoard(board);
         clone.getPieces().get(0).setPosition(new Coordinate(5, 5));
@@ -36,6 +37,23 @@ class StandardGameBoardTest {
             for (Player clonePlayer : clone.getPlayers()) {
                 assertNotSame(oldPlayer, clonePlayer);
             }
+        }
+    }
+
+    @Test
+    void cloneAreEqual() {
+        StandardGameBoard board = BoardFactory.standardBoard(new CommandLineUserLayer());
+        StandardGameBoard clone = BoardFactory.cloneBoard(board);
+
+        for (Piece piece : board.getPieces()) {
+            boolean oneEqual = false;
+            for (Piece clonePiece : clone.getPieces()) {
+                if (piece.equals(clonePiece)) {
+                    if (oneEqual) throw new AssertionFailedError("more than one piece equal to " + piece);
+                    oneEqual = true;
+                }
+            }
+            assertTrue(oneEqual);
         }
     }
 }

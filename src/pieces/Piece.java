@@ -5,6 +5,7 @@ import main.Coordinate;
 import players.Player;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public abstract class Piece implements PieceStrategy {
     // todo could use player's instance of board rather than storing its own
@@ -60,6 +61,19 @@ public abstract class Piece implements PieceStrategy {
     @Override
     public String toString() {
         return type + " belonging to " + player.representation + " at " + position;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Piece piece = (Piece) o;
+        return type == piece.type && Objects.equals(position, piece.position);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, position);
     }
 
     public Piece(Player player, Coordinate position, PieceType type, Board board) {

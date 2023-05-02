@@ -50,15 +50,17 @@ public class BoardFactory {
             board.addPiece(new Pawn(black, new Coordinate(i, 6), -1, board));
         }
 
+        board.setUserLayerActive(true);
+
         return board;
     }
 
     public static StandardGameBoard cloneBoard(Board board) {
         StandardGameBoard clone = new StandardGameBoard();
-        Player playerClones[] = new Player[board.getPlayers().size()];
-        for (int i = 0; i < playerClones.length; i++) {
+
+        for (int i = 0; i < board.getPlayers().size(); i++) {
             Player pc = board.getPlayers().get(i);
-            playerClones[i] = new Player(pc.representation, clone) {
+            Player playerClone = new Player(pc.representation, clone) {
                 @Override
                 public Piece getPiece() {
                     return null;
@@ -71,8 +73,9 @@ public class BoardFactory {
             };
             for (Piece piece: board.getPieces()) {
                 if (piece.getPlayer() == board.getPlayers().get(i))
-                    clone.addPiece(PieceFactory.clonePiece(piece, playerClones[i], clone));
+                    clone.addPiece(PieceFactory.clonePiece(piece, playerClone, clone));
             }
+            clone.addPlayer(playerClone);
         }
 
         return clone;
