@@ -80,8 +80,8 @@ public class StandardGameBoard extends Board {
             Piece test = this.pieceAt(coord);
             if (test != null && test.getPlayer() == piece.getPlayer()) continue;
 
-            if (coord.x < 0 || coord.x > this.maxX) continue;
-            if (coord.y < 0 || coord.y > this.maxY) continue;
+            if (coord.x < 0 || coord.x >= this.maxX) continue;
+            if (coord.y < 0 || coord.y >= this.maxY) continue;
 
             newMoves.add(coord);
         }

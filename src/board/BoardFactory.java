@@ -2,57 +2,73 @@ package board;
 
 import main.Coordinate;
 import pieces.*;
+import players.BadAIPlayer;
 import players.HumanPlayer;
 import players.Player;
 import userlayers.UserLayer;
 
 public class BoardFactory {
-    public static StandardGameBoard standardBoard(UserLayer userLayer) {
-        StandardGameBoard board = new StandardGameBoard(userLayer);
+    private static StandardGameBoard standardGameBoard(StandardGameBoard board, Player player1, Player player2) {
 
-        Player black = new HumanPlayer('b', board);
-        Player white = new HumanPlayer('w', board);
-        black.setSovereign(new King(black, new Coordinate(3, 7), board));
-        white.setSovereign(new King(white, new Coordinate(4, 0), board));
+        player2.setSovereign(new King(player2, new Coordinate(3, 7), board));
+        player1.setSovereign(new King(player1, new Coordinate(4, 0), board));
 
-        board.addPlayer(white);
-        board.addPlayer(black);
+        board.addPlayer(player1);
+        board.addPlayer(player2);
 
         // add rooks
-        board.addPiece(new Rook(white, new Coordinate(0, 0), board));
-        board.addPiece(new Rook(white, new Coordinate(7, 0), board));
-        board.addPiece(new Rook(black, new Coordinate(0, 7), board));
-        board.addPiece(new Rook(black, new Coordinate(7, 7), board));
+        board.addPiece(new Rook(player1, new Coordinate(0, 0), board));
+        board.addPiece(new Rook(player1, new Coordinate(7, 0), board));
+        board.addPiece(new Rook(player2, new Coordinate(0, 7), board));
+        board.addPiece(new Rook(player2, new Coordinate(7, 7), board));
 
         // add knights
-        board.addPiece(new Knight(white, new Coordinate(1, 0), board));
-        board.addPiece(new Knight(white, new Coordinate(6, 0), board));
-        board.addPiece(new Knight(black, new Coordinate(1, 7), board));
-        board.addPiece(new Knight(black, new Coordinate(6, 7), board));
+        board.addPiece(new Knight(player1, new Coordinate(1, 0), board));
+        board.addPiece(new Knight(player1, new Coordinate(6, 0), board));
+        board.addPiece(new Knight(player2, new Coordinate(1, 7), board));
+        board.addPiece(new Knight(player2, new Coordinate(6, 7), board));
 
         // add bishops
-        board.addPiece(new Bishop(white, new Coordinate(2, 0), board));
-        board.addPiece(new Bishop(white, new Coordinate(5, 0), board));
-        board.addPiece(new Bishop(black, new Coordinate(2, 7), board));
-        board.addPiece(new Bishop(black, new Coordinate(5, 7), board));
+        board.addPiece(new Bishop(player1, new Coordinate(2, 0), board));
+        board.addPiece(new Bishop(player1, new Coordinate(5, 0), board));
+        board.addPiece(new Bishop(player2, new Coordinate(2, 7), board));
+        board.addPiece(new Bishop(player2, new Coordinate(5, 7), board));
 
         // add queens
-        board.addPiece(new Queen(white, new Coordinate(3, 0), board));
-        board.addPiece(new Queen(black, new Coordinate(4, 7), board));
+        board.addPiece(new Queen(player1, new Coordinate(3, 0), board));
+        board.addPiece(new Queen(player2, new Coordinate(4, 7), board));
 
         // add kings
-        board.addPiece(black.getSovereign());
-        board.addPiece(white.getSovereign());
-        
+        board.addPiece(player2.getSovereign());
+        board.addPiece(player1.getSovereign());
+
         //add pawns
         for (int i = 0; i < 8; i++) {
-            board.addPiece(new Pawn(white, new Coordinate(i, 1), 1, board));
-            board.addPiece(new Pawn(black, new Coordinate(i, 6), -1, board));
+            board.addPiece(new Pawn(player1, new Coordinate(i, 1), 1, board));
+            board.addPiece(new Pawn(player2, new Coordinate(i, 6), -1, board));
         }
 
         board.setUserLayerActive(true);
 
         return board;
+    }
+    public static StandardGameBoard standardBoard(UserLayer userLayer) {
+        StandardGameBoard board = new StandardGameBoard(userLayer);
+
+        Player player2 = new HumanPlayer('b', board);
+        Player player1 = new HumanPlayer('w', board);
+
+
+        return standardGameBoard(board, player1, player2);
+    }
+
+    public static StandardGameBoard standardGameBoardAgainstBadAI(UserLayer userLayer) {
+        StandardGameBoard board = new StandardGameBoard(userLayer);
+
+        Player player2 = new BadAIPlayer('b', board);
+        Player player1 = new HumanPlayer('w', board);
+
+        return standardGameBoard(board, player1, player2);
     }
 
     public static StandardGameBoard cloneBoard(Board board) {
