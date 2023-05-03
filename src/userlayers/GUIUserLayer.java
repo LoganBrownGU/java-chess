@@ -41,6 +41,7 @@ public class GUIUserLayer implements UserLayer, MouseListener {
     private int divSize, max;
     private Piece highlighted = null;
     private HashMap<String, Image> icons = new HashMap<>();
+    private Image checkmark;
 
     private void drawSquares(Graphics g, int max, int divSize) {
         g.setColor(canvas.squareColour);
@@ -136,7 +137,10 @@ public class GUIUserLayer implements UserLayer, MouseListener {
 
     @Override
     public void showCheck(Player checking, Player checked) {
+        int x = checked.getSovereign().getPosition().x;
+        int y = checked.getSovereign().getPosition().y;
 
+        g.drawImage(checkmark, divSize * x + divSize / 20, divSize * y + divSize / 20, divSize / 3, divSize / 3, null);
     }
 
     @Override
@@ -188,6 +192,12 @@ public class GUIUserLayer implements UserLayer, MouseListener {
 
         g = ((Graphics2D) canvas.getGraphics());
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        try {
+            checkmark = ImageIO.read(new File("assets/checkmark.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         frame.addWindowListener(new WindowAdapter() {
             @Override
