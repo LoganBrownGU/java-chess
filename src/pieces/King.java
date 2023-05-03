@@ -28,7 +28,7 @@ public class King extends Piece {
     }
 
     public King(Player player, Coordinate position, Board board) {
-        super(player, position, PieceType.KING, board);
+        super(player, position, PieceType.KING, board, "kg");
     }
 
     public boolean isChecked() {

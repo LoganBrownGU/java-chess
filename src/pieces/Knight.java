@@ -26,6 +26,6 @@ public class Knight extends Piece {
     }
 
     public Knight(Player player, Coordinate position, Board board) {
-        super(player, position, PieceType.KNIGHT, board);
+        super(player, position, PieceType.KNIGHT, board, "kt");
     }
 }

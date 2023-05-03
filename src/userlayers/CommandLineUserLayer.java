@@ -16,10 +16,6 @@ public class CommandLineUserLayer implements UserLayer {
 
     private Scanner sc = new Scanner(System.in);
     private Board board;
-    private static final String representations[] = {
-            "rk", "kt", "bp", "kg", "qn", "pn"
-    };
-
     public void update() {
         System.out.println(clear);
 
@@ -28,7 +24,7 @@ public class CommandLineUserLayer implements UserLayer {
 
         for (Piece p: board.getPieces()) {
             if (p != null)
-                boardRep[p.getPosition().y][p.getPosition().x] = representations[p.getType().ordinal()] + p.getPlayer().representation;
+                boardRep[p.getPosition().y][p.getPosition().x] = p.representation + p.getPlayer().representation;
         }
 
         StringBuilder sb = new StringBuilder();

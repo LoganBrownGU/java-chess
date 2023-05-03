@@ -14,6 +14,6 @@ public class Bishop extends Piece {
     }
 
     public Bishop(Player player, Coordinate position, Board board) {
-        super(player, position, PieceType.BISHOP, board);
+        super(player, position, PieceType.BISHOP, board, "bp");
     }
 }

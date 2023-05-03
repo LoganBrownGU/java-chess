@@ -15,8 +15,10 @@ public abstract class Piece implements PieceStrategy {
     private final Player player;
     private PieceType type;
     private Coordinate position;
+
     protected Board board;
 
+    public final String representation;
     public Coordinate getLastMove() {
         return previousMoves.get(0);
     }
@@ -76,13 +78,14 @@ public abstract class Piece implements PieceStrategy {
         return Objects.hash(type, position);
     }
 
-    public Piece(Player player, Coordinate position, PieceType type, Board board) {
+    public Piece(Player player, Coordinate position, PieceType type, Board board, String representation) {
         this.previousMoves = new ArrayList<>();
         previousMoves.add(position);
         this.player = player;
         this.position = position;
         this.type = type;
         this.board = board;
+        this.representation = representation;
     }
 
     public Player getPlayer() {

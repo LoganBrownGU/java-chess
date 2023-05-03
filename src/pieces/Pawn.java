@@ -12,6 +12,7 @@ public class Pawn extends Piece {
 
     public final int direction;
     public final int promotionRank;
+    private boolean takingEnPassant;
 
     public boolean doubleFirstMove() {
         boolean firstMove = this.getPreviousMoves().size() == 2;
@@ -33,10 +34,10 @@ public class Pawn extends Piece {
         }
 
         // if taking en passant
-        // pawn can only move diagonally if taking en passant or if taking normally, so if there isn't a piece at the
-        // position it is moving to then it must be taking en passant
-        if (this.getPosition().x != position.x && this.getPosition().y != position.y && board.pieceAt(position) == null)
+        if (takingEnPassant) {
             board.removePiece(board.pieceAt(new Coordinate(position.x, position.y - this.direction)));
+            takingEnPassant = false;
+        }
 
         super.setPosition(position);
     }
@@ -63,16 +64,19 @@ public class Pawn extends Piece {
         Piece leftPiece = board.pieceAt(new Coordinate(this.getPosition().x - 1, this.getPosition().y));
         boolean pawnRight = rightPiece instanceof Pawn && rightPiece.getPlayer() != this.getPlayer();
         boolean pawnLeft = leftPiece instanceof Pawn && leftPiece.getPlayer() != this.getPlayer();
-        if (pawnRight && ((Pawn) rightPiece).doubleFirstMove())
+        if (pawnRight && ((Pawn) rightPiece).doubleFirstMove()) {
             moves.add(new Coordinate(rightPiece.getPosition().x, rightPiece.getPosition().y + this.direction));
-        if (pawnLeft && ((Pawn) leftPiece).doubleFirstMove())
+            takingEnPassant = true;
+        } if (pawnLeft && ((Pawn) leftPiece).doubleFirstMove()) {
             moves.add(new Coordinate(leftPiece.getPosition().x, leftPiece.getPosition().y + this.direction));
+            takingEnPassant = true;
+        }
 
         return board.sanitiseMoves(moves, this);
     }
 
     public Pawn(Player player, Coordinate position, int direction, Board board) {
-        super(player, position, PieceType.PAWN, board);
+        super(player, position, PieceType.PAWN, board, "pn");
         this.direction = direction;
         this.promotionRank = direction == 1 ? board.maxY - 1 : 0;
     }

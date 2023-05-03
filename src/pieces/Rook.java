@@ -20,6 +20,6 @@ public class Rook extends Piece {
     }
 
     public Rook(Player player, Coordinate position, Board board) {
-        super(player, position, PieceType.ROOK, board);
+        super(player, position, PieceType.ROOK, board, "rk");
     }
 }

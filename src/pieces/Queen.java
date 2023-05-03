@@ -20,6 +20,6 @@ public class Queen extends Piece {
     }
 
     public Queen(Player player, Coordinate position, Board board) {
-        super(player, position, PieceType.QUEEN, board);
+        super(player, position, PieceType.QUEEN, board, "qn");
     }
 }
