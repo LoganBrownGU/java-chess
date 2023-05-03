@@ -12,8 +12,6 @@ import java.util.Scanner;
 
 public class CommandLineUserLayer implements UserLayer {
 
-    // todo make getPiece and getMove independent of userlayer.
-
     private final String clear = "\n".repeat(50);
 
     private Scanner sc = new Scanner(System.in);
@@ -65,11 +63,10 @@ public class CommandLineUserLayer implements UserLayer {
     }
 
     @Override
-    public Coordinate getMove(Piece pieceToMove) {
+    public Coordinate getMove() {
         Coordinate movePosition = null;
-        ArrayList<Coordinate> moves = pieceToMove.possibleMoves();
 
-        while (movePosition == null || !moves.contains(movePosition)) {
+        while (movePosition == null) {
             System.out.print("Enter position to move piece to: ");
             String input = sc.nextLine();
             movePosition = Coordinate.chessCoordToCoordinate(input);

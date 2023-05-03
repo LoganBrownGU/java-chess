@@ -24,7 +24,7 @@ class PawnTest {
             }
 
             @Override
-            public Coordinate getMove(Piece pieceToMove) {
+            public Coordinate getMove() {
                 return null;
             }
 

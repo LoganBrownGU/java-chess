@@ -7,7 +7,7 @@ import players.Player;
 
 public interface UserLayer {
     Piece getPiece(Player p);
-    Coordinate getMove(Piece pieceToMove);
+    Coordinate getMove();
 
     void update();
 

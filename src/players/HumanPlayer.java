@@ -4,6 +4,8 @@ import board.Board;
 import main.Coordinate;
 import pieces.Piece;
 
+import java.util.ArrayList;
+
 public class HumanPlayer extends Player {
 
     @Override
@@ -13,7 +15,13 @@ public class HumanPlayer extends Player {
 
     @Override
     public Coordinate getMove(Piece pieceToMove) {
-        return board.getUserLayer().getMove(pieceToMove);
+        Coordinate movePosition = null;
+        ArrayList<Coordinate> moves = pieceToMove.possibleMoves();
+
+        while (movePosition == null || !moves.contains(movePosition))
+            movePosition = board.getUserLayer().getMove();
+
+        return movePosition;
     }
 
     public HumanPlayer(char representation, Board board) {

@@ -13,7 +13,7 @@ public class DummyUserLayer implements UserLayer {
     }
 
     @Override
-    public Coordinate getMove(Piece pieceToMove) {
+    public Coordinate getMove() {
         return null;
     }
 
