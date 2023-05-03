@@ -52,8 +52,7 @@ public class CommandLineUserLayer implements UserLayer {
         Coordinate piecePosition = null;
         Piece piece;
 
-        while ((piece = board.pieceAt(piecePosition)) == null || piecePosition == null || piece.getPlayer() != p) {
-
+        while ((piece = board.pieceAt(piecePosition)) == null || piecePosition == null) {
             System.out.print(p.representation + ": Enter position of piece to move: ");
             String input = sc.nextLine();
             piecePosition = Coordinate.chessCoordToCoordinate(input);
