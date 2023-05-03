@@ -82,4 +82,25 @@ class StandardGameBoardTest {
         assertSame(board.check(player2), player1);
         assertFalse(board.canBlock(player2.representation, player1.representation));
     }
+
+    @Test
+    void checkmateHasNoCheckmate() {
+        StandardGameBoard board = new StandardGameBoard();
+        Player player1 = new HumanPlayer('a', board);
+        Player player2 = new HumanPlayer('b', board);
+        board.addPlayer(player1);
+        board.addPlayer(player2);
+        Piece king = new King(player1, new Coordinate(0, 0), board);
+        player1.setSovereign(king);
+
+        board.addPiece(new Knight(player1, new Coordinate(0, 1), board));
+        board.addPiece(new Pawn(player1, new Coordinate(1, 1), 1, board));
+        board.addPiece(king);
+        board.addPiece(new Knight(player2, new Coordinate(1, 2), board));
+        board.setUserLayerActive(true);
+        board.updateUserLayer();
+
+        assertSame(board.check(player2), player1);
+        assertTrue(board.canBlock(player2.representation, player1.representation));
+    }
 }
