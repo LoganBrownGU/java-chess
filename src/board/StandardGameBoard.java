@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class StandardGameBoard extends Board {
 
-    // todo this should probably return an arraylist; if there are > 1 players then a player could be checking > 1 players
     public Player check(Player player) {        // returns player that player is checking or null if it is not
         for (Player other : this.getPlayers()) {
             if (other == player) continue;
@@ -60,7 +59,6 @@ public class StandardGameBoard extends Board {
         return false;
     }
 
-    // todo implement this
     public Player checkWinner() {
         for (Player p : getPlayers()) {
             Player checked = check(p);
@@ -92,8 +90,9 @@ public class StandardGameBoard extends Board {
     @Override
     public void play() {
         while (true) {
+            Player checking = null, checked = null;
+
             for (Player player : super.getPlayers()) {
-                if (check(player) != null) System.out.println(player + " checks " + check(player));
 
                 Piece pieceToMove = player.getPiece();
                 Coordinate move = player.getMove(pieceToMove);
@@ -106,6 +105,17 @@ public class StandardGameBoard extends Board {
                 if (winner != null) {
                     System.out.println(winner + " wins");
                     break;
+                }
+
+                if (checked != null && check(checking) == checked) {
+                    System.out.println(checking + " wins");
+                    break;
+                }
+
+                checked = check(player);
+                if (checked != null) {
+                    System.out.println(player + " checks " + check(player));
+                    checking = player;
                 }
             }
         }

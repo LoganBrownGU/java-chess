@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class Pawn extends Piece {
 
     // todo pawn seems to be able to jump over other pieces on first go
+    // todo pawn seems to disappear sometimes: probably something to do with en passant
 
     public final int direction;
     public final int promotionRank;

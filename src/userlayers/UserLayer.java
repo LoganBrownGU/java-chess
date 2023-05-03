@@ -13,5 +13,9 @@ public interface UserLayer {
 
     void setBoard(Board board);
 
+    void showWinner(Player winner);
+
+    void showCheck(Player checking, Player checked);
+
     String dialogue(String message);
 }

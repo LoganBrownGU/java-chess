@@ -155,7 +155,7 @@ public class GUIUserLayer implements UserLayer, MouseListener {
 
     public GUIUserLayer() {
         Frame frame = new Frame("Chess");
-        int size = (int) (Math.min(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height) * 0.95);
+        int size = (int) (Math.min(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height) * 0.5);
         //canvas = new Canvas((int) (size * 0.9), new Color(0x00, 0x99, 0x33), new Color(0xff, 0xcc, 0x66));
         canvas = new Canvas((int) (size * 0.9), new Color(0x30, 0x30, 0x30), new Color(0xd0, 0xd0, 0xd0));
         canvas.setLocation((int) (size * 0.05), (int) (size * 0.05));

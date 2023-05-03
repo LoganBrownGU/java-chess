@@ -8,7 +8,7 @@ import players.Player;
 import userlayers.UserLayer;
 
 public class BoardFactory {
-    private static StandardGameBoard standardGameBoard(StandardGameBoard board, Player player1, Player player2) {
+    private static StandardGameBoard standardBoard(StandardGameBoard board, Player player1, Player player2) {
 
         player2.setSovereign(new King(player2, new Coordinate(3, 7), board));
         player1.setSovereign(new King(player1, new Coordinate(4, 0), board));
@@ -59,7 +59,7 @@ public class BoardFactory {
         Player player1 = new HumanPlayer('w', board);
 
 
-        return standardGameBoard(board, player1, player2);
+        return standardBoard(board, player1, player2);
     }
 
     public static StandardGameBoard standardGameBoardAgainstBadAI(UserLayer userLayer) {
@@ -68,7 +68,7 @@ public class BoardFactory {
         Player player2 = new BadAIPlayer('b', board);
         Player player1 = new HumanPlayer('w', board);
 
-        return standardGameBoard(board, player1, player2);
+        return standardBoard(board, player1, player2);
     }
 
     public static StandardGameBoard cloneBoard(Board board) {
