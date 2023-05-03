@@ -1,6 +1,7 @@
 package tests;
 
 import board.Board;
+import board.BoardFactory;
 import board.StandardGameBoard;
 import main.Coordinate;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,8 @@ import pieces.Piece;
 import pieces.Queen;
 import players.HumanPlayer;
 import players.Player;
+import userlayers.CommandLineUserLayer;
+import userlayers.DummyUserLayer;
 import userlayers.UserLayer;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -120,11 +123,13 @@ class PawnTest {
     }
 
     @Test
-    void cloneWorks() {
-        StandardGameBoard board = new StandardGameBoard();
-        Player player = new HumanPlayer('a', board);
-        Pawn pawn = new Pawn(player, new Coordinate(0, 0), 1, board);
+    void recreateTakingBug() {
+        Board board = BoardFactory.standardBoard(new CommandLineUserLayer());
+        Piece pawn1 = board.pieceAt(new Coordinate(1, 1));
+        Piece pawn2 = board.pieceAt(new Coordinate(0, 6));
+        pawn1.setPosition(new Coordinate(1, 3));
+        pawn2.setPosition(new Coordinate(0, 4));
 
-
+        assertTrue(pawn1.possibleMoves().contains(pawn2.getPosition()));
     }
 }

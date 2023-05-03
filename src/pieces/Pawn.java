@@ -56,7 +56,7 @@ public class Pawn extends Piece {
         // taking diagonally
         test = new Coordinate(position.x + 1, position.y + 1);
         if (board.pieceAt(test) != null && board.pieceAt(test).getPlayer() != this.getPlayer()) moves.add(test);
-        test = new Coordinate(position.x + 1, position.y - 1);
+        test = new Coordinate(position.x - 1, position.y + 1);
         if (board.pieceAt(test) != null && board.pieceAt(test).getPlayer() != this.getPlayer()) moves.add(test);
 
         // en passant
