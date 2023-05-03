@@ -15,7 +15,7 @@ public class HumanPlayer extends Player {
         while (pieceToMove == null || pieceToMove.getPlayer() != this)
             pieceToMove = board.getUserLayer().getPiece(this);
 
-        return board.getUserLayer().getPiece(this);
+        return pieceToMove;
     }
 
     @Override

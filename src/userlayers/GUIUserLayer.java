@@ -7,14 +7,16 @@ import players.Player;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
-public class GUIUserLayer implements UserLayer {
+public class GUIUserLayer implements UserLayer, MouseListener {
 
-    // chess icons : <a href="https://iconscout.com/icon-pack/chess" target="_blank">Free Chess Icon Pack</a> on <a href="https://iconscout.com">IconScout</a>
+    // chess icons: <a href="https://iconscout.com/icon-pack/chess" target="_blank">Free Chess Icon Pack</a> on <a href="https://iconscout.com">IconScout</a>
 
     private static class Canvas extends java.awt.Canvas {
 
@@ -35,12 +37,20 @@ public class GUIUserLayer implements UserLayer {
     private static final String representations[] = {
             "rk", "kt", "bp", "kg", "qn", "pn"
     };
+    private static volatile MouseEvent mouseEvent = null;
+    private int divSize, max;
+    private Coordinate highlighted = null;
 
     private void drawSquares(Graphics g, int max, int divSize) {
         g.setColor(canvas.squareColour);
         for (int i = 0; i < max; i++) {
             for (int j = i % 2 == 0 ? 0 : 1; j < max; j+=2)
                 g.fillRect(i * divSize, j * divSize, divSize, divSize);
+        }
+
+        if (highlighted != null) {
+            g.setColor(Color.red);
+            g.fillRect(highlighted.x * divSize, highlighted.y * divSize, divSize, divSize);
         }
     }
 
@@ -50,7 +60,6 @@ public class GUIUserLayer implements UserLayer {
 
             try {
                 File f = new File("assets/default_icons/" + iconName + ".png");
-                System.out.println(f.getAbsolutePath());
                 Image image = ImageIO.read(f);
                 g.drawImage(image, p.getPosition().x * divSize, p.getPosition().y * divSize, divSize, divSize, null);
             } catch (IOException e) {
@@ -61,19 +70,41 @@ public class GUIUserLayer implements UserLayer {
 
     @Override
     public Piece getPiece(Player p) {
+        mouseEvent = null;
 
+        while (mouseEvent == null) {
+            Thread.onSpinWait();
+        }
+
+        int x = mouseEvent.getX() / divSize;
+        int y = mouseEvent.getY() / divSize;
+        highlighted = new Coordinate(x, y);
+        update();
+
+        return board.pieceAt(new Coordinate(x, y));
     }
 
     @Override
     public Coordinate getMove() {
-        return null;
+        mouseEvent = null;
+
+        while (mouseEvent == null) {
+            Thread.onSpinWait();
+        }
+
+        int x = mouseEvent.getX() / divSize;
+        int y = mouseEvent.getY() / divSize;
+
+        highlighted = null;
+        return new Coordinate(x, y);
     }
 
     @Override
     public void update() {
         Graphics g = canvas.getGraphics();
-        int max = Math.max(board.maxX, board.maxY);
-        int divSize = (int) Math.ceil((float) canvas.getWidth() / max);
+        g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        max = Math.max(board.maxX, board.maxY);
+        divSize = (int) Math.ceil((float) canvas.getWidth() / max);
         drawSquares(g, max, divSize);
         drawPieces(g, max, divSize);
     }
@@ -88,6 +119,31 @@ public class GUIUserLayer implements UserLayer {
         return null;
     }
 
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        mouseEvent = e;
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
     public GUIUserLayer() {
         Frame f = new Frame("Chess");
         int size = (int) (Math.min(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height) * 0.95);
@@ -95,6 +151,7 @@ public class GUIUserLayer implements UserLayer {
         canvas = new Canvas((int) (size * 0.9), new Color(0x30, 0x30, 0x30), new Color(0xd0, 0xd0, 0xd0));
         canvas.setLocation((int) (size * 0.05), (int) (size * 0.05));
         f.add(canvas);
+        canvas.addMouseListener(this);
         f.setLayout(null);
         f.setSize(size, size);
         f.setVisible(true);
