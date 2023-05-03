@@ -126,4 +126,17 @@ class QueenTest {
         ArrayList<Coordinate> moves = queen.possibleMoves();
         assertTrue(board.check(queen.getPlayer()) == null);
     }
+
+    @Test
+    void noOutOfBoundsMoves() {
+        StandardGameBoard board = new StandardGameBoard();
+        Piece queen = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
+        board.addPiece(queen);
+
+        ArrayList<Coordinate> coords = queen.possibleMoves();
+        for (Coordinate coord : coords) {
+            assertTrue(coord.x >= 0 && coord.x <= board.maxX);
+            assertTrue(coord.y >= 0 && coord.y <= board.maxY);
+        }
+    }
 }

@@ -22,7 +22,7 @@ public class Knight extends Piece {
         moves.add(new Coordinate(position.x + 1, position.y - 2));
         moves.add(new Coordinate(position.x - 1, position.y + 2));
 
-        return removeAlliesFromPossibleMoves(moves);
+        return board.sanitiseMoves(moves, this);
     }
 
     public Knight(Player player, Coordinate position, Board board) {

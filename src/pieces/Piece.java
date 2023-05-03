@@ -58,15 +58,6 @@ public abstract class Piece implements PieceStrategy {
         return moves;
     }
 
-    public ArrayList<Coordinate> removeAlliesFromPossibleMoves(ArrayList<Coordinate> moves) {
-        ArrayList<Coordinate> newMoves = new ArrayList<>();
-        for (Coordinate coord : moves) {
-            Piece piece = board.pieceAt(coord);
-            if (piece == null || piece.getPlayer() != this.getPlayer()) newMoves.add(coord);
-        }
-        return newMoves;
-    }
-
     @Override
     public String toString() {
         return type + " belonging to " + player.representation + " at " + position;

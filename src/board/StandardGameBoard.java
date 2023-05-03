@@ -76,6 +76,22 @@ public class StandardGameBoard extends Board {
     }
 
     @Override
+    public ArrayList<Coordinate> sanitiseMoves(ArrayList<Coordinate> moves, Piece piece) {
+        ArrayList<Coordinate> newMoves = new ArrayList<>();
+        for (Coordinate coord : moves) {
+            Piece test = this.pieceAt(coord);
+            if (test != null && test.getPlayer() == piece.getPlayer()) continue;
+
+            if (coord.x < 0 || coord.x > this.maxX) continue;
+            if (coord.y < 0 || coord.y > this.maxY) continue;
+
+            newMoves.add(coord);
+        }
+
+        return newMoves;
+    }
+
+    @Override
     public void play() {
         while (true) {
             for (Player player : super.getPlayers()) {

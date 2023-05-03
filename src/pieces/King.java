@@ -24,7 +24,7 @@ public class King extends Piece {
         moves.add(new Coordinate(position.x + 1, position.y - 1));
         moves.add(new Coordinate(position.x - 1, position.y + 1));
 
-        return removeAlliesFromPossibleMoves(moves);
+        return board.sanitiseMoves(moves, this);
     }
 
     public King(Player player, Coordinate position, Board board) {
