@@ -48,10 +48,14 @@ public class GUIUserLayer implements UserLayer, MouseListener {
                 g.fillRect(i * divSize, j * divSize, divSize, divSize);
         }
 
-        if (highlighted != null) {
-            g.setColor(Color.red);
-            g.fillRect(highlighted.getPosition().x * divSize, highlighted.getPosition().y * divSize, divSize, divSize);
-        }
+        if (highlighted == null) return;
+
+        g.setColor(Color.red);
+        g.fillRect(highlighted.getPosition().x * divSize, highlighted.getPosition().y * divSize, divSize, divSize);
+
+        g.setColor(Color.yellow);
+        for (Coordinate coord : highlighted.possibleMoves())
+            g.fillRect((int) (coord.x * divSize + 0.05 * divSize), (int) (coord.y * divSize + divSize * 0.05), (int) (divSize * 0.9), (int) (divSize * 0.9));
     }
 
     private void drawPieces(Graphics g, int max, int divSize) {
