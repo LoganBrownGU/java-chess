@@ -72,7 +72,7 @@ class StandardGameBoardTest {
         player1.setSovereign(king);
 
         board.addPiece(new Pawn(player1, new Coordinate(1, 0), 1, board));
-        board.addPiece(new Pawn(player1, new Coordinate(0, 1), 1, board));
+        board.addPiece(new Knight(player1, new Coordinate(0, 1), board));
         board.addPiece(new Pawn(player1, new Coordinate(1, 1), 1, board));
         board.addPiece(king);
         board.addPiece(new Knight(player2, new Coordinate(1, 2), board));
@@ -80,5 +80,7 @@ class StandardGameBoardTest {
         board.updateUserLayer();
 
         assertSame(board.check(player2), player1);
+        // todo current issue: player can take own pieces
+        assertFalse(board.canBlock(player2.representation, player1.representation));
     }
 }

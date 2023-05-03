@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class Pawn extends Piece {
 
+    // todo pawn seems to be able to jump over other pieces on first go
+
     public final int direction;
     public final int promotionRank;
 

@@ -107,6 +107,14 @@ class QueenTest {
     }
 */
     @Test
+    void cantTakeOwnPiece() {
+        StandardGameBoard board = BoardFactory.standardBoard(new CommandLineUserLayer());
+        Piece queen = board.pieceAt(new Coordinate(4, 7));
+        System.out.println(queen);
+        assertFalse(queen.possibleMoves().contains(board.pieceAt(new Coordinate(4, 6)).getPosition()));
+    }
+
+    @Test
     public void recreateWrongCheckBug() {
         StandardGameBoard board = BoardFactory.standardBoard(new CommandLineUserLayer());
         board.removePiece(board.pieceAt(new Coordinate(3, 1)));

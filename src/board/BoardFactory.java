@@ -71,9 +71,13 @@ public class BoardFactory {
                     return null;
                 }
             };
+
             for (Piece piece: board.getPieces()) {
-                if (piece.getPlayer() == board.getPlayers().get(i))
-                    clone.addPiece(PieceFactory.clonePiece(piece, playerClone, clone));
+                if (piece.getPlayer() == board.getPlayers().get(i)) {
+                    Piece clonePiece = PieceFactory.clonePiece(piece, playerClone, clone);
+                    clone.addPiece(clonePiece);
+                    if (piece == pc.getSovereign()) playerClone.setSovereign(clonePiece);
+                }
             }
             clone.addPlayer(playerClone);
         }

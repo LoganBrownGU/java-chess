@@ -33,28 +33,29 @@ public class StandardGameBoard extends Board {
         Player checked = playerWithRep(checkedRep);
 
         for (Piece piece : this.getPiecesBelongingTo(checked)) {
-
             for (int i = 0; i < piece.possibleMoves().size(); i++) { // need to iterate over piece's possible moves
-                StandardGameBoard clone = new StandardGameBoard();
-                Piece pieceToCheck = null;
-                for (Piece clonePiece : clone.getPieces())
+                StandardGameBoard clone = BoardFactory.cloneBoard(this);
+                Piece possibleBlocker = null;
+                for (Piece clonePiece : clone.getPieces()) {
                     if (clonePiece.equals(piece)) {
-                        pieceToCheck = piece;
+                        possibleBlocker = clonePiece;
                         break;
                     }
+                }
 
                 // get move to check
-                assert pieceToCheck != null;
-                Coordinate move = pieceToCheck.possibleMoves().get(i);
+                assert possibleBlocker != null;
+                Coordinate move = possibleBlocker.possibleMoves().get(i);
 
                 // make move
                 if (clone.pieceAt(move) != null) clone.removePiece(clone.pieceAt(move));
-                pieceToCheck.setPosition(move);
+                possibleBlocker.setPosition(move);
 
                 // check if checking is still checking checked
                 Player checkedClone = clone.playerWithRep(checkedRep);
                 Player checkingClone = clone.playerWithRep(checkingRep);
-                if (clone.check(checkingClone) != checkedClone) return true;
+                if (clone.check(checkingClone) != checkedClone)
+                    return true;
             }
         }
 

@@ -10,7 +10,10 @@ public class Bishop extends Piece {
 
     @Override
     public ArrayList<Coordinate> possibleMoves() {
-        return this.diagonalMoves();
+        ArrayList<Coordinate> moves = this.diagonalMoves();
+        moves = removeAlliesFromPossibleMoves(moves);
+
+        return moves;
     }
 
     public Bishop(Player player, Coordinate position, Board board) {
