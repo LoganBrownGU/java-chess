@@ -17,6 +17,10 @@ public class Knight extends Piece {
         moves.add(new Coordinate(position.x - 2, position.y - 1));
         moves.add(new Coordinate(position.x + 2, position.y - 1));
         moves.add(new Coordinate(position.x - 2, position.y + 1));
+        moves.add(new Coordinate(position.x + 1, position.y + 2));
+        moves.add(new Coordinate(position.x - 1, position.y - 2));
+        moves.add(new Coordinate(position.x + 1, position.y - 2));
+        moves.add(new Coordinate(position.x - 1, position.y + 2));
 
         return moves;
     }
