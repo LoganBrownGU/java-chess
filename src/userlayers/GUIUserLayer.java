@@ -35,6 +35,7 @@ public class GUIUserLayer implements UserLayer, MouseListener {
     }
 
     private Canvas canvas;
+    private Graphics2D g;
     private Board board;
     private static volatile MouseEvent mouseEvent = null;
     private int divSize, max;
@@ -110,12 +111,32 @@ public class GUIUserLayer implements UserLayer, MouseListener {
 
     @Override
     public void update() {
-        Graphics g = canvas.getGraphics();
         g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         max = Math.max(board.maxX, board.maxY);
         divSize = (int) Math.ceil((float) canvas.getWidth() / max);
         drawSquares(g, max, divSize);
         drawPieces(g, max, divSize);
+    }
+
+    @Override
+    public void showWinner(Player winner) {
+        String message = winner + " wins!";
+
+        g.setFont(new Font("Helvetica", Font.BOLD, 36));
+        FontMetrics metrics = g.getFontMetrics();
+        int x = (canvas.getWidth() - metrics.stringWidth(message)) / 2;
+        int y = (metrics.getAscent() + (canvas.getHeight() - (metrics.getAscent() + metrics.getDescent())) / 2);
+
+        g.setColor(Color.white);
+        g.fill3DRect(x - 20, y - metrics.getAscent() - 10, metrics.stringWidth(message) + 40, metrics.getDescent() + metrics.getAscent() + 20, true);
+
+        g.setColor(canvas.backgroundColour);
+        g.drawString(message, x, y);
+    }
+
+    @Override
+    public void showCheck(Player checking, Player checked) {
+
     }
 
     @Override
@@ -164,6 +185,9 @@ public class GUIUserLayer implements UserLayer, MouseListener {
         frame.setLayout(null);
         frame.setSize(size, size);
         frame.setVisible(true);
+
+        g = ((Graphics2D) canvas.getGraphics());
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         frame.addWindowListener(new WindowAdapter() {
             @Override

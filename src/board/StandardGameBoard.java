@@ -103,18 +103,18 @@ public class StandardGameBoard extends Board {
 
                 Player winner = checkWinner();
                 if (winner != null) {
-                    System.out.println(winner + " wins");
+                    getUserLayer().showWinner(winner);
                     break;
                 }
 
                 if (checked != null && check(checking) == checked) {
-                    System.out.println(checking + " wins");
+                    getUserLayer().showWinner(checking);
                     break;
                 }
 
                 checked = check(player);
                 if (checked != null) {
-                    System.out.println(player + " checks " + check(player));
+                    getUserLayer().showCheck(checking, checked);
                     checking = player;
                 }
             }

@@ -81,4 +81,14 @@ public class CommandLineUserLayer implements UserLayer {
         Scanner sc = new Scanner(System.in);
         return sc.nextLine();
     }
+
+    @Override
+    public void showWinner(Player winner) {
+
+    }
+
+    @Override
+    public void showCheck(Player checking, Player checked) {
+
+    }
 }

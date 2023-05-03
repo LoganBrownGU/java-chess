@@ -31,4 +31,14 @@ public class DummyUserLayer implements UserLayer {
     public String dialogue(String message) {
         return null;
     }
+
+    @Override
+    public void showWinner(Player winner) {
+
+    }
+
+    @Override
+    public void showCheck(Player checking, Player checked) {
+
+    }
 }

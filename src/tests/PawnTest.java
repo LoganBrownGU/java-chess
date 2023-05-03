@@ -42,6 +42,16 @@ class PawnTest {
             }
 
             @Override
+            public void showWinner(Player winner) {
+
+            }
+
+            @Override
+            public void showCheck(Player checking, Player checked) {
+
+            }
+
+            @Override
             public String dialogue(String message) {
                 return "QUEEN";
             }
