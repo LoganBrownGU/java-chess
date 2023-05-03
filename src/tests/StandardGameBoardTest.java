@@ -80,7 +80,6 @@ class StandardGameBoardTest {
         board.updateUserLayer();
 
         assertSame(board.check(player2), player1);
-        // todo current issue: player can take own pieces
         assertFalse(board.canBlock(player2.representation, player1.representation));
     }
 }

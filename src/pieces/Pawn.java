@@ -68,7 +68,7 @@ public class Pawn extends Piece {
         if (pawnLeft && ((Pawn) leftPiece).doubleFirstMove())
             moves.add(new Coordinate(leftPiece.getPosition().x, leftPiece.getPosition().y + this.direction));
 
-        return moves;
+        return removeAlliesFromPossibleMoves(moves);
     }
 
     public Pawn(Player player, Coordinate position, int direction, Board board) {

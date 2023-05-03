@@ -15,9 +15,8 @@ public class Queen extends Piece {
         moves.addAll(this.rankMoves());
         moves.addAll(this.fileMoves());
         moves.addAll(this.diagonalMoves());
-        moves = removeAlliesFromPossibleMoves(moves);
 
-        return moves;
+        return removeAlliesFromPossibleMoves(moves);
     }
 
     public Queen(Player player, Coordinate position, Board board) {

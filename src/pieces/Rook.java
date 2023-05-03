@@ -16,7 +16,7 @@ public class Rook extends Piece {
         moves.addAll(this.rankMoves());
         moves.addAll(this.fileMoves());
 
-        return moves;
+        return removeAlliesFromPossibleMoves(moves);
     }
 
     public Rook(Player player, Coordinate position, Board board) {
