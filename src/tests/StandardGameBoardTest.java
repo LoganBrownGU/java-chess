@@ -1,6 +1,5 @@
 package tests;
 
-import board.Board;
 import board.BoardFactory;
 import board.StandardGameBoard;
 import main.Coordinate;
@@ -80,7 +79,7 @@ class StandardGameBoardTest {
         board.updateUserLayer();
 
         assertSame(board.check(player2), player1);
-        assertFalse(board.canBlock(player2.representation, player1.representation));
+        assertFalse(board.canPreventCheck(player2.representation, player1.representation));
     }
 
     @Test
@@ -101,6 +100,6 @@ class StandardGameBoardTest {
         board.updateUserLayer();
 
         assertSame(board.check(player2), player1);
-        assertTrue(board.canBlock(player2.representation, player1.representation));
+        assertTrue(board.canPreventCheck(player2.representation, player1.representation));
     }
 }

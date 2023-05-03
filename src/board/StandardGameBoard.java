@@ -2,13 +2,11 @@ package board;
 
 import main.Coordinate;
 import pieces.Piece;
-import pieces.PieceFactory;
 import players.Player;
 import userlayers.CommandLineUserLayer;
 import userlayers.UserLayer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class StandardGameBoard extends Board {
 
@@ -29,7 +27,7 @@ public class StandardGameBoard extends Board {
         return null;
     }
 
-    public boolean canBlock(char checkingRep, char checkedRep) { // returns true if there's a move that would prevent checking from winning
+    public boolean canPreventCheck(char checkingRep, char checkedRep) { // returns true if there's a move that would prevent checking from winning
         Player checked = playerWithRep(checkedRep);
 
         for (Piece piece : this.getPiecesBelongingTo(checked)) {
@@ -69,7 +67,7 @@ public class StandardGameBoard extends Board {
             if (checked == null) continue;
 
             // now need to play every possible move of checked to see if it would prevent p from winning
-            if (canBlock(p.representation, checked.representation)) return null;
+            if (canPreventCheck(p.representation, checked.representation)) return null;
         }
 
         return null;
