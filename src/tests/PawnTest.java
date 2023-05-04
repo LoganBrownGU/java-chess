@@ -147,6 +147,24 @@ class PawnTest {
     }
 
     @Test
+    void enPassant() {
+        Board board = BoardFactory.standardBoard(new CommandLineUserLayer());
+        Piece pawn1 = board.pieceAt(new Coordinate(5, 1));
+        Piece pawn2 = board.pieceAt(new Coordinate(4, 6));
+        Piece pawn3 = board.pieceAt(new Coordinate(6, 6));
+
+        pawn1.setPosition(new Coordinate(5, 3));
+        pawn2.setPosition(new Coordinate(4, 4));
+        pawn1.setPosition(new Coordinate(5, 4));
+        pawn3.setPosition(new Coordinate(6, 4));
+        ArrayList<Coordinate> moves = pawn1.possibleMoves();
+        pawn1.setPosition(new Coordinate(5, 5));
+
+        assertFalse(moves.contains(new Coordinate(pawn2.getPosition().x, pawn2.getPosition().y + 1)));
+        assertTrue(moves.contains(new Coordinate(pawn3.getPosition().x, pawn3.getPosition().y + 1)));
+    }
+
+    @Test
     void recreateEnPassantBug() {
         Board board = BoardFactory.standardBoard(new CommandLineUserLayer());
         Piece pawn1 = board.pieceAt(new Coordinate(5, 1));

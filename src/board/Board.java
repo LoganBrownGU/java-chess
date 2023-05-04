@@ -16,6 +16,7 @@ public abstract class Board implements BoardStrategy {
     private UserLayer userLayer = null;
     private boolean userLayerActive = false;
     public final int maxX, maxY;
+    private Coordinate lastMove = null;
 
     public boolean onBoard(Coordinate coord) {
         return coord.x >= 0 && coord.y >= 0 && coord.x < maxX && coord.y < maxY;
@@ -95,6 +96,14 @@ public abstract class Board implements BoardStrategy {
 
     public UserLayer getUserLayer() {
         return userLayer;
+    }
+
+    public Coordinate getLastMove() {
+        return lastMove;
+    }
+
+    public void setLastMove(Coordinate lastMove) {
+        this.lastMove = lastMove;
     }
 
     public void setUserLayerActive(boolean userLayerActive) {

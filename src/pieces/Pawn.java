@@ -13,7 +13,6 @@ public class Pawn extends Piece {
 
     public final int direction;
     public final int promotionRank;
-    private boolean takingEnPassant;
     private ArrayList<Coordinate> enPassantMoves = new ArrayList<>();
 
     public boolean doubleFirstMove() {
@@ -36,9 +35,9 @@ public class Pawn extends Piece {
         }
 
         // if taking en passant
-        if (takingEnPassant) {
+        if (enPassantMoves.contains(position)) {
             board.removePiece(board.pieceAt(new Coordinate(position.x, position.y - this.direction)));
-            takingEnPassant = false;
+            enPassantMoves.clear();
         }
 
         super.setPosition(position);
@@ -66,16 +65,14 @@ public class Pawn extends Piece {
         Piece leftPiece = board.pieceAt(new Coordinate(this.getPosition().x - 1, this.getPosition().y));
         boolean pawnRight = rightPiece instanceof Pawn && rightPiece.getPlayer() != this.getPlayer();
         boolean pawnLeft = leftPiece instanceof Pawn && leftPiece.getPlayer() != this.getPlayer();
-        if (pawnRight && ((Pawn) rightPiece).doubleFirstMove()) {
+        if (pawnRight && ((Pawn) rightPiece).doubleFirstMove() && board.getLastMove() == rightPiece.getPosition()) {
             Coordinate move = new Coordinate(rightPiece.getPosition().x, rightPiece.getPosition().y + this.direction);
             moves.add(move);
             enPassantMoves.add(move);
-            takingEnPassant = true;
-        } if (pawnLeft && ((Pawn) leftPiece).doubleFirstMove()) {
+        } if (pawnLeft && ((Pawn) leftPiece).doubleFirstMove() && board.getLastMove() == leftPiece.getPosition()) {
             Coordinate move = new Coordinate(leftPiece.getPosition().x, leftPiece.getPosition().y + this.direction);
             moves.add(move);
             enPassantMoves.add(move);
-            takingEnPassant = true;
         }
 
         return board.sanitiseMoves(moves, this);

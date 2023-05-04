@@ -104,6 +104,7 @@ public abstract class Piece implements PieceStrategy {
         this.position = position;
         previousMoves.add(position);
         board.updateUserLayer();
+        board.setLastMove(position);
     }
 
     public ArrayList<Coordinate> getPreviousMoves() {
