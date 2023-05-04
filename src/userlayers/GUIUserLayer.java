@@ -60,8 +60,11 @@ public class GUIUserLayer implements UserLayer, MouseListener {
         g.fillRect(highlighted.getPosition().x * divSize, highlighted.getPosition().y * divSize, divSize, divSize);
 
         g.setColor(Color.yellow);
+        Composite defaultComposite = g.getComposite();
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC, .5f));
         for (Coordinate coord : highlighted.possibleMoves())
-            g.fillRect((int) (coord.x * divSize + 0.05 * divSize), (int) (coord.y * divSize + divSize * 0.05), (int) (divSize * 0.9), (int) (divSize * 0.9));
+            g.fillRect(coord.x * divSize, coord.y * divSize, divSize, divSize);
+        g.setComposite(defaultComposite);
     }
 
     private void drawPieces(Graphics2D g, int max, int divSize) {
@@ -79,7 +82,7 @@ public class GUIUserLayer implements UserLayer, MouseListener {
                 }
             }
 
-            g.drawImage(image, p.getPosition().x * divSize, p.getPosition().y * divSize, null);
+            g.drawImage(image, p.getPosition().x * divSize, p.getPosition().y * divSize, divSize, divSize, null);
         }
     }
 
@@ -193,7 +196,6 @@ public class GUIUserLayer implements UserLayer, MouseListener {
     public GUIUserLayer() {
         Frame frame = new Frame("Chess");
         int size = (int) (Math.min(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height) * 0.5);
-        //canvas = new Canvas((int) (size * 0.9), new Color(0x00, 0x99, 0x33), new Color(0xff, 0xcc, 0x66));
         canvas = new Canvas((int) (size * 0.9), new Color(0x30, 0x30, 0x30), new Color(0xd0, 0xd0, 0xd0));
         canvas.setLocation((int) (size * 0.05), (int) (size * 0.05));
         frame.add(canvas);
