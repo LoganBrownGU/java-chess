@@ -24,7 +24,7 @@ public class Coordinate {
     // finds all coordinates between two coordinates on the same rank, file or diagonal.
     // only adds if there is line of sight
     public ArrayList<Coordinate> coordsBetween(Coordinate other, Board board) {
-        if (!(this.sameDiagonal(other) || this.sameRank(other) || this.sameFile(other))) return null;
+        if (!(this.sameDiagonal(other) || this.sameRank(other) || this.sameFile(other) || this.equals(other))) return null;
 
         ArrayList<Coordinate> coords = new ArrayList<>();
 

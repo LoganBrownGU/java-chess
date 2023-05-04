@@ -163,6 +163,7 @@ public class GUIUserLayer implements UserLayer, MouseListener {
 
     @Override
     public String dialogue(String message) {
+        System.out.println(message);
         return "y";
     }
 

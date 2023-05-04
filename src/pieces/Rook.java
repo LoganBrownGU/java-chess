@@ -39,6 +39,7 @@ public class Rook extends Piece {
             ArrayList<Coordinate> coordsBetween = this.getPosition().coordsBetween(sovereign.getPosition(), board);
             ArrayList<Coordinate> allMoves = new ArrayList<>();
 
+            // todo STACKOVERFLOW ERROR BECAUSE OPPONENT ROOK POSSIBLE MOVES WILL BE CALLED HERE
             for (Piece piece : board.getPieces())
                 if (piece.getPlayer() != this.getPlayer())
                     allMoves.addAll(piece.possibleMoves());
@@ -53,7 +54,7 @@ public class Rook extends Piece {
             // now we can add castling as a move
             if (!underAttack) {
                 int direction = this.getPosition().x < sovereign.getPosition().x ? -1 : 1;
-                Coordinate move = new Coordinate(sovereign.getPosition().x - direction, sovereign.getPosition().y);
+                Coordinate move = new Coordinate(sovereign.getPosition().x + direction, sovereign.getPosition().y);
                 castlingMoves.add(move);
                 moves.add(move);
             }

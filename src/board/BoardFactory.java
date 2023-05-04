@@ -71,6 +71,33 @@ public class BoardFactory {
         return standardBoard(board, player1, player2);
     }
 
+    public static StandardGameBoard castlingTest(UserLayer userLayer) {
+        StandardGameBoard board = new StandardGameBoard(userLayer);
+        Player player = new HumanPlayer('b', board);
+        board.addPlayer(player);
+
+        Piece rook = new Rook(player, new Coordinate(0, 7), board);
+        board.addPiece(rook);
+        Piece king = new King(player, new Coordinate(3, 7), board);
+        board.addPiece(king);
+        player.setSovereign(king);
+
+        player = new HumanPlayer('w', board);
+        board.addPlayer(player);
+
+        rook = new Rook(player, new Coordinate(0, 0), board);
+        board.addPiece(rook);
+        king = new King(player, new Coordinate(3, 0), board);
+        board.addPiece(king);
+        player.setSovereign(king);
+
+
+        board.setUserLayerActive(true);
+        board.updateUserLayer();
+
+        return board;
+    }
+
     public static StandardGameBoard cloneBoard(Board board) {
         StandardGameBoard clone = new StandardGameBoard();
 
