@@ -158,10 +158,23 @@ class PawnTest {
         pawn1.setPosition(new Coordinate(5, 4));
         pawn3.setPosition(new Coordinate(6, 4));
         ArrayList<Coordinate> moves = pawn1.possibleMoves();
-        pawn1.setPosition(new Coordinate(5, 5));
 
         assertFalse(moves.contains(new Coordinate(pawn2.getPosition().x, pawn2.getPosition().y + 1)));
         assertTrue(moves.contains(new Coordinate(pawn3.getPosition().x, pawn3.getPosition().y + 1)));
+
+        board = BoardFactory.standardBoard(new CommandLineUserLayer());
+        pawn1 = board.pieceAt(new Coordinate(5, 6));
+        pawn2 = board.pieceAt(new Coordinate(4, 1));
+        pawn3 = board.pieceAt(new Coordinate(6, 1));
+
+        pawn1.setPosition(new Coordinate(5, 4));
+        pawn2.setPosition(new Coordinate(4, 3));
+        pawn1.setPosition(new Coordinate(5, 3));
+        pawn3.setPosition(new Coordinate(6, 3));
+        moves = pawn1.possibleMoves();
+
+        assertFalse(moves.contains(new Coordinate(pawn2.getPosition().x, pawn2.getPosition().y - 1)));
+        assertTrue(moves.contains(new Coordinate(pawn3.getPosition().x, pawn3.getPosition().y - 1)));
     }
 
     @Test
