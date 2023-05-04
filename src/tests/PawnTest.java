@@ -12,7 +12,10 @@ import players.HumanPlayer;
 import players.Player;
 import userlayers.CommandLineUserLayer;
 import userlayers.DummyUserLayer;
+import userlayers.GUIUserLayer;
 import userlayers.UserLayer;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -141,5 +144,22 @@ class PawnTest {
         pawn2.setPosition(new Coordinate(0, 4));
 
         assertTrue(pawn1.possibleMoves().contains(pawn2.getPosition()));
+    }
+
+    @Test
+    void recreateEnPassantBug() {
+        Board board = BoardFactory.standardBoard(new CommandLineUserLayer());
+        Piece pawn1 = board.pieceAt(new Coordinate(5, 1));
+        Piece pawn2 = board.pieceAt(new Coordinate(4, 6));
+        Piece pawn3 = board.pieceAt(new Coordinate(6, 6));
+
+        pawn1.setPosition(new Coordinate(5, 3));
+        pawn2.setPosition(new Coordinate(4, 4));
+        pawn1.setPosition(new Coordinate(5, 4));
+        pawn3.setPosition(new Coordinate(6, 4));
+        ArrayList<Coordinate> moves = pawn1.possibleMoves();
+        pawn1.setPosition(new Coordinate(5, 5));
+
+        assertSame(board.pieceAt(pawn1.getPosition()), pawn1);
     }
 }

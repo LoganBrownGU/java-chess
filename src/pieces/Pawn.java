@@ -14,6 +14,7 @@ public class Pawn extends Piece {
     public final int direction;
     public final int promotionRank;
     private boolean takingEnPassant;
+    private ArrayList<Coordinate> enPassantMoves = new ArrayList<>();
 
     public boolean doubleFirstMove() {
         boolean firstMove = this.getPreviousMoves().size() == 2;
@@ -66,10 +67,14 @@ public class Pawn extends Piece {
         boolean pawnRight = rightPiece instanceof Pawn && rightPiece.getPlayer() != this.getPlayer();
         boolean pawnLeft = leftPiece instanceof Pawn && leftPiece.getPlayer() != this.getPlayer();
         if (pawnRight && ((Pawn) rightPiece).doubleFirstMove()) {
-            moves.add(new Coordinate(rightPiece.getPosition().x, rightPiece.getPosition().y + this.direction));
+            Coordinate move = new Coordinate(rightPiece.getPosition().x, rightPiece.getPosition().y + this.direction);
+            moves.add(move);
+            enPassantMoves.add(move);
             takingEnPassant = true;
         } if (pawnLeft && ((Pawn) leftPiece).doubleFirstMove()) {
-            moves.add(new Coordinate(leftPiece.getPosition().x, leftPiece.getPosition().y + this.direction));
+            Coordinate move = new Coordinate(leftPiece.getPosition().x, leftPiece.getPosition().y + this.direction);
+            moves.add(move);
+            enPassantMoves.add(move);
             takingEnPassant = true;
         }
 
