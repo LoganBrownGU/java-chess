@@ -47,7 +47,7 @@ public class GUIUserLayer implements UserLayer, MouseListener {
 
     private static final Object lock = new Object();
 
-    private static BufferedImage addBorder(BufferedImage image) {
+    /*private static BufferedImage addBorder(BufferedImage image) {
         BufferedImage result = new BufferedImage(
                 image.getWidth() + 2, image.getHeight() + 2,
                 BufferedImage.TYPE_INT_ARGB);
@@ -55,7 +55,7 @@ public class GUIUserLayer implements UserLayer, MouseListener {
         g.drawImage(image, 1, 1, null);
         g.dispose();
         return result;
-    }
+    }*/
 
     private void drawSquares(Graphics2D g, int max, int divSize) {
         g.setColor(canvas.squareColour);
@@ -88,16 +88,26 @@ public class GUIUserLayer implements UserLayer, MouseListener {
                     throw new RuntimeException(e);
                 }
             }
-            image = addBorder(image);
 
             /*Graphics2D g2d = (Graphics2D) image.getGraphics();
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.drawImage(image, 0, 0, divSize, divSize, null);*/
-            AffineTransform transform = new AffineTransform();
-            transform.scale((double) divSize / image.getWidth(), (double) divSize / image.getHeight());
+            /*AffineTransform transform = new AffineTransform();
+            transform.scale((double) divSize / image.getWidth(), (double) divSize / image.getHeight());*/
+            /*Image scaled = image.getScaledInstance(divSize, divSize, Image.SCALE_DEFAULT);
+            BufferedImage outputImage = new BufferedImage(divSize, divSize, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D imgGraphics = (Graphics2D) outputImage.getGraphics();
+            imgGraphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            imgGraphics.drawImage(scaled, 0, 0, null);*/
 
-            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g.drawImage(image, p.getPosition().x * divSize, p.getPosition().y * divSize, divSize, divSize, null);
+            BufferedImage outputImage = new BufferedImage(divSize, divSize, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D oig = (Graphics2D) outputImage.getGraphics();
+            oig.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            oig.drawImage(image, AffineTransform.getScaleInstance((double) divSize / image.getWidth(), (double) divSize / image.getHeight()), null);
+
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            //g.drawImage(image, p.getPosition().x * divSize, p.getPosition().y * divSize, divSize, divSize, null);
+            g.drawImage(outputImage, p.getPosition().x * divSize, p.getPosition().y * divSize, null);
         }
     }
 
