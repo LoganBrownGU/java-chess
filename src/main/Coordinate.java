@@ -67,14 +67,14 @@ public class Coordinate {
         if (this.equals(other)) return true;
 
         if (sameRank(other)) {
-            for (int i = Math.min(this.x, other.x); i <= Math.max(this.x, other.x); i++)
+            for (int i = Math.min(this.x, other.x) + 1; i < Math.max(this.x, other.x); i++)
                 if (board.pieceAt(new Coordinate(i, this.y)) != null) return false;
 
             return true;
         }
 
         if (sameFile(other)) {
-            for (int i = Math.min(this.y, other.y); i <= Math.max(this.y, other.y); i++) {
+            for (int i = Math.min(this.y, other.y) + 1; i < Math.max(this.y, other.y); i++) {
                 Coordinate coord = new Coordinate(this.x, i);
                 if (board.pieceAt(coord) != null && !coord.equals(this) && !coord.equals(other))
                     return false;

@@ -5,8 +5,10 @@ import board.BoardFactory;
 import board.StandardGameBoard;
 import main.Coordinate;
 import org.junit.jupiter.api.Test;
+import pieces.King;
 import pieces.Pawn;
 import pieces.Piece;
+import pieces.Rook;
 import players.HumanPlayer;
 import players.Player;
 import userlayers.CommandLineUserLayer;
@@ -85,31 +87,6 @@ class CoordinateTest {
         Coordinate c2 = new Coordinate(5, 5);
         assertFalse(c1.lineOfSight(c2, board));
     }
-
-    /*@Test
-    void lineOfSightNoLineOfSightSameDiagonalPiecesEitherSide() {
-        Board board = new StandardGameBoard();
-        Player testPlayer = new HumanPlayer('a', board, 1);
-        Piece testPiece1 = new Pawn(testPlayer, new Coordinate(3, 2));
-        Piece testPiece2 = new Pawn(testPlayer, new Coordinate(2, 3));
-        testPiece1.register(board);
-        testPiece2.register(board);
-        board.addPiece(testPiece1);
-        board.addPiece(testPiece2);
-        board.setUserLayer(new DummyUserLayer());
-
-        // in middle
-        Coordinate c1 = new Coordinate(0, 0);
-        Coordinate c2 = new Coordinate(5, 5);
-        assertFalse(c1.lineOfSight(c2, board));
-        assertFalse(c2.lineOfSight(c1, board));
-
-        // at each end
-        testPiece1.setPosition(new Coordinate(5, 6));
-        testPiece2.setPosition(new Coordinate(6, 5));
-        assertFalse(c1.lineOfSight(c2, board));
-        assertFalse(c2.lineOfSight(c1, board));
-    }*/
 
     @Test
     void lineOfSightSameCoord() {
@@ -214,6 +191,21 @@ class CoordinateTest {
 
         assertTrue(c2.coordsBetween(c1, board).containsAll(coords1));
         assertTrue(c3.coordsBetween(c2, board).containsAll(coords2));
+    }
+
+    @Test
+    public void recreateCastlingBug() {
+        Board board = new StandardGameBoard();
+        Player player = new HumanPlayer('a', board);
+        Piece rook = new Rook(player, new Coordinate(0, 0), board);
+        board.addPiece(rook);
+        Piece king = new King(player, new Coordinate(4, 0), board);
+        board.addPiece(king);
+        player.setSovereign(king);
+        board.setUserLayerActive(true);
+        board.updateUserLayer();
+
+        assertTrue(rook.getPosition().lineOfSight(king.getPosition(), board));
     }
 
     /*@Test
