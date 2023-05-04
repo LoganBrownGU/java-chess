@@ -89,7 +89,9 @@ public class StandardGameBoard extends Board {
 
     @Override
     public void play() {
-        while (true) {
+        boolean hasWon = false;
+
+        while (!hasWon) {
             Player checking = null, checked = null;
 
             for (Player player : super.getPlayers()) {
@@ -104,11 +106,13 @@ public class StandardGameBoard extends Board {
                 Player winner = checkWinner();
                 if (winner != null) {
                     getUserLayer().showWinner(winner);
+                    hasWon = true;
                     break;
                 }
 
                 if (checked != null && check(checking) == checked) {
                     getUserLayer().showWinner(checking);
+                    hasWon = true;
                     break;
                 }
 
@@ -119,6 +123,8 @@ public class StandardGameBoard extends Board {
                 }
             }
         }
+
+        System.out.println("game end");
     }
 
     public StandardGameBoard() {

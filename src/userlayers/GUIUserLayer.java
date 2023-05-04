@@ -11,6 +11,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -43,7 +45,19 @@ public class GUIUserLayer implements UserLayer, MouseListener {
     private HashMap<String, Image> icons = new HashMap<>();
     private Image checkmark;
 
-    private void drawSquares(Graphics g, int max, int divSize) {
+    private static final Object lock = new Object();
+
+    private static BufferedImage addBorder(BufferedImage image) {
+        BufferedImage result = new BufferedImage(
+                image.getWidth() + 2, image.getHeight() + 2,
+                BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = result.createGraphics();
+        g.drawImage(image, 1, 1, null);
+        g.dispose();
+        return result;
+    }
+
+    private void drawSquares(Graphics2D g, int max, int divSize) {
         g.setColor(canvas.squareColour);
         for (int i = 0; i < max; i++) {
             for (int j = i % 2 == 0 ? 0 : 1; j < max; j += 2)
@@ -60,10 +74,10 @@ public class GUIUserLayer implements UserLayer, MouseListener {
             g.fillRect((int) (coord.x * divSize + 0.05 * divSize), (int) (coord.y * divSize + divSize * 0.05), (int) (divSize * 0.9), (int) (divSize * 0.9));
     }
 
-    private void drawPieces(Graphics g, int max, int divSize) {
+    private void drawPieces(Graphics2D g, int max, int divSize) {
         for (Piece p : board.getPieces()) {
             String iconName = p.getPlayer().representation + p.representation;
-            Image image = icons.get(iconName);
+            BufferedImage image = (BufferedImage) icons.get(iconName);
 
             if (image == null) {
                 try {
@@ -74,18 +88,36 @@ public class GUIUserLayer implements UserLayer, MouseListener {
                     throw new RuntimeException(e);
                 }
             }
+            image = addBorder(image);
 
+            /*Graphics2D g2d = (Graphics2D) image.getGraphics();
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.drawImage(image, 0, 0, divSize, divSize, null);*/
+            AffineTransform transform = new AffineTransform();
+            transform.scale((double) divSize / image.getWidth(), (double) divSize / image.getHeight());
+
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             g.drawImage(image, p.getPosition().x * divSize, p.getPosition().y * divSize, divSize, divSize, null);
+        }
+    }
+
+    private void waitForMouse() {
+        mouseEvent = null;
+
+        synchronized (lock) {
+            while (mouseEvent == null) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 
     @Override
     public Piece getPiece(Player p) {
-        mouseEvent = null;
-
-        while (mouseEvent == null) {
-            Thread.onSpinWait();
-        }
+        waitForMouse();
 
         int x = mouseEvent.getX() / divSize;
         int y = mouseEvent.getY() / divSize;
@@ -97,11 +129,7 @@ public class GUIUserLayer implements UserLayer, MouseListener {
 
     @Override
     public Coordinate getMove() {
-        mouseEvent = null;
-
-        while (mouseEvent == null) {
-            Thread.onSpinWait();
-        }
+        waitForMouse();
 
         int x = mouseEvent.getX() / divSize;
         int y = mouseEvent.getY() / divSize;
@@ -156,6 +184,8 @@ public class GUIUserLayer implements UserLayer, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         mouseEvent = e;
+
+        synchronized (lock) { lock.notify(); }
     }
 
     @Override
