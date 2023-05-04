@@ -147,6 +147,17 @@ class PawnTest {
     }
 
     @Test
+    void recreateTakingBug2() {
+        Board board = BoardFactory.standardBoard(new CommandLineUserLayer());
+        Piece pawn1 = board.pieceAt(new Coordinate(1, 1));
+        Piece pawn2 = board.pieceAt(new Coordinate(0, 6));
+        pawn1.setPosition(new Coordinate(1, 3));
+        pawn2.setPosition(new Coordinate(0, 4));
+
+        assertTrue(pawn2.possibleMoves().contains(pawn1.getPosition()));
+    }
+
+    @Test
     void enPassant() {
         Board board = BoardFactory.standardBoard(new CommandLineUserLayer());
         Piece pawn1 = board.pieceAt(new Coordinate(5, 1));
