@@ -98,6 +98,19 @@ public class BoardFactory {
         return board;
     }
 
+    public static StandardGameBoard promotionTest(UserLayer userLayer) {
+        StandardGameBoard board = new StandardGameBoard(userLayer);
+        Player player = new HumanPlayer('w', board);
+        board.addPlayer(player);
+
+        Pawn pawn = new Pawn(player, new Coordinate(1, 6), 1, board);
+        board.addPiece(pawn);
+
+        board.setUserLayerActive(true);
+
+        return board;
+    }
+
     public static StandardGameBoard cloneBoard(Board board) {
         StandardGameBoard clone = new StandardGameBoard();
 

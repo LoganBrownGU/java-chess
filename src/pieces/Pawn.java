@@ -26,8 +26,7 @@ public class Pawn extends Piece {
 
         // if promoting
         if (position.y == this.promotionRank) {
-            //String str = board.getUserLayer().dialogue("What piece would you like to promote to?");
-            String str = "QUEEN";
+            String str = board.getUserLayer().dialogue("What piece would you like to promote to?");
             Piece piece = PieceFactory.promotePawn(str, this);
             board.removePiece(this);
             piece.setPosition(position);
