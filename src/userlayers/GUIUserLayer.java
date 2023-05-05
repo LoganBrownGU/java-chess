@@ -3,19 +3,17 @@ package userlayers;
 import board.Board;
 import main.Coordinate;
 import pieces.Piece;
+import pieces.PieceType;
 import players.Player;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.geom.AffineTransform;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GUIUserLayer implements UserLayer, MouseListener {
 
@@ -46,6 +44,7 @@ public class GUIUserLayer implements UserLayer, MouseListener {
     private Image checkmark;
 
     private static final Object lock = new Object();
+    String promotionPiece = null;
 
     private void drawSquares(Graphics2D g, int max, int divSize) {
         g.setColor(canvas.squareColour);
@@ -161,10 +160,35 @@ public class GUIUserLayer implements UserLayer, MouseListener {
         this.board = board;
     }
 
+    ActionListener miListener
+
     @Override
     public String dialogue(String message) {
         System.out.println(message);
-        return "y";
+        PopupMenu pm = new PopupMenu();
+
+        for (PieceType type: PieceType.values()) {
+            MenuItem mi = new MenuItem(type.toString());
+            System.out.println(mi);
+            mi.addActionListener(e -> {piece = mi.getLabel(); lock.notify();});
+            pm.add(mi);
+        }
+
+        canvas.add(pm);
+        pm.show(canvas, 100, 100);
+
+        synchronized (lock) {
+            while (promotionPiece == null) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+
+        return p;
     }
 
     @Override
