@@ -12,8 +12,6 @@ import pieces.Queen;
 import players.HumanPlayer;
 import players.Player;
 import userlayers.CommandLineUserLayer;
-import userlayers.DummyUserLayer;
-import userlayers.GUIUserLayer;
 import userlayers.UserLayer;
 
 import java.util.ArrayList;
@@ -72,7 +70,6 @@ class PawnTest {
         });
         Player player = new HumanPlayer('a', board);
         Pawn pawn = new Pawn(player, new Coordinate(0, 6), 1, board);
-        board.addPiece(pawn);
         pawn.setPosition(new Coordinate(0, 7));
         assertTrue(board.pieceAt(new Coordinate(0, 7)) instanceof Queen);
     }
@@ -82,7 +79,6 @@ class PawnTest {
         Board board = new StandardGameBoard();
         Player player = new HumanPlayer('a', board);
         Pawn pawn = new Pawn(player, new Coordinate(0, 6), 1, board);
-        board.addPiece(pawn);
 
         assertFalse(pawn.possibleMoves().contains(new Coordinate(0, 5)));
     }
@@ -92,7 +88,6 @@ class PawnTest {
         Board board = new StandardGameBoard();
         Player player = new HumanPlayer('a', board);
         Pawn pawn = new Pawn(player, new Coordinate(0, 0), 1, board);
-        board.addPiece(pawn);
 
         assertFalse(pawn.possibleMoves().contains(new Coordinate(1, 1)));
     }
@@ -102,9 +97,7 @@ class PawnTest {
         Board board = new StandardGameBoard();
         Player player1 = new HumanPlayer('a', board);
         Pawn pawn = new Pawn(player1, new Coordinate(0, 0), 1, board);
-        board.addPiece(pawn);
         Pawn toTake = new Pawn(player1, new Coordinate(1, 1), 1, board);
-        board.addPiece(toTake);
 
         assertFalse(pawn.possibleMoves().contains(new Coordinate(1, 1)));
     }
@@ -115,9 +108,7 @@ class PawnTest {
         Player player1 = new HumanPlayer('a', board);
         Player player2 = new HumanPlayer('b', board);
         Pawn pawn = new Pawn(player1, new Coordinate(1, 1), 1, board);
-        board.addPiece(pawn);
         Pawn toTake = new Pawn(player2, new Coordinate(0, 0), 1, board);
-        board.addPiece(toTake);
 
         assertFalse(pawn.possibleMoves().contains(new Coordinate(0, 0)));
     }
@@ -128,9 +119,7 @@ class PawnTest {
         Player player1 = new HumanPlayer('a', board);
         Player player2 = new HumanPlayer('b', board);
         Pawn pawn = new Pawn(player1, new Coordinate(0, 0), 1, board);
-        board.addPiece(pawn);
         Pawn toTake = new Pawn(player2, new Coordinate(1, 1), 1, board);
-        board.addPiece(toTake);
 
         assertTrue(pawn.possibleMoves().contains(new Coordinate(1, 1)));
     }
@@ -140,7 +129,6 @@ class PawnTest {
         Board board = new StandardGameBoard();
         Player player = new HumanPlayer('a', board);
         Pawn pawn = new Pawn(player, new Coordinate(0, 0), 1, board);
-        board.addPiece(pawn);
 
         pawn.setPosition(new Coordinate(0, 1));
         assertFalse(pawn.possibleMoves().contains(new Coordinate(0, 3)));
@@ -222,7 +210,6 @@ class PawnTest {
 
         Pawn pawn = (Pawn) board.pieceAt(new Coordinate(0, 1));
         Bishop test = new Bishop(board.getPlayers().get(1), new Coordinate(0, 2), board);
-        board.addPiece(test);
 
         assertFalse(pawn.possibleMoves().contains(new Coordinate(0, 3)));
     }

@@ -17,35 +17,33 @@ public class BoardFactory {
         board.addPlayer(player2);
 
         // add rooks
-        board.addPiece(new Rook(player1, new Coordinate(0, 0), board));
-        board.addPiece(new Rook(player1, new Coordinate(7, 0), board));
-        board.addPiece(new Rook(player2, new Coordinate(0, 7), board));
-        board.addPiece(new Rook(player2, new Coordinate(7, 7), board));
+        new Rook(player1, new Coordinate(0, 0), board);
+        new Rook(player1, new Coordinate(7, 0), board);
+        new Rook(player2, new Coordinate(0, 7), board);
+        new Rook(player2, new Coordinate(7, 7), board);
 
         // add knights
-        board.addPiece(new Knight(player1, new Coordinate(1, 0), board));
-        board.addPiece(new Knight(player1, new Coordinate(6, 0), board));
-        board.addPiece(new Knight(player2, new Coordinate(1, 7), board));
-        board.addPiece(new Knight(player2, new Coordinate(6, 7), board));
+        new Knight(player1, new Coordinate(1, 0), board);
+        new Knight(player1, new Coordinate(6, 0), board);
+        new Knight(player2, new Coordinate(1, 7), board);
+        new Knight(player2, new Coordinate(6, 7), board);
 
         // add bishops
-        board.addPiece(new Bishop(player1, new Coordinate(2, 0), board));
-        board.addPiece(new Bishop(player1, new Coordinate(5, 0), board));
-        board.addPiece(new Bishop(player2, new Coordinate(2, 7), board));
-        board.addPiece(new Bishop(player2, new Coordinate(5, 7), board));
+        new Bishop(player1, new Coordinate(2, 0), board);
+        new Bishop(player1, new Coordinate(5, 0), board);
+        new Bishop(player2, new Coordinate(2, 7), board);
+        new Bishop(player2, new Coordinate(5, 7), board);
 
         // add queens
-        board.addPiece(new Queen(player1, new Coordinate(3, 0), board));
-        board.addPiece(new Queen(player2, new Coordinate(4, 7), board));
+        new Queen(player1, new Coordinate(3, 0), board);
+        new Queen(player2, new Coordinate(4, 7), board);
 
         // add kings
-        board.addPiece(player2.getSovereign());
-        board.addPiece(player1.getSovereign());
 
         //add pawns
         for (int i = 0; i < 8; i++) {
-            board.addPiece(new Pawn(player1, new Coordinate(i, 1), 1, board));
-            board.addPiece(new Pawn(player2, new Coordinate(i, 6), -1, board));
+            new Pawn(player1, new Coordinate(i, 1), 1, board);
+            new Pawn(player2, new Coordinate(i, 6), -1, board);
         }
 
         board.setUserLayerActive(true);
@@ -77,18 +75,14 @@ public class BoardFactory {
         board.addPlayer(player);
 
         Piece rook = new Rook(player, new Coordinate(0, 7), board);
-        board.addPiece(rook);
         Sovereign king = new King(player, new Coordinate(3, 7), board);
-        board.addPiece(king);
         player.setSovereign(king);
 
         player = new HumanPlayer('w', board);
         board.addPlayer(player);
 
         rook = new Rook(player, new Coordinate(0, 0), board);
-        board.addPiece(rook);
         king = new King(player, new Coordinate(3, 0), board);
-        board.addPiece(king);
         player.setSovereign(king);
 
 
@@ -104,7 +98,6 @@ public class BoardFactory {
         board.addPlayer(player);
 
         Pawn pawn = new Pawn(player, new Coordinate(1, 6), 1, board);
-        board.addPiece(pawn);
 
         board.setUserLayerActive(true);
 
@@ -140,7 +133,6 @@ public class BoardFactory {
             for (Piece piece: board.getPieces()) {
                 if (piece.getPlayer() == board.getPlayers().get(i)) {
                     Piece clonePiece = PieceFactory.clonePiece(piece, playerClone, clone);
-                    clone.addPiece(clonePiece);
                     if (piece == pc.getSovereign()) playerClone.setSovereign((Sovereign) clonePiece);
                 }
             }

@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public abstract class Piece implements PieceStrategy {
-    // todo could use player's instance of board rather than storing its own
-    // todo could add self to board in constructor
 
     private ArrayList<Coordinate> previousMoves; // initial position is counted as a move
     private final Player player;
@@ -86,6 +84,8 @@ public abstract class Piece implements PieceStrategy {
         this.type = type;
         this.board = board;
         this.representation = representation;
+
+        this.board.addPiece(this);
     }
 
     public Player getPlayer() {

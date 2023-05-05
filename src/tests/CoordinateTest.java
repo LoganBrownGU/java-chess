@@ -1,18 +1,14 @@
 package tests;
 
 import board.Board;
-import board.BoardFactory;
 import board.StandardGameBoard;
 import main.Coordinate;
 import org.junit.jupiter.api.Test;
 import pieces.*;
 import players.HumanPlayer;
 import players.Player;
-import userlayers.CommandLineUserLayer;
-import userlayers.DummyUserLayer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -54,7 +50,6 @@ class CoordinateTest {
         Board board = new StandardGameBoard();
         Player testPlayer = new HumanPlayer('a', board);
         Piece testPiece = new Pawn(testPlayer, new Coordinate(0, 2), 1, board);
-        board.addPiece(testPiece);
 
         Coordinate c1 = new Coordinate(0, 0);
         Coordinate c2 = new Coordinate(0, 5);
@@ -66,7 +61,6 @@ class CoordinateTest {
         Board board = new StandardGameBoard();
         Player testPlayer = new HumanPlayer('a', board);
         Piece testPiece = new Pawn(testPlayer, new Coordinate(2, 0), 1, board);
-        board.addPiece(testPiece);
 
         Coordinate c1 = new Coordinate(0, 0);
         Coordinate c2 = new Coordinate(5, 0);
@@ -78,7 +72,6 @@ class CoordinateTest {
         Board board = new StandardGameBoard();
         Player testPlayer = new HumanPlayer('a', board);
         Piece testPiece = new Pawn(testPlayer, new Coordinate(2, 2), 1, board);
-        board.addPiece(testPiece);
 
         Coordinate c1 = new Coordinate(0, 0);
         Coordinate c2 = new Coordinate(5, 5);
@@ -100,7 +93,6 @@ class CoordinateTest {
         Board board = new StandardGameBoard();
         Player testPlayer = new HumanPlayer('a', board);
         Piece testPiece = new Pawn(testPlayer, new Coordinate(0, 0), 1, board);
-        board.addPiece(testPiece);
 
         Coordinate c1 = new Coordinate(0, 0);
         Coordinate c2 = new Coordinate(0, 0);
@@ -195,9 +187,7 @@ class CoordinateTest {
         Board board = new StandardGameBoard();
         Player player = new HumanPlayer('a', board);
         Piece rook = new Rook(player, new Coordinate(0, 0), board);
-        board.addPiece(rook);
         Sovereign king = new King(player, new Coordinate(4, 0), board);
-        board.addPiece(king);
         player.setSovereign(king);
         board.setUserLayerActive(true);
         board.updateUserLayer();

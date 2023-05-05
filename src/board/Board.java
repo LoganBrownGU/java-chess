@@ -1,9 +1,7 @@
 package board;
 
 import main.Coordinate;
-import pieces.King;
 import pieces.Piece;
-import pieces.PieceType;
 import players.Player;
 import userlayers.UserLayer;
 

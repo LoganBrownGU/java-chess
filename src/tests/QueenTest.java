@@ -22,7 +22,6 @@ class QueenTest {
         Board board = new StandardGameBoard();
 
         Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
-        board.addPiece(toTake);
         Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(0, 5), board);
 
         assertTrue(taker.possibleMoves().contains(toTake.getPosition()));
@@ -33,7 +32,6 @@ class QueenTest {
         Board board = new StandardGameBoard();
 
         Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
-        board.addPiece(toTake);
         Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(5, 0), board);
 
         assertTrue(taker.possibleMoves().contains(toTake.getPosition()));
@@ -44,7 +42,6 @@ class QueenTest {
         Board board = new StandardGameBoard();
 
         Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
-        board.addPiece(toTake);
         Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(5, 5), board);
 
         assertTrue(taker.possibleMoves().contains(toTake.getPosition()));
@@ -55,9 +52,7 @@ class QueenTest {
         Board board = new StandardGameBoard();
 
         Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
-        board.addPiece(toTake);
         Piece blocker = new Queen(new HumanPlayer('c', board), new Coordinate(0,3), board);
-        board.addPiece(blocker);
         Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(0, 5), board);
 
         assertFalse(taker.possibleMoves().contains(toTake.getPosition()));
@@ -68,9 +63,7 @@ class QueenTest {
         Board board = new StandardGameBoard();
 
         Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
-        board.addPiece(toTake);
         Piece blocker = new Queen(new HumanPlayer('c', board), new Coordinate(3,0), board);
-        board.addPiece(blocker);
         Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(5, 0), board);
 
         assertFalse(taker.possibleMoves().contains(toTake.getPosition()));
@@ -81,9 +74,7 @@ class QueenTest {
         Board board = new StandardGameBoard();
 
         Piece toTake = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
-        board.addPiece(toTake);
         Piece blocker = new Queen(new HumanPlayer('c', board), new Coordinate(3,3), board);
-        board.addPiece(blocker);
         Piece taker = new Queen(new HumanPlayer('b', board), new Coordinate(5, 5), board);
 
 
@@ -122,7 +113,7 @@ class QueenTest {
 
         Piece queen = board.pieceAt(new Coordinate(4, 7));
         queen.setPosition(new Coordinate(4, 4));
-        board.addPiece(new Pawn(new HumanPlayer('z', board), new Coordinate(4, 6), 1, board));
+        new Pawn(new HumanPlayer('z', board), new Coordinate(4, 6), 1, board);
         ArrayList<Coordinate> moves = queen.possibleMoves();
         assertTrue(board.check(queen.getPlayer()) == null);
     }
@@ -131,7 +122,6 @@ class QueenTest {
     void noOutOfBoundsMoves() {
         StandardGameBoard board = new StandardGameBoard();
         Piece queen = new Queen(new HumanPlayer('a', board), new Coordinate(0, 0), board);
-        board.addPiece(queen);
 
         ArrayList<Coordinate> coords = queen.possibleMoves();
         for (Coordinate coord : coords) {

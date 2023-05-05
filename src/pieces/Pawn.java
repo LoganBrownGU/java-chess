@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 public class Pawn extends Piece {
 
-    // todo pawn seems to be able to jump over other pieces on first go
-
     public final int direction;
     public final int promotionRank;
     private ArrayList<Coordinate> enPassantMoves = new ArrayList<>();
@@ -29,7 +27,6 @@ public class Pawn extends Piece {
             Piece piece = PieceFactory.promotePawn(str, this);
             board.removePiece(this);
             piece.setPosition(position);
-            board.addPiece(piece);
         }
 
         // if taking en passant
