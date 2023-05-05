@@ -89,7 +89,7 @@ public class StandardGameBoard extends Board {
         while (!hasWon) {
             Player checking = null, checked = null;
 
-            for (Player player : super.getPlayers()) {
+            gameLoop: for (Player player : super.getPlayers()) {
 
                 Piece pieceToMove = player.getPiece();
                 Coordinate move = player.getMove(pieceToMove);
@@ -98,17 +98,30 @@ public class StandardGameBoard extends Board {
                 if (pieceAtMove != null) super.removePiece(pieceAtMove);
                 pieceToMove.setPosition(move);
 
+                // for normal checkmate where player checkmates opponent
                 Player winner = checkWinner();
                 if (winner != null) {
                     getUserLayer().showWinner(winner);
                     hasWon = true;
-                    break;
+                    break gameLoop;
                 }
 
+                // if opponent puts player into check, and then player does not prevent the check
                 if (checked != null && check(checking) == checked) {
                     getUserLayer().showWinner(checking);
                     hasWon = true;
-                    break;
+                    break gameLoop;
+                }
+
+                // if player puts themself into check
+                for (Player other : this.getPlayers()) {
+                    if (other == player) continue;
+
+                    if (check(other) == player) {
+                        getUserLayer().showWinner(other);
+                        hasWon = true;
+                        break gameLoop;
+                    }
                 }
 
                 checked = check(player);
