@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Knight extends Piece {
 
     @Override
-    public ArrayList<Coordinate> possibleMoves() {
+    public ArrayList<Coordinate> attackingMoves() {
         ArrayList<Coordinate> moves = new ArrayList<>();
         Coordinate position = this.getPosition();
 
@@ -23,6 +23,11 @@ public class Knight extends Piece {
         moves.add(new Coordinate(position.x - 1, position.y + 2));
 
         return board.sanitiseMoves(moves, this);
+    }
+
+    @Override
+    public ArrayList<Coordinate> possibleMoves() {
+        return board.sanitiseMoves(this.attackingMoves(), this);
     }
 
     public Knight(Player player, Coordinate position, Board board) {

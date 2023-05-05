@@ -43,18 +43,12 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public ArrayList<Coordinate> possibleMoves() {
+    public ArrayList<Coordinate> attackingMoves() {
         ArrayList<Coordinate> moves = new ArrayList<>();
         Coordinate position = this.getPosition();
 
-        // moving forward
-        Coordinate test = new Coordinate(position.x, position.y + direction);
-        if (board.pieceAt(test) == null) moves.add(test);
-        test = new Coordinate(test.x, test.y + direction);
-        if (!this.hasMoved() && board.pieceAt(test) == null) moves.add(test);
-
         // taking diagonally
-        test = new Coordinate(position.x + 1, position.y + this.direction);
+        Coordinate test = new Coordinate(position.x + 1, position.y + this.direction);
         if (board.pieceAt(test) != null && board.pieceAt(test).getPlayer() != this.getPlayer()) moves.add(test);
         test = new Coordinate(position.x - 1, position.y + this.direction);
         if (board.pieceAt(test) != null && board.pieceAt(test).getPlayer() != this.getPlayer()) moves.add(test);
@@ -73,6 +67,20 @@ public class Pawn extends Piece {
             moves.add(move);
             enPassantMoves.add(move);
         }
+
+        return board.sanitiseMoves(moves, this);
+    }
+
+    @Override
+    public ArrayList<Coordinate> possibleMoves() {
+        ArrayList<Coordinate> moves = new ArrayList<>(this.attackingMoves());
+        Coordinate position = this.getPosition();
+
+        // moving forward
+        Coordinate test = new Coordinate(position.x, position.y + direction);
+        if (board.pieceAt(test) == null) moves.add(test);
+        test = new Coordinate(test.x, test.y + direction);
+        if (!this.hasMoved() && board.pieceAt(test) == null) moves.add(test);
 
         return board.sanitiseMoves(moves, this);
     }

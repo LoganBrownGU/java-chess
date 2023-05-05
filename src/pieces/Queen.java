@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Queen extends Piece {
 
     @Override
-    public ArrayList<Coordinate> possibleMoves() {
+    public ArrayList<Coordinate> attackingMoves() {
         ArrayList<Coordinate> moves = new ArrayList<>();
 
         moves.addAll(this.rankMoves());
@@ -17,6 +17,11 @@ public class Queen extends Piece {
         moves.addAll(this.diagonalMoves());
 
         return board.sanitiseMoves(moves, this);
+    }
+
+    @Override
+    public ArrayList<Coordinate> possibleMoves() {
+        return board.sanitiseMoves(attackingMoves(), this);
     }
 
     public Queen(Player player, Coordinate position, Board board) {

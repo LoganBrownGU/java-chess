@@ -6,5 +6,6 @@ import java.util.ArrayList;
 
 public interface PieceStrategy {
 
+    ArrayList<Coordinate> attackingMoves();
     ArrayList<Coordinate> possibleMoves();
 }

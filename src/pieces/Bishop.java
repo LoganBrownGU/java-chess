@@ -10,9 +10,15 @@ public class Bishop extends Piece {
 
     //todo seems to be a problem with checking
 
+
+    @Override
+    public ArrayList<Coordinate> attackingMoves() {
+        return board.sanitiseMoves(this.diagonalMoves(), this);
+    }
+
     @Override
     public ArrayList<Coordinate> possibleMoves() {
-        return board.sanitiseMoves(this.diagonalMoves(), this);
+        return board.sanitiseMoves(this.attackingMoves(), this);
     }
 
     public Bishop(Player player, Coordinate position, Board board) {

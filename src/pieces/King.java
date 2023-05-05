@@ -8,10 +8,11 @@ import java.util.ArrayList;
 
 public class King extends Piece {
 
+    //todo make a sovereign interface
     private boolean checked = false;
 
     @Override
-    public ArrayList<Coordinate> possibleMoves() {
+    public ArrayList<Coordinate> attackingMoves() {
         ArrayList<Coordinate> moves = new ArrayList<>();
         Coordinate position = this.getPosition();
 
@@ -25,6 +26,11 @@ public class King extends Piece {
         moves.add(new Coordinate(position.x - 1, position.y + 1));
 
         return board.sanitiseMoves(moves, this);
+    }
+
+    @Override
+    public ArrayList<Coordinate> possibleMoves() {
+        return board.sanitiseMoves(this.attackingMoves(), this);
     }
 
     public King(Player player, Coordinate position, Board board) {

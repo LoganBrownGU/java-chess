@@ -56,7 +56,7 @@ class PawnTest {
 
             @Override
             public String getPromotion() {
-                return null;
+                return "QUEEN";
             }
 
             @Override

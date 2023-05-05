@@ -22,12 +22,19 @@ public class Rook extends Piece {
     }
 
     @Override
-    public ArrayList<Coordinate> possibleMoves() {
+    public ArrayList<Coordinate> attackingMoves() {
         ArrayList<Coordinate> moves = new ArrayList<>();
 
-        // todo uncomment this when castling works
+        //todo uncomment this when castling works
         //moves.addAll(this.rankMoves());
         moves.addAll(this.fileMoves());
+
+        return board.sanitiseMoves(moves, this);
+    }
+
+    @Override
+    public ArrayList<Coordinate> possibleMoves() {
+        ArrayList<Coordinate> moves = new ArrayList<>(this.attackingMoves());
 
         // castling
         // todo decide if castling should be with sovereign or king specifically
