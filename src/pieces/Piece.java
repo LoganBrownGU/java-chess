@@ -9,20 +9,17 @@ import java.util.Objects;
 
 public abstract class Piece implements PieceStrategy {
 
-    private ArrayList<Coordinate> previousMoves; // initial position is counted as a move
+    private final ArrayList<Coordinate> previousMoves; // initial position is counted as a move
     private final Player player;
-    private PieceType type;
+    private final PieceType type;
     private Coordinate position;
 
     protected Board board;
 
     public final String representation;
-    public Coordinate getLastMove() {
-        return previousMoves.get(0);
-    }
 
-    public boolean hasMoved() {
-        return this.previousMoves.size() > 1;
+    public boolean hasNotMoved() {
+        return this.previousMoves.size() <= 1;
     }
 
     public ArrayList<Coordinate> rankMoves() {

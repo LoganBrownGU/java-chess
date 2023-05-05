@@ -10,7 +10,7 @@ public class Pawn extends Piece {
 
     public final int direction;
     public final int promotionRank;
-    private ArrayList<Coordinate> enPassantMoves = new ArrayList<>();
+    private final ArrayList<Coordinate> enPassantMoves = new ArrayList<>();
 
     public boolean doubleFirstMove() {
         boolean firstMove = this.getPreviousMoves().size() == 2;
@@ -78,7 +78,7 @@ public class Pawn extends Piece {
             // can only move forward two if space in front of pawn is empty
             moves.add(test);
             test = new Coordinate(test.x, test.y + direction);
-            if (!this.hasMoved() && board.pieceAt(test) == null) moves.add(test);
+            if (this.hasNotMoved() && board.pieceAt(test) == null) moves.add(test);
         }
 
         return board.sanitiseMoves(moves, this);

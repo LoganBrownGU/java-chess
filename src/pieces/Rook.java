@@ -38,7 +38,7 @@ public class Rook extends Piece {
 
         Piece sovereign = this.getPlayer().getSovereign();
         // first, check if there are pieces between king and rook and if either have moved
-        if (sovereign.getPosition().lineOfSight(this.getPosition(), board) && !this.hasMoved() && !sovereign.hasMoved()) {
+        if (sovereign.getPosition().lineOfSight(this.getPosition(), board) && this.hasNotMoved() && sovereign.hasNotMoved()) {
             // now check if any squares between king and final king position are under attack
             int direction = this.getPosition().x < sovereign.getPosition().x ? -1 : 1;
             Coordinate newSovereignCoord = new Coordinate(sovereign.getPosition().x + 2 * direction, sovereign.getPosition().y);
