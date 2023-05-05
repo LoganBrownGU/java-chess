@@ -43,8 +43,18 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     private final Image checkmark;
     private boolean moving = false;
     private Player checked = null, checking = null;
-
     private static final Object lock = new Object();
+    private boolean active = false;
+
+    private void loadIcon(String iconName) {
+        try {
+            File f = new File("assets/default_icons/" + iconName + ".png");
+            Image image = ImageIO.read(f);
+            icons.put(iconName, image);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private void drawSquares(Graphics2D g, int max, int divSize) {
         g.setColor(canvas.squareColour);
@@ -67,21 +77,14 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     }
 
     private void drawPieces(Graphics2D g, int divSize) {
-        for (Piece p : board.getPieces()) {
-            String iconName = p.getPlayer().representation + p.representation;
+        for (Piece piece : board.getPieces()) {
+            String iconName = piece.getPlayer().representation + piece.representation;
             BufferedImage image = (BufferedImage) icons.get(iconName);
 
-            if (image == null) {
-                try {
-                    File f = new File("assets/default_icons/" + iconName + ".png");
-                    image = ImageIO.read(f);
-                    icons.put(iconName, image);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            if (image == null)
+                loadIcon(iconName);
 
-            g.drawImage(image, p.getPosition().x * divSize, p.getPosition().y * divSize, divSize, divSize, null);
+            g.drawImage(image, piece.getPosition().x * divSize, piece.getPosition().y * divSize, divSize, divSize, null);
         }
     }
 
@@ -122,6 +125,19 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
         return mouseEvent;
     }
 
+    private void showMessage(String message) {
+        g.setFont(new Font("Helvetica", Font.BOLD, 36));
+        FontMetrics metrics = g.getFontMetrics();
+        int x = (canvas.getWidth() - metrics.stringWidth(message)) / 2;
+        int y = (metrics.getAscent() + (canvas.getHeight() - (metrics.getAscent() + metrics.getDescent())) / 2);
+
+        g.setColor(Color.white);
+        g.fill3DRect(x - 20, y - metrics.getAscent() - 10, metrics.stringWidth(message) + 40, metrics.getDescent() + metrics.getAscent() + 20, true);
+
+        g.setColor(canvas.backgroundColour);
+        g.drawString(message, x, y);
+    }
+
     @Override
     public Piece getPiece(Player p) {
         if (p.equals(checking)) {
@@ -151,6 +167,8 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
 
     @Override
     public void update() {
+        if (!active) return;
+
         drawBoard();
     }
 
@@ -158,16 +176,7 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     public void showWinner(Player winner) {
         String message = winner + " wins!";
 
-        g.setFont(new Font("Helvetica", Font.BOLD, 36));
-        FontMetrics metrics = g.getFontMetrics();
-        int x = (canvas.getWidth() - metrics.stringWidth(message)) / 2;
-        int y = (metrics.getAscent() + (canvas.getHeight() - (metrics.getAscent() + metrics.getDescent())) / 2);
-
-        g.setColor(Color.white);
-        g.fill3DRect(x - 20, y - metrics.getAscent() - 10, metrics.stringWidth(message) + 40, metrics.getDescent() + metrics.getAscent() + 20, true);
-
-        g.setColor(canvas.backgroundColour);
-        g.drawString(message, x, y);
+        showMessage(message);
 
         canvas.removeMouseListener(this);
         canvas.removeMouseMotionListener(this);
@@ -227,10 +236,22 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
 
     @Override
     public void setActive(boolean active) {
+        this.active = active;
 
         if (active) {
+            showMessage("loading...");
+            for (Piece piece: board.getPieces()) {
+                String iconName = piece.getPlayer().representation + piece.representation;
+                BufferedImage image = (BufferedImage) icons.get(iconName);
+
+                if (image == null)
+                    loadIcon(iconName);
+            }
+
             canvas.addMouseMotionListener(this);
             canvas.addMouseListener(this);
+
+            update();
         } else {
             canvas.removeMouseListener(this);
             canvas.removeMouseMotionListener(this);
@@ -277,8 +298,6 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
         canvas = new Canvas((int) (size * 0.9), new Color(0x30, 0x30, 0x30), new Color(0xd0, 0xd0, 0xd0));
         canvas.setLocation((int) (size * 0.05), (int) (size * 0.05));
         frame.add(canvas);
-        canvas.addMouseListener(this);
-        canvas.addMouseMotionListener(this);
         frame.setLayout(null);
         frame.setSize(size, size);
         frame.setVisible(true);
