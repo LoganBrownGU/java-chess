@@ -16,6 +16,7 @@ public class Rook extends Piece {
             Piece sovereign = this.getPlayer().getSovereign();
             int direction = this.getPosition().x < sovereign.getPosition().x ? -1 : 1;
             sovereign.setPosition(new Coordinate(sovereign.getPosition().x + 2 * direction, sovereign.getPosition().y));
+            castlingMoves.clear();
         }
 
         super.setPosition(position);
@@ -25,8 +26,7 @@ public class Rook extends Piece {
     public ArrayList<Coordinate> attackingMoves() {
         ArrayList<Coordinate> moves = new ArrayList<>();
 
-        //todo uncomment this when castling works
-        //moves.addAll(this.rankMoves());
+        moves.addAll(this.rankMoves());
         moves.addAll(this.fileMoves());
 
         return board.sanitiseMoves(moves, this);
@@ -42,14 +42,15 @@ public class Rook extends Piece {
         Piece sovereign = this.getPlayer().getSovereign();
         // first, check if there are pieces between king and rook and if either have moved
         if (sovereign.getPosition().lineOfSight(this.getPosition(), board) && !this.hasMoved() && !sovereign.hasMoved()) {
-            // now check if any squares between king and rook are under attack
-            ArrayList<Coordinate> coordsBetween = this.getPosition().coordsBetween(sovereign.getPosition(), board);
+            // now check if any squares between king and final king position are under attack
+            int direction = this.getPosition().x < sovereign.getPosition().x ? -1 : 1;
+            Coordinate newSovereignCoord = new Coordinate(sovereign.getPosition().x + 2 * direction, sovereign.getPosition().y);
+            ArrayList<Coordinate> coordsBetween = newSovereignCoord.coordsBetween(sovereign.getPosition(), board);
             ArrayList<Coordinate> allMoves = new ArrayList<>();
 
-            // todo STACKOVERFLOW ERROR BECAUSE OPPONENT ROOK POSSIBLE MOVES WILL BE CALLED HERE
             for (Piece piece : board.getPieces())
                 if (piece.getPlayer() != this.getPlayer())
-                    allMoves.addAll(piece.possibleMoves());
+                    allMoves.addAll(piece.attackingMoves());
 
             boolean underAttack = false;
             for (Coordinate move : allMoves)
@@ -60,7 +61,6 @@ public class Rook extends Piece {
 
             // now we can add castling as a move
             if (!underAttack) {
-                int direction = this.getPosition().x < sovereign.getPosition().x ? -1 : 1;
                 Coordinate move = new Coordinate(sovereign.getPosition().x + direction, sovereign.getPosition().y);
                 castlingMoves.add(move);
                 moves.add(move);
