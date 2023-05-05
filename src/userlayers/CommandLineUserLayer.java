@@ -76,19 +76,26 @@ public class CommandLineUserLayer implements UserLayer {
     }
 
     @Override
-    public String dialogue(String message) {
-        System.out.print(message + ": ");
-        Scanner sc = new Scanner(System.in);
-        return sc.nextLine();
-    }
-
-    @Override
     public void showWinner(Player winner) {
-
+        System.out.println(winner + " wins!");
     }
 
     @Override
     public void showCheck(Player checking, Player checked) {
+        System.out.println(checking + " checks " + checked);
+    }
 
+    @Override
+    public String getPromotion() {
+        System.out.println("which piece would you like to promote to?");
+        Scanner sc = new Scanner(System.in);
+        return sc.nextLine().toUpperCase();
+    }
+
+    @Override
+    public boolean confirmCastling() {
+        System.out.println("would you like to castle (y/n)?");
+        Scanner sc = new Scanner(System.in);
+        return sc.nextLine().equals("y");
     }
 }

@@ -28,11 +28,6 @@ public class DummyUserLayer implements UserLayer {
     }
 
     @Override
-    public String dialogue(String message) {
-        return null;
-    }
-
-    @Override
     public void showWinner(Player winner) {
 
     }
@@ -40,5 +35,15 @@ public class DummyUserLayer implements UserLayer {
     @Override
     public void showCheck(Player checking, Player checked) {
 
+    }
+
+    @Override
+    public String getPromotion() {
+        return null;
+    }
+
+    @Override
+    public boolean confirmCastling() {
+        return false;
     }
 }

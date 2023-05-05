@@ -160,9 +160,7 @@ public class GUIUserLayer implements UserLayer, MouseListener {
     }
 
     @Override
-    public String dialogue(String message) {
-        System.out.println(message);
-
+    public String getPromotion() {
         PromotionDialogueMenu pm = new PromotionDialogueMenu(100, 30, lock);
 
         synchronized (lock) {
@@ -176,6 +174,21 @@ public class GUIUserLayer implements UserLayer, MouseListener {
         }
 
         return pm.getPiece().toUpperCase();
+    }
+
+    @Override
+    public boolean confirmCastling() {
+        CastlingDialogueMenu cm = new CastlingDialogueMenu(100, 100, lock);
+
+        synchronized (lock) {
+            while (!cm.isFinished()) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) { throw new RuntimeException(e); }
+            }
+        }
+
+        return cm.getConfirm();
     }
 
     @Override

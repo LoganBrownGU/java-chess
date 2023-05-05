@@ -24,7 +24,7 @@ public class PromotionDialogueMenu {
     };
 
     public PromotionDialogueMenu(int x, int y, Object lock) {
-        frame = new Frame("promotion");
+        frame = new Frame();
         this.lock = lock;
         frame.setSize(300, 100);
         frame.setLocation(x, y);

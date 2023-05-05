@@ -17,5 +17,6 @@ public interface UserLayer {
 
     void showCheck(Player checking, Player checked);
 
-    String dialogue(String message);
+    String getPromotion();
+    boolean confirmCastling();
 }

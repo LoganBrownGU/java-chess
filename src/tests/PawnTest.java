@@ -55,8 +55,13 @@ class PawnTest {
             }
 
             @Override
-            public String dialogue(String message) {
-                return "QUEEN";
+            public String getPromotion() {
+                return null;
+            }
+
+            @Override
+            public boolean confirmCastling() {
+                return false;
             }
         });
         Player player = new HumanPlayer('a', board);

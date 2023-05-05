@@ -12,7 +12,7 @@ public class Rook extends Piece {
 
     @Override
     public void setPosition(Coordinate position) {
-        if (castlingMoves.contains(position) && board.getUserLayer().dialogue("Would you like to castle?").equals("y")) {
+        if (castlingMoves.contains(position) && board.getUserLayer().confirmCastling()) {
             Piece sovereign = this.getPlayer().getSovereign();
             int direction = this.getPosition().x < sovereign.getPosition().x ? -1 : 1;
             sovereign.setPosition(new Coordinate(sovereign.getPosition().x + 2 * direction, sovereign.getPosition().y));
