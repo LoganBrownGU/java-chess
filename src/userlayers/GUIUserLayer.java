@@ -44,7 +44,6 @@ public class GUIUserLayer implements UserLayer, MouseListener {
     private Image checkmark;
 
     private static final Object lock = new Object();
-    String promotionPiece = null;
 
     private void drawSquares(Graphics2D g, int max, int divSize) {
         g.setColor(canvas.squareColour);
@@ -163,27 +162,6 @@ public class GUIUserLayer implements UserLayer, MouseListener {
     @Override
     public String dialogue(String message) {
         System.out.println(message);
-        /*PopupMenu pm = new PopupMenu();
-
-        class MenuItemListener implements ActionListener {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                synchronized (lock) {
-                    promotionPiece = e.getActionCommand();
-                    lock.notify();
-                }
-            }
-        }
-
-        for (PieceType type: PieceType.values()) {
-            MenuItem mi = new MenuItem(type.toString());
-            System.out.println(mi);
-            mi.addActionListener(new MenuItemListener());
-            pm.add(mi);
-        }
-
-        canvas.add(pm);
-        pm.show(canvas, 100, 100);*/
 
         PromotionDialogueMenu pm = new PromotionDialogueMenu(100, 30, lock);
 
@@ -197,7 +175,7 @@ public class GUIUserLayer implements UserLayer, MouseListener {
             }
         }
 
-        return pm.getPiece();
+        return pm.getPiece().toUpperCase();
     }
 
     @Override

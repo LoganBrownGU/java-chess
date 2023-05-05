@@ -3,16 +3,13 @@ package userlayers;
 import pieces.PieceType;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 public class PromotionDialogueMenu {
 
     private final Object lock;
     private String piece = null;
-    private final Choice choice;
+    private Choice choice;
     private final Frame frame;
 
     ActionListener buttonListener = new ActionListener() {
@@ -20,12 +17,9 @@ public class PromotionDialogueMenu {
         public void actionPerformed(ActionEvent e) {
             piece = choice.getItem(choice.getSelectedIndex());
             synchronized (lock) {
-                piece = null;
                 lock.notify();
             }
             frame.dispose();
-
-            System.out.println(piece);
         }
     };
 
@@ -43,6 +37,7 @@ public class PromotionDialogueMenu {
         for (PieceType type : PieceType.values())
             choice.add(type.toString().toLowerCase());
         choice.setBounds(0, 40, 100, 20);
+        choice.select(0);
         panel.add(choice);
 
         Button confirm = new Button("confirm");
