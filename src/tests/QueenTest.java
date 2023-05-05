@@ -119,7 +119,7 @@ class QueenTest {
         player3.setSovereign(new King(player3, new Coordinate(2, 2), board));
         new Pawn(player3, new Coordinate(4, 6), 1, board);
         ArrayList<Coordinate> moves = queen.possibleMoves();
-        assertTrue(board.check(queen.getPlayer()) == null);
+        assertNull(board.check(queen.getPlayer()));
     }
 
     @Test
