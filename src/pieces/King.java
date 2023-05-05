@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 public class King extends Sovereign {
 
-    //todo make a sovereign interface
-
     @Override
     public ArrayList<Coordinate> attackingMoves() {
         ArrayList<Coordinate> moves = new ArrayList<>();

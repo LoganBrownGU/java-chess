@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class Pawn extends Piece {
 
     // todo pawn seems to be able to jump over other pieces on first go
-    // todo pawn cant take up and to right or left
 
     public final int direction;
     public final int promotionRank;
@@ -78,9 +77,12 @@ public class Pawn extends Piece {
 
         // moving forward
         Coordinate test = new Coordinate(position.x, position.y + direction);
-        if (board.pieceAt(test) == null) moves.add(test);
-        test = new Coordinate(test.x, test.y + direction);
-        if (!this.hasMoved() && board.pieceAt(test) == null) moves.add(test);
+        if (board.pieceAt(test) == null) {
+            // can only move forward two if space in front of pawn is empty
+            moves.add(test);
+            test = new Coordinate(test.x, test.y + direction);
+            if (!this.hasMoved() && board.pieceAt(test) == null) moves.add(test);
+        }
 
         return board.sanitiseMoves(moves, this);
     }

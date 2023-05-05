@@ -15,7 +15,6 @@ public class Main {
         board.removePiece(board.pieceAt(new Coordinate(3, 0)));
         board.removePiece(board.pieceAt(new Coordinate(2, 0)));
         board.removePiece(board.pieceAt(new Coordinate(1, 0)));*/
-        board.setUserLayerActive(false);
 
         board.play();
     }

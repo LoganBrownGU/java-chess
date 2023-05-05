@@ -5,6 +5,7 @@ import board.BoardFactory;
 import board.StandardGameBoard;
 import main.Coordinate;
 import org.junit.jupiter.api.Test;
+import pieces.Bishop;
 import pieces.Pawn;
 import pieces.Piece;
 import pieces.Queen;
@@ -213,5 +214,16 @@ class PawnTest {
         pawn1.setPosition(new Coordinate(5, 5));
 
         assertSame(board.pieceAt(pawn1.getPosition()), pawn1);
+    }
+
+    @Test
+    void recreateJumpingBug() {
+        Board board = BoardFactory.standardBoard(new CommandLineUserLayer());
+
+        Pawn pawn = (Pawn) board.pieceAt(new Coordinate(0, 1));
+        Bishop test = new Bishop(board.getPlayers().get(1), new Coordinate(0, 2), board);
+        board.addPiece(test);
+
+        assertFalse(pawn.possibleMoves().contains(new Coordinate(0, 3)));
     }
 }
