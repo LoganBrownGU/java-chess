@@ -160,25 +160,35 @@ public class GUIUserLayer implements UserLayer, MouseListener {
         this.board = board;
     }
 
-    ActionListener miListener
-
     @Override
     public String dialogue(String message) {
         System.out.println(message);
-        PopupMenu pm = new PopupMenu();
+        /*PopupMenu pm = new PopupMenu();
+
+        class MenuItemListener implements ActionListener {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                synchronized (lock) {
+                    promotionPiece = e.getActionCommand();
+                    lock.notify();
+                }
+            }
+        }
 
         for (PieceType type: PieceType.values()) {
             MenuItem mi = new MenuItem(type.toString());
             System.out.println(mi);
-            mi.addActionListener(e -> {piece = mi.getLabel(); lock.notify();});
+            mi.addActionListener(new MenuItemListener());
             pm.add(mi);
         }
 
         canvas.add(pm);
-        pm.show(canvas, 100, 100);
+        pm.show(canvas, 100, 100);*/
+
+        PromotionDialogueMenu pm = new PromotionDialogueMenu(100, 30, lock);
 
         synchronized (lock) {
-            while (promotionPiece == null) {
+            while (pm.getPiece() == null) {
                 try {
                     lock.wait();
                 } catch (InterruptedException e) {
@@ -187,8 +197,7 @@ public class GUIUserLayer implements UserLayer, MouseListener {
             }
         }
 
-
-        return p;
+        return pm.getPiece();
     }
 
     @Override
