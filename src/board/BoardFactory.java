@@ -10,11 +10,9 @@ import userlayers.UserLayer;
 public class BoardFactory {
     private static StandardGameBoard standardBoard(StandardGameBoard board, Player player1, Player player2) {
 
+        // add sovereigns
         player2.setSovereign(new King(player2, new Coordinate(3, 7), board));
         player1.setSovereign(new King(player1, new Coordinate(4, 0), board));
-
-        board.addPlayer(player1);
-        board.addPlayer(player2);
 
         // add rooks
         new Rook(player1, new Coordinate(0, 0), board);
@@ -38,8 +36,6 @@ public class BoardFactory {
         new Queen(player1, new Coordinate(3, 0), board);
         new Queen(player2, new Coordinate(4, 7), board);
 
-        // add kings
-
         //add pawns
         for (int i = 0; i < 8; i++) {
             new Pawn(player1, new Coordinate(i, 1), 1, board);
@@ -53,8 +49,8 @@ public class BoardFactory {
     public static StandardGameBoard standardBoard(UserLayer userLayer) {
         StandardGameBoard board = new StandardGameBoard(userLayer);
 
-        Player player2 = new HumanPlayer('b', board);
         Player player1 = new HumanPlayer('w', board);
+        Player player2 = new HumanPlayer('b', board);
 
 
         return standardBoard(board, player1, player2);
@@ -72,14 +68,12 @@ public class BoardFactory {
     public static StandardGameBoard castlingTest(UserLayer userLayer) {
         StandardGameBoard board = new StandardGameBoard(userLayer);
         Player player = new HumanPlayer('b', board);
-        board.addPlayer(player);
 
         Piece rook = new Rook(player, new Coordinate(0, 7), board);
         Sovereign king = new King(player, new Coordinate(3, 7), board);
         player.setSovereign(king);
 
         player = new HumanPlayer('w', board);
-        board.addPlayer(player);
 
         rook = new Rook(player, new Coordinate(0, 0), board);
         king = new King(player, new Coordinate(3, 0), board);
@@ -95,7 +89,6 @@ public class BoardFactory {
     public static StandardGameBoard promotionTest(UserLayer userLayer) {
         StandardGameBoard board = new StandardGameBoard(userLayer);
         Player player = new HumanPlayer('w', board);
-        board.addPlayer(player);
 
         Pawn pawn = new Pawn(player, new Coordinate(1, 6), 1, board);
 
@@ -136,7 +129,7 @@ public class BoardFactory {
                     if (piece == pc.getSovereign()) playerClone.setSovereign((Sovereign) clonePiece);
                 }
             }
-            clone.addPlayer(playerClone);
+
         }
 
         return clone;

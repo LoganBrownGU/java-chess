@@ -18,6 +18,8 @@ public abstract class Player {
     public Player(char representation, Board board) {
         this.representation = representation;
         this.board = board;
+
+        this.board.addPlayer(this);
     }
 
     public Sovereign getSovereign() {

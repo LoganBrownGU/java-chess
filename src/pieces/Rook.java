@@ -36,9 +36,6 @@ public class Rook extends Piece {
     public ArrayList<Coordinate> possibleMoves() {
         ArrayList<Coordinate> moves = new ArrayList<>(this.attackingMoves());
 
-        // castling
-        // todo decide if castling should be with sovereign or king specifically
-
         Piece sovereign = this.getPlayer().getSovereign();
         // first, check if there are pieces between king and rook and if either have moved
         if (sovereign.getPosition().lineOfSight(this.getPosition(), board) && !this.hasMoved() && !sovereign.hasMoved()) {

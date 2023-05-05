@@ -86,15 +86,15 @@ public abstract class Board implements BoardStrategy {
         updateUserLayer();
     }
 
-    public boolean hasPieceAt(Coordinate coord) {
-        return this.pieceAt(coord) != null;
-    }
-
     public void addPlayer(Player p) {
         for (Player player : this.getPlayers())
             if (player.representation == p.representation) throw new RuntimeException("Another player already has representation " + p.representation);
 
         players.add(p);
+    }
+
+    public boolean hasPieceAt(Coordinate coord) {
+        return this.pieceAt(coord) != null;
     }
 
     public ArrayList<Piece> getPieces() {

@@ -34,6 +34,7 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
         }
     }
 
+    private Frame frame;
     private Canvas canvas;
     private Graphics2D g;
     private Board board;
@@ -173,6 +174,14 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
 
         canvas.removeMouseListener(this);
         canvas.removeMouseMotionListener(this);
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        frame.dispose();
     }
 
     @Override
@@ -267,7 +276,7 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     }
 
     public GUIUserLayer() {
-        Frame frame = new Frame("Chess");
+        frame = new Frame("Chess");
         int size = (int) (Math.min(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height) * 0.8);
         canvas = new Canvas((int) (size * 0.9), new Color(0x30, 0x30, 0x30), new Color(0xd0, 0xd0, 0xd0));
         canvas.setLocation((int) (size * 0.05), (int) (size * 0.05));

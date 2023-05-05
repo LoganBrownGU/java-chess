@@ -5,10 +5,12 @@ import board.BoardFactory;
 import board.StandardGameBoard;
 import main.Coordinate;
 import org.junit.jupiter.api.Test;
+import pieces.King;
 import pieces.Pawn;
 import pieces.Piece;
 import pieces.Queen;
 import players.HumanPlayer;
+import players.Player;
 import userlayers.CommandLineUserLayer;
 
 import java.util.ArrayList;
@@ -113,7 +115,9 @@ class QueenTest {
 
         Piece queen = board.pieceAt(new Coordinate(4, 7));
         queen.setPosition(new Coordinate(4, 4));
-        new Pawn(new HumanPlayer('z', board), new Coordinate(4, 6), 1, board);
+        Player player3 = new HumanPlayer('z', board);
+        player3.setSovereign(new King(player3, new Coordinate(2, 2), board));
+        new Pawn(player3, new Coordinate(4, 6), 1, board);
         ArrayList<Coordinate> moves = queen.possibleMoves();
         assertTrue(board.check(queen.getPlayer()) == null);
     }

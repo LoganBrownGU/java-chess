@@ -62,8 +62,7 @@ class StandardGameBoardTest {
         StandardGameBoard board = new StandardGameBoard();
         Player player1 = new HumanPlayer('a', board);
         Player player2 = new HumanPlayer('b', board);
-        board.addPlayer(player1);
-        board.addPlayer(player2);
+
         Sovereign king = new King(player1, new Coordinate(0, 0), board);
         player1.setSovereign(king);
 
@@ -83,8 +82,7 @@ class StandardGameBoardTest {
         StandardGameBoard board = new StandardGameBoard();
         Player player1 = new HumanPlayer('a', board);
         Player player2 = new HumanPlayer('b', board);
-        board.addPlayer(player1);
-        board.addPlayer(player2);
+
         Sovereign king = new King(player1, new Coordinate(0, 0), board);
         player1.setSovereign(king);
 
