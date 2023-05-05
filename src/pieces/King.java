@@ -6,10 +6,9 @@ import players.Player;
 
 import java.util.ArrayList;
 
-public class King extends Piece {
+public class King extends Sovereign {
 
     //todo make a sovereign interface
-    private boolean checked = false;
 
     @Override
     public ArrayList<Coordinate> attackingMoves() {
@@ -33,15 +32,19 @@ public class King extends Piece {
         return board.sanitiseMoves(this.attackingMoves(), this);
     }
 
+    @Override
+    public Player checkedBy() {
+        for (Player player : board.getPlayers()) {
+            if (player == this.getPlayer()) continue;
+
+            for (Piece piece : board.getPiecesBelongingTo(player))
+                if (piece.attackingMoves().contains(this.getPosition())) return player;
+        }
+
+        return null;
+    }
+
     public King(Player player, Coordinate position, Board board) {
         super(player, position, PieceType.KING, board, "kg");
-    }
-
-    public boolean isChecked() {
-        return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
     }
 }

@@ -15,11 +15,7 @@ public class StandardGameBoard extends Board {
         for (Player other : this.getPlayers()) {
             if (other == player) continue;
 
-            for (Piece piece : super.getPieces()) {
-                if (piece.getPlayer() != player) continue;
-
-                if (piece.attackingMoves().contains(other.getSovereign().getPosition())) return other;
-            }
+            if (other.getSovereign().checkedBy() == player) return other;
         }
 
         return null;

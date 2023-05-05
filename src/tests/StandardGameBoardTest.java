@@ -5,10 +5,7 @@ import board.StandardGameBoard;
 import main.Coordinate;
 import org.junit.jupiter.api.Test;
 import org.opentest4j.AssertionFailedError;
-import pieces.King;
-import pieces.Knight;
-import pieces.Pawn;
-import pieces.Piece;
+import pieces.*;
 import players.HumanPlayer;
 import players.Player;
 import userlayers.CommandLineUserLayer;
@@ -67,7 +64,7 @@ class StandardGameBoardTest {
         Player player2 = new HumanPlayer('b', board);
         board.addPlayer(player1);
         board.addPlayer(player2);
-        Piece king = new King(player1, new Coordinate(0, 0), board);
+        Sovereign king = new King(player1, new Coordinate(0, 0), board);
         player1.setSovereign(king);
 
         board.addPiece(new Pawn(player1, new Coordinate(1, 0), 1, board));
@@ -89,7 +86,7 @@ class StandardGameBoardTest {
         Player player2 = new HumanPlayer('b', board);
         board.addPlayer(player1);
         board.addPlayer(player2);
-        Piece king = new King(player1, new Coordinate(0, 0), board);
+        Sovereign king = new King(player1, new Coordinate(0, 0), board);
         player1.setSovereign(king);
 
         board.addPiece(new Knight(player1, new Coordinate(0, 1), board));

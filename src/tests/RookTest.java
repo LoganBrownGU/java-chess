@@ -43,7 +43,7 @@ class RookTest {
         Player player = new HumanPlayer('a', board);
         Piece rook = new Rook(player, new Coordinate(0, 0), board);
         board.addPiece(rook);
-        Piece king = new King(player, new Coordinate(4, 0), board);
+        Sovereign king = new King(player, new Coordinate(4, 0), board);
         board.addPiece(king);
         player.setSovereign(king);
         board.setUserLayerActive(true);

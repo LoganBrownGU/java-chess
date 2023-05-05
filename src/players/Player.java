@@ -3,13 +3,14 @@ package players;
 import board.Board;
 import main.Coordinate;
 import pieces.Piece;
+import pieces.Sovereign;
 
 public abstract class Player {
     // todo could add self to board in constructor
 
     public final char representation;
     public final Board board;
-    private Piece sovereign;
+    private Sovereign sovereign;
 
     public abstract Piece getPiece();
     public abstract Coordinate getMove(Piece pieceToMove);
@@ -19,11 +20,11 @@ public abstract class Player {
         this.board = board;
     }
 
-    public Piece getSovereign() {
+    public Sovereign getSovereign() {
         return sovereign;
     }
 
-    public void setSovereign(Piece sovereign) {
+    public void setSovereign(Sovereign sovereign) {
         this.sovereign = sovereign;
     }
 

@@ -78,7 +78,7 @@ public class BoardFactory {
 
         Piece rook = new Rook(player, new Coordinate(0, 7), board);
         board.addPiece(rook);
-        Piece king = new King(player, new Coordinate(3, 7), board);
+        Sovereign king = new King(player, new Coordinate(3, 7), board);
         board.addPiece(king);
         player.setSovereign(king);
 
@@ -141,7 +141,7 @@ public class BoardFactory {
                 if (piece.getPlayer() == board.getPlayers().get(i)) {
                     Piece clonePiece = PieceFactory.clonePiece(piece, playerClone, clone);
                     clone.addPiece(clonePiece);
-                    if (piece == pc.getSovereign()) playerClone.setSovereign(clonePiece);
+                    if (piece == pc.getSovereign()) playerClone.setSovereign((Sovereign) clonePiece);
                 }
             }
             clone.addPlayer(playerClone);
