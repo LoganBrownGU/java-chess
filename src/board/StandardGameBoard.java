@@ -6,8 +6,6 @@ import players.Player;
 import userlayers.CommandLineUserLayer;
 import userlayers.UserLayer;
 
-import java.util.ArrayList;
-
 public class StandardGameBoard extends Board {
 
     public Player check(Player player) {        // returns player that player is checking or null if it is not
@@ -86,14 +84,14 @@ public class StandardGameBoard extends Board {
                 if (winner != null) {
                     getUserLayer().showWinner(winner);
                     hasWon = true;
-                    break gameLoop;
+                    break;
                 }
 
                 // if opponent puts player into check, and then player does not prevent the check
                 if (checked != null && check(checking) == checked) {
                     getUserLayer().showWinner(checking);
                     hasWon = true;
-                    break gameLoop;
+                    break;
                 }
 
                 // if player puts themself into check

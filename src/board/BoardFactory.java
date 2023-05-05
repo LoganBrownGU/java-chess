@@ -8,6 +8,8 @@ import players.Player;
 import userlayers.UserLayer;
 
 public class BoardFactory {
+    // todo add a function that allows user to create board with players of their choosing
+
     private static StandardGameBoard standardBoard(StandardGameBoard board, Player player1, Player player2) {
 
         // add sovereigns
@@ -69,13 +71,13 @@ public class BoardFactory {
         StandardGameBoard board = new StandardGameBoard(userLayer);
         Player player = new HumanPlayer('b', board);
 
-        Piece rook = new Rook(player, new Coordinate(0, 7), board);
+        new Rook(player, new Coordinate(0, 7), board);
         Sovereign king = new King(player, new Coordinate(3, 7), board);
         player.setSovereign(king);
 
         player = new HumanPlayer('w', board);
 
-        rook = new Rook(player, new Coordinate(0, 0), board);
+        new Rook(player, new Coordinate(0, 0), board);
         king = new King(player, new Coordinate(3, 0), board);
         player.setSovereign(king);
 

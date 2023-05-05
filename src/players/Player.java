@@ -6,8 +6,6 @@ import pieces.Piece;
 import pieces.Sovereign;
 
 public abstract class Player {
-    // todo could add self to board in constructor
-
     public final char representation;
     public final Board board;
     private Sovereign sovereign;

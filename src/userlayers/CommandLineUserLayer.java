@@ -5,8 +5,6 @@ import main.Coordinate;
 import pieces.Piece;
 import players.Player;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 

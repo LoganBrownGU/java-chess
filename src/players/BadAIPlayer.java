@@ -25,8 +25,7 @@ public class BadAIPlayer extends Player {
 
     @Override
     public Coordinate getMove(Piece pieceToMove) {
-        Coordinate move = pieceToMove.possibleMoves().get(rd.nextInt(pieceToMove.possibleMoves().size()));
-        return move;
+        return pieceToMove.possibleMoves().get(rd.nextInt(pieceToMove.possibleMoves().size()));
     }
 
     public BadAIPlayer(char representation, Board board) {

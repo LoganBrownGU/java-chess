@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Rook extends Piece {
 
-    private ArrayList<Coordinate> castlingMoves = new ArrayList<>();
+    private final ArrayList<Coordinate> castlingMoves = new ArrayList<>();
 
     @Override
     public void setPosition(Coordinate position) {

@@ -8,9 +8,9 @@ import userlayers.UserLayer;
 import java.util.ArrayList;
 
 public abstract class Board implements BoardStrategy {
-    private ArrayList<Piece> pieces;
-    private ArrayList<Player> players;
-    private UserLayer userLayer;
+    private final ArrayList<Piece> pieces;
+    private final ArrayList<Player> players;
+    private final UserLayer userLayer;
     public final int maxX, maxY;
     private Coordinate lastMove = null;
 

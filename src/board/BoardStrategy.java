@@ -2,7 +2,6 @@ package board;
 
 import main.Coordinate;
 import pieces.Piece;
-import players.Player;
 
 import java.util.ArrayList;
 

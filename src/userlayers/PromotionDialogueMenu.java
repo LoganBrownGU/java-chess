@@ -9,7 +9,7 @@ public class PromotionDialogueMenu {
 
     private final Object lock;
     private String piece = null;
-    private Choice choice;
+    private final Choice choice;
     private final Frame frame;
 
     ActionListener buttonListener = new ActionListener() {

@@ -114,20 +114,6 @@ public class Coordinate {
         return x == y;
     }
 
-    public boolean adjacent(Coordinate other) {
-        int x = Math.abs(this.x - other.x);
-        int y = Math.abs(this.y - other.y);
-
-        return (x <= 1 && y == 0) || (y <= 1 && x == 0);
-    }
-
-    public boolean adjacentDiagonally(Coordinate other) {
-        int x = Math.abs(this.x - other.x);
-        int y = Math.abs(this.y - other.y);
-
-        return x == 1 && y == 1;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

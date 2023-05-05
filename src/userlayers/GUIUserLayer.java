@@ -3,7 +3,6 @@ package userlayers;
 import board.Board;
 import main.Coordinate;
 import pieces.Piece;
-import pieces.PieceType;
 import players.Player;
 
 import javax.imageio.ImageIO;
@@ -13,7 +12,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListener {
 
@@ -34,18 +32,17 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
         }
     }
 
-    private Frame frame;
-    private Canvas canvas;
-    private Graphics2D g;
+    private final Frame frame;
+    private final Canvas canvas;
+    private final Graphics2D g;
     private Board board;
     private static volatile MouseEvent mouseEvent = null;
-    private int divSize, max;
+    private int divSize;
     private Piece highlighted = null;
-    private HashMap<String, Image> icons = new HashMap<>();
-    private Image checkmark;
+    private final HashMap<String, Image> icons = new HashMap<>();
+    private final Image checkmark;
     private boolean moving = false;
     private Player checked = null, checking = null;
-    private boolean active = false;
 
     private static final Object lock = new Object();
 
@@ -69,7 +66,7 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
         g.setComposite(defaultComposite);
     }
 
-    private void drawPieces(Graphics2D g, int max, int divSize) {
+    private void drawPieces(Graphics2D g, int divSize) {
         for (Piece p : board.getPieces()) {
             String iconName = p.getPlayer().representation + p.representation;
             BufferedImage image = (BufferedImage) icons.get(iconName);
@@ -90,10 +87,10 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
 
     private void drawBoard() {
         g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        max = Math.max(board.maxX, board.maxY);
+        int max = Math.max(board.maxX, board.maxY);
         divSize = (int) Math.ceil((float) canvas.getWidth() / max);
         drawSquares(g, max, divSize);
-        drawPieces(g, max, divSize);
+        drawPieces(g, divSize);
 
         if (this.checked != null) {
             int x = checked.getSovereign().getPosition().x;
@@ -230,7 +227,6 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
 
     @Override
     public void setActive(boolean active) {
-        this.active = active;
 
         if (active) {
             canvas.addMouseMotionListener(this);
