@@ -25,6 +25,12 @@ public class BadAIPlayer extends Player {
 
     @Override
     public Coordinate getMove(Piece pieceToMove) {
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         return pieceToMove.possibleMoves().get(rd.nextInt(pieceToMove.possibleMoves().size()));
     }
 

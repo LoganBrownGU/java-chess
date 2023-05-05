@@ -5,6 +5,7 @@ import pieces.*;
 import players.BadAIPlayer;
 import players.HumanPlayer;
 import players.Player;
+import players.PlayerType;
 import userlayers.UserLayer;
 
 public class BoardFactory {
@@ -58,11 +59,11 @@ public class BoardFactory {
         return standardBoard(board, player1, player2);
     }
 
-    public static StandardGameBoard standardGameBoardAgainstBadAI(UserLayer userLayer) {
+    public static StandardGameBoard standardBoardAgainstBadAI(UserLayer userLayer) {
         StandardGameBoard board = new StandardGameBoard(userLayer);
 
-        Player player2 = new BadAIPlayer('b', board);
         Player player1 = new HumanPlayer('w', board);
+        Player player2 = new BadAIPlayer('b', board);
 
         return standardBoard(board, player1, player2);
     }
@@ -106,6 +107,15 @@ public class BoardFactory {
         board.pieceAt(new Coordinate(5, 1)).setPosition(new Coordinate(4, 5));
 
         return board;
+    }
+
+    public static StandardGameBoard standardBoardFromPlayers(PlayerType player1, PlayerType player2, UserLayer userLayer) {
+        StandardGameBoard board = new StandardGameBoard(userLayer);
+
+        Player white = player1.toPlayer('w', board);
+        Player black = player2.toPlayer('b', board);
+
+        return standardBoard(board, white, black);
     }
 
     public static StandardGameBoard cloneBoard(Board board) {
