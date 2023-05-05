@@ -19,4 +19,6 @@ public interface UserLayer {
 
     String getPromotion();
     boolean confirmCastling();
+
+    void setActive(boolean active);
 }

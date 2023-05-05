@@ -14,9 +14,13 @@ public class CommandLineUserLayer implements UserLayer {
 
     private final String clear = "\n".repeat(50);
 
-    private Scanner sc = new Scanner(System.in);
+    private final Scanner sc = new Scanner(System.in);
     private Board board;
+    private boolean active = false;
+
     public void update() {
+        if (!active) return;
+
         System.out.println(clear);
 
         String boardRep[][] = new String[board.maxY][board.maxX];
@@ -40,7 +44,7 @@ public class CommandLineUserLayer implements UserLayer {
             sb.append("| ").append(i++).append("\n");
         }
 
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 
     @Override
@@ -97,5 +101,10 @@ public class CommandLineUserLayer implements UserLayer {
         System.out.println("would you like to castle (y/n)?");
         Scanner sc = new Scanner(System.in);
         return sc.nextLine().equals("y");
+    }
+
+    @Override
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

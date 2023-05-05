@@ -63,6 +63,11 @@ class PawnTest {
             public boolean confirmCastling() {
                 return false;
             }
+
+            @Override
+            public void setActive(boolean active) {
+
+            }
         });
         Player player = new HumanPlayer('a', board);
         Pawn pawn = new Pawn(player, new Coordinate(0, 6), 1, board);

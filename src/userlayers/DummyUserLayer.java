@@ -46,4 +46,9 @@ public class DummyUserLayer implements UserLayer {
     public boolean confirmCastling() {
         return false;
     }
+
+    @Override
+    public void setActive(boolean active) {
+
+    }
 }

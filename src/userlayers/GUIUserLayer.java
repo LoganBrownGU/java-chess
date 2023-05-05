@@ -44,6 +44,7 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     private Image checkmark;
     private boolean moving = false;
     private Player checked = null, checking = null;
+    private boolean active = false;
 
     private static final Object lock = new Object();
 
@@ -216,6 +217,19 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
         }
 
         return cm.getConfirm();
+    }
+
+    @Override
+    public void setActive(boolean active) {
+        this.active = active;
+
+        if (active) {
+            canvas.addMouseMotionListener(this);
+            canvas.addMouseListener(this);
+        } else {
+            canvas.removeMouseListener(this);
+            canvas.removeMouseMotionListener(this);
+        }
     }
 
     @Override

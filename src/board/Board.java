@@ -10,16 +10,28 @@ import userlayers.UserLayer;
 import java.util.ArrayList;
 
 public abstract class Board implements BoardStrategy {
-    // todo add check to make sure that two players don't have the same rep
     private ArrayList<Piece> pieces;
     private ArrayList<Player> players;
-    private UserLayer userLayer = null;
-    private boolean userLayerActive = false;
+    private UserLayer userLayer;
     public final int maxX, maxY;
     private Coordinate lastMove = null;
 
     public boolean onBoard(Coordinate coord) {
         return coord.x >= 0 && coord.y >= 0 && coord.x < maxX && coord.y < maxY;
+    }
+
+    public ArrayList<Coordinate> sanitiseMoves(ArrayList<Coordinate> moves, Piece piece) {
+        ArrayList<Coordinate> newMoves = new ArrayList<>();
+        for (Coordinate coord : moves) {
+            Piece test = this.pieceAt(coord);
+            if (test != null && test.getPlayer() == piece.getPlayer()) continue;
+
+            if (!this.onBoard(coord)) continue;
+
+            newMoves.add(coord);
+        }
+
+        return newMoves;
     }
 
     public Player playerWithRep(char representation) {
@@ -49,7 +61,6 @@ public abstract class Board implements BoardStrategy {
     }
 
     public void updateUserLayer() {
-        if (!userLayerActive) return;
         if (userLayer != null) userLayer.update();
         else throw new RuntimeException("USERLAYER IN BOARD HAS NOT BEEN INITIALISED");
     }
@@ -68,8 +79,7 @@ public abstract class Board implements BoardStrategy {
     public void addPiece(Piece p) {
         pieces.add(p);
 
-        // todo can probably remove the not null check
-        if (userLayer != null) updateUserLayer();
+        updateUserLayer();
     }
 
     public void removePiece(Piece p) {
@@ -83,6 +93,9 @@ public abstract class Board implements BoardStrategy {
     }
 
     public void addPlayer(Player p) {
+        for (Player player : this.getPlayers())
+            if (player.representation == p.representation) throw new RuntimeException("Another player already has representation " + p.representation);
+
         players.add(p);
     }
 
@@ -107,6 +120,6 @@ public abstract class Board implements BoardStrategy {
     }
 
     public void setUserLayerActive(boolean userLayerActive) {
-        this.userLayerActive = userLayerActive;
+        this.getUserLayer().setActive(userLayerActive);
     }
 }
