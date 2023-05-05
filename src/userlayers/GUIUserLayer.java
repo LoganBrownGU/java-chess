@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class GUIUserLayer implements UserLayer, MouseListener {
+public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListener {
 
     // chess icons: <a href="https://iconscout.com/icon-pack/chess" target="_blank">Free Chess Icon Pack</a> on <a href="https://iconscout.com">IconScout</a>
 
@@ -42,6 +42,7 @@ public class GUIUserLayer implements UserLayer, MouseListener {
     private Piece highlighted = null;
     private HashMap<String, Image> icons = new HashMap<>();
     private Image checkmark;
+    private boolean moving = false;
 
     private static final Object lock = new Object();
 
@@ -84,7 +85,22 @@ public class GUIUserLayer implements UserLayer, MouseListener {
         }
     }
 
-    private void waitForMouse() {
+    private void drawBoard() {
+        g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        max = Math.max(board.maxX, board.maxY);
+        divSize = (int) Math.ceil((float) canvas.getWidth() / max);
+        drawSquares(g, max, divSize);
+        drawPieces(g, max, divSize);
+    }
+
+    private Coordinate coordinateOf(MouseEvent e) {
+        int x = e.getX() / divSize;
+        int y = e.getY() / divSize;
+
+        return new Coordinate(x, y);
+    }
+
+    private MouseEvent waitForMouse() {
         mouseEvent = null;
 
         synchronized (lock) {
@@ -96,38 +112,34 @@ public class GUIUserLayer implements UserLayer, MouseListener {
                 }
             }
         }
+
+        return mouseEvent;
     }
 
     @Override
     public Piece getPiece(Player p) {
         waitForMouse();
 
-        int x = mouseEvent.getX() / divSize;
-        int y = mouseEvent.getY() / divSize;
-        highlighted = board.pieceAt(new Coordinate(x, y));
-        update();
+        Coordinate coord = coordinateOf(mouseEvent);
+        highlighted = board.pieceAt(coord);
+        drawBoard();
 
-        return board.pieceAt(new Coordinate(x, y));
+        return board.pieceAt(coord);
     }
 
     @Override
     public Coordinate getMove() {
-        waitForMouse();
-
-        int x = mouseEvent.getX() / divSize;
-        int y = mouseEvent.getY() / divSize;
+        moving = true;
+        MouseEvent e = waitForMouse();
 
         highlighted = null;
-        return new Coordinate(x, y);
+        moving = false;
+        return coordinateOf(e);
     }
 
     @Override
     public void update() {
-        g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        max = Math.max(board.maxX, board.maxY);
-        divSize = (int) Math.ceil((float) canvas.getWidth() / max);
-        drawSquares(g, max, divSize);
-        drawPieces(g, max, divSize);
+        drawBoard();
     }
 
     @Override
@@ -210,6 +222,21 @@ public class GUIUserLayer implements UserLayer, MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {}
 
+    @Override
+    public void mouseDragged(MouseEvent e) {}
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        if (moving) return;
+
+        Piece piece = board.pieceAt(coordinateOf(e));
+
+        if (piece != null && piece != highlighted) {
+            highlighted = board.pieceAt(coordinateOf(e));
+            drawBoard();
+        }
+    }
+
     public GUIUserLayer() {
         Frame frame = new Frame("Chess");
         int size = (int) (Math.min(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height) * 0.8);
@@ -217,6 +244,7 @@ public class GUIUserLayer implements UserLayer, MouseListener {
         canvas.setLocation((int) (size * 0.05), (int) (size * 0.05));
         frame.add(canvas);
         canvas.addMouseListener(this);
+        canvas.addMouseMotionListener(this);
         frame.setLayout(null);
         frame.setSize(size, size);
         frame.setVisible(true);
