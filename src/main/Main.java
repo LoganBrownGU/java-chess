@@ -7,7 +7,7 @@ import userlayers.GUIUserLayer;
 public class Main {
     public static void main(String[] args) {
 
-        Board board = BoardFactory.castlingTest(new GUIUserLayer());
+        Board board = BoardFactory.checkTest(new GUIUserLayer());
         board.updateUserLayer();
         /*board.removePiece(board.pieceAt(new Coordinate(0, 6)));
         board.removePiece(board.pieceAt(new Coordinate(0, 1)));

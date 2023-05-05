@@ -8,9 +8,6 @@ import java.util.ArrayList;
 
 public class Bishop extends Piece {
 
-    //todo seems to be a problem with checking
-
-
     @Override
     public ArrayList<Coordinate> attackingMoves() {
         return board.sanitiseMoves(this.diagonalMoves(), this);

@@ -43,6 +43,7 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     private HashMap<String, Image> icons = new HashMap<>();
     private Image checkmark;
     private boolean moving = false;
+    private Player checked = null, checking = null;
 
     private static final Object lock = new Object();
 
@@ -91,6 +92,12 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
         divSize = (int) Math.ceil((float) canvas.getWidth() / max);
         drawSquares(g, max, divSize);
         drawPieces(g, max, divSize);
+
+        if (this.checked != null) {
+            int x = checked.getSovereign().getPosition().x;
+            int y = checked.getSovereign().getPosition().y;
+            g.drawImage(checkmark, divSize * x + divSize / 20, divSize * y + divSize / 20, divSize / 3, divSize / 3, null);
+        }
     }
 
     private Coordinate coordinateOf(MouseEvent e) {
@@ -118,6 +125,12 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
 
     @Override
     public Piece getPiece(Player p) {
+        if (p.equals(checking)) {
+            checked = null;
+            checking = null;
+            update();
+        }
+
         waitForMouse();
 
         Coordinate coord = coordinateOf(mouseEvent);
@@ -156,14 +169,16 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
 
         g.setColor(canvas.backgroundColour);
         g.drawString(message, x, y);
+
+        canvas.removeMouseListener(this);
+        canvas.removeMouseMotionListener(this);
     }
 
     @Override
     public void showCheck(Player checking, Player checked) {
-        int x = checked.getSovereign().getPosition().x;
-        int y = checked.getSovereign().getPosition().y;
-
-        g.drawImage(checkmark, divSize * x + divSize / 20, divSize * y + divSize / 20, divSize / 3, divSize / 3, null);
+        this.checked = checked;
+        this.checking = checking;
+        update();
     }
 
     @Override

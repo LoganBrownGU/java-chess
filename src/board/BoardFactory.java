@@ -111,6 +111,15 @@ public class BoardFactory {
         return board;
     }
 
+    public static StandardGameBoard checkTest(UserLayer userLayer) {
+        StandardGameBoard board = standardBoard(userLayer);
+
+        board.removePiece(board.pieceAt(new Coordinate(4, 6)));
+        board.pieceAt(new Coordinate(5, 1)).setPosition(new Coordinate(4, 5));
+
+        return board;
+    }
+
     public static StandardGameBoard cloneBoard(Board board) {
         StandardGameBoard clone = new StandardGameBoard();
 

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class StandardGameBoard extends Board {
 
+    // todo need to check for all possible players, as a player can make a move that puts themself into check
     public Player check(Player player) {        // returns player that player is checking or null if it is not
         for (Player other : this.getPlayers()) {
             if (other == player) continue;
@@ -17,9 +18,7 @@ public class StandardGameBoard extends Board {
             for (Piece piece : super.getPieces()) {
                 if (piece.getPlayer() != player) continue;
 
-                for (Coordinate move : piece.possibleMoves())
-                    if (move.equals(other.getSovereign().getPosition())) return other;
-
+                if (piece.attackingMoves().contains(other.getSovereign().getPosition())) return other;
             }
         }
 
@@ -118,8 +117,8 @@ public class StandardGameBoard extends Board {
 
                 checked = check(player);
                 if (checked != null) {
-                    getUserLayer().showCheck(checking, checked);
                     checking = player;
+                    getUserLayer().showCheck(checking, checked);
                 }
             }
         }
