@@ -5,109 +5,24 @@ import main.Coordinate;
 import pieces.Piece;
 import players.Player;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 
 public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListener {
 
     // chess icons: <a href="https://iconscout.com/icon-pack/chess" target="_blank">Free Chess Icon Pack</a> on <a href="https://iconscout.com">IconScout</a>
-
-    private static class Canvas extends java.awt.Canvas {
-
-        public final Color backgroundColour, squareColour;
-
-        public void paint(Graphics g) {
-        }
-
-        public Canvas(int size, Color backgroundColour, Color squareColour) {
-            this.setBackground(backgroundColour);
-            this.setSize(size, size);
-            this.backgroundColour = backgroundColour;
-            this.squareColour = squareColour;
-        }
-    }
 
     private final Frame frame;
     private final Canvas canvas;
     private final Graphics2D g;
     private Board board;
     private static volatile MouseEvent mouseEvent = null;
-    private int divSize;
     private Piece highlighted = null;
-    private final HashMap<String, Image> icons = new HashMap<>();
-    private final Image checkmark;
     private boolean moving = false;
     private Player checked = null, checking = null;
     private static final Object lock = new Object();
     private boolean active = false;
-
-    private void loadIcon(String iconName) {
-        try {
-            File f = new File("assets/default_icons/" + iconName + ".png");
-            Image image = ImageIO.read(f);
-            icons.put(iconName, image);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void drawSquares(Graphics2D g, int max, int divSize) {
-        g.setColor(canvas.squareColour);
-        for (int i = 0; i < max; i++) {
-            for (int j = i % 2 == 0 ? 0 : 1; j < max; j += 2)
-                g.fillRect(i * divSize, j * divSize, divSize, divSize);
-        }
-
-        if (highlighted == null) return;
-
-        g.setColor(Color.red);
-        g.fillRect(highlighted.getPosition().x * divSize, highlighted.getPosition().y * divSize, divSize, divSize);
-
-        g.setColor(Color.yellow);
-        Composite defaultComposite = g.getComposite();
-        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC, .5f));
-        for (Coordinate coord : highlighted.possibleMoves())
-            g.fillRect(coord.x * divSize, coord.y * divSize, divSize, divSize);
-        g.setComposite(defaultComposite);
-    }
-
-    private void drawPieces(Graphics2D g, int divSize) {
-        for (Piece piece : board.getPieces()) {
-            String iconName = piece.getPlayer().representation + piece.representation;
-            BufferedImage image = (BufferedImage) icons.get(iconName);
-
-            if (image == null)
-                loadIcon(iconName);
-
-            g.drawImage(image, piece.getPosition().x * divSize, piece.getPosition().y * divSize, divSize, divSize, null);
-        }
-    }
-
-    private void drawBoard() {
-        g.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        int max = Math.max(board.maxX, board.maxY);
-        divSize = (int) Math.ceil((float) canvas.getWidth() / max);
-        drawSquares(g, max, divSize);
-        drawPieces(g, divSize);
-
-        if (this.checked != null) {
-            int x = checked.getSovereign().getPosition().x;
-            int y = checked.getSovereign().getPosition().y;
-            g.drawImage(checkmark, divSize * x + divSize / 20, divSize * y + divSize / 20, divSize / 3, divSize / 3, null);
-        }
-    }
-
-    private Coordinate coordinateOf(MouseEvent e) {
-        int x = e.getX() / divSize;
-        int y = e.getY() / divSize;
-
-        return new Coordinate(x, y);
-    }
 
     private MouseEvent waitForMouse() {
         mouseEvent = null;
@@ -148,9 +63,9 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
 
         waitForMouse();
 
-        Coordinate coord = coordinateOf(mouseEvent);
+        Coordinate coord = canvas.coordinateOf(mouseEvent);
         highlighted = board.pieceAt(coord);
-        drawBoard();
+        canvas.drawBoard(checked, board, highlighted);
 
         return board.pieceAt(coord);
     }
@@ -162,14 +77,14 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
 
         highlighted = null;
         moving = false;
-        return coordinateOf(e);
+        return canvas.coordinateOf(e);
     }
 
     @Override
     public void update() {
         if (!active) return;
 
-        drawBoard();
+        canvas.drawBoard(checked, board, highlighted);
     }
 
     @Override
@@ -200,6 +115,7 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     @Override
     public void setBoard(Board board) {
         this.board = board;
+        this.canvas.setDivSize((int) Math.ceil((float) canvas.getWidth() / Math.max(board.maxX, board.maxY)));
     }
 
     @Override
@@ -242,10 +158,7 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
             showMessage("loading...");
             for (Piece piece: board.getPieces()) {
                 String iconName = piece.getPlayer().representation + piece.representation;
-                BufferedImage image = (BufferedImage) icons.get(iconName);
-
-                if (image == null)
-                    loadIcon(iconName);
+                canvas.loadIcon(iconName);
             }
 
             canvas.addMouseMotionListener(this);
@@ -284,11 +197,11 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     public void mouseMoved(MouseEvent e) {
         if (moving) return;
 
-        Piece piece = board.pieceAt(coordinateOf(e));
+        Piece piece = board.pieceAt(canvas.coordinateOf(e));
 
         if (piece != null && piece != highlighted) {
-            highlighted = board.pieceAt(coordinateOf(e));
-            drawBoard();
+            highlighted = board.pieceAt(canvas.coordinateOf(e));
+            canvas.drawBoard(checked, board, highlighted);
         }
     }
 
@@ -304,12 +217,6 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
 
         g = ((Graphics2D) canvas.getGraphics());
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        try {
-            checkmark = ImageIO.read(new File("assets/checkmark.png"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
         frame.addWindowListener(new WindowAdapter() {
             @Override

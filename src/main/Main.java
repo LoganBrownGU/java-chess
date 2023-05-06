@@ -8,7 +8,7 @@ import userlayers.GUIUserLayer;
 public class Main {
     public static void main(String[] args) {
 
-        Board board = BoardFactory.standardBoardFromPlayers(PlayerType.BAD_AI, PlayerType.BAD_AI, new GUIUserLayer());
+        Board board = BoardFactory.standardBoardFromPlayers(PlayerType.HUMAN, PlayerType.BAD_AI, new GUIUserLayer());
         board.updateUserLayer();
 
         board.play();
