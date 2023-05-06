@@ -9,7 +9,6 @@ import players.PlayerType;
 import userlayers.UserLayer;
 
 public class BoardFactory {
-    // todo add a function that allows user to create board with players of their choosing
 
     private static StandardGameBoard standardBoard(StandardGameBoard board, Player player1, Player player2) {
 

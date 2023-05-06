@@ -13,6 +13,8 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
 
     // chess icons: <a href="https://iconscout.com/icon-pack/chess" target="_blank">Free Chess Icon Pack</a> on <a href="https://iconscout.com">IconScout</a>
 
+    // todo checkmark doesnt disappear when king goes out of check
+
     private final Frame frame;
     private final Canvas canvas;
     private final Graphics2D g;
