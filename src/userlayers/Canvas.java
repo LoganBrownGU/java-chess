@@ -89,9 +89,9 @@ public class Canvas extends java.awt.Canvas {
         }
     }
 
-    public Canvas(int size, Color backgroundColour, Color squareColour) {
+    public Canvas(int width, int height, Color squareColour, Color backgroundColour) {
         this.setBackground(backgroundColour);
-        this.setSize(size, size);
+        this.setSize(width, height);
         this.backgroundColour = backgroundColour;
         this.squareColour = squareColour;
 

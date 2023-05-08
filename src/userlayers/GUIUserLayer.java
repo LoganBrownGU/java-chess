@@ -7,7 +7,6 @@ import players.Player;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 
 public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListener {
 
@@ -19,7 +18,7 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     private final Canvas canvas;
     private final Graphics2D g;
     private Board board;
-    private static volatile MouseEvent mouseEvent = null;
+    private static MouseEvent mouseEvent = null;
     private Piece highlighted = null;
     private boolean moving = false;
     private Player checked = null, checking = null;
@@ -210,11 +209,11 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     public GUIUserLayer() {
         frame = new Frame("Chess");
         int size = (int) (Math.min(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height) * 0.8);
-        canvas = new Canvas((int) (size * 0.9), new Color(0x30, 0x30, 0x30), new Color(0xd0, 0xd0, 0xd0));
+        canvas = new Canvas((int) (size * .9f), (int) (size * .9f), new Color(0xd0, 0xd0, 0xd0), new Color(0x30, 0x30, 0x30));
         canvas.setLocation((int) (size * 0.05), (int) (size * 0.05));
         frame.add(canvas);
         frame.setLayout(null);
-        frame.setSize(size, size);
+        frame.setSize(size * 2, size);
         frame.setVisible(true);
 
         g = ((Graphics2D) canvas.getGraphics());
