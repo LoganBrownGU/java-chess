@@ -7,12 +7,14 @@ import userlayers.UserLayer;
 
 import java.util.ArrayList;
 
-public abstract class Board implements BoardStrategy {
+public abstract class Board {
     private final ArrayList<Piece> pieces;
     private final ArrayList<Player> players;
     private final UserLayer userLayer;
     public final int maxX, maxY;
     private Coordinate lastMove = null;
+
+    public abstract void play();
 
     public boolean onBoard(Coordinate coord) {
         return coord.x >= 0 && coord.y >= 0 && coord.x < maxX && coord.y < maxY;

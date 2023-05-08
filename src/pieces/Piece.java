@@ -7,7 +7,7 @@ import players.Player;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public abstract class Piece implements PieceStrategy {
+public abstract class Piece {
 
     private final ArrayList<Coordinate> previousMoves; // initial position is counted as a move
     private final Player player;
@@ -17,6 +17,9 @@ public abstract class Piece implements PieceStrategy {
     protected Board board;
 
     public final String representation;
+
+    public abstract ArrayList<Coordinate> attackingMoves();
+    public abstract ArrayList<Coordinate> possibleMoves();
 
     public boolean hasNotMoved() {
         return this.previousMoves.size() <= 1;
