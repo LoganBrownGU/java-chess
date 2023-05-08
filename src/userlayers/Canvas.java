@@ -105,4 +105,8 @@ public class Canvas extends java.awt.Canvas {
     public void setDivSize(int divSize) {
         this.divSize = divSize;
     }
+
+    public int getDivSize() {
+        return this.divSize;
+    }
 }

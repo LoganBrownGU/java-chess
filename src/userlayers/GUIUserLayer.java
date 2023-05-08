@@ -117,6 +117,9 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     public void setBoard(Board board) {
         this.board = board;
         this.boardCanvas.setDivSize((int) Math.ceil((float) boardCanvas.getWidth() / Math.max(board.maxX, board.maxY)));
+
+        takenPieceCanvas.setSize(boardCanvas.getDivSize() * 3, boardCanvas.getHeight());
+        frame.setSize(takenPieceCanvas.getWidth() + boardCanvas.getWidth() + boardCanvas.getX(), frame.getHeight());
     }
 
     @Override
@@ -214,12 +217,12 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
         boardCanvas.setLocation((int) (size * 0.05), (int) (size * 0.05));
         frame.add(boardCanvas);
 
-        takenPieceCanvas = new Canvas(boardCanvas.getWidth(), boardCanvas.getHeight(), new Color(0xd0, 0xd0, 0xd0), new Color(0x30, 0x30, 0x30));
-        takenPieceCanvas.setLocation(boardCanvas.getWidth() + boardCanvas.getX() * 3, boardCanvas.getY());
+        takenPieceCanvas = new Canvas(0, 0, new Color(0xd0, 0xd0, 0xd0), new Color(0xe5, 0xe5, 0xcc));
+        takenPieceCanvas.setLocation(boardCanvas.getWidth(), boardCanvas.getY());
         frame.add(takenPieceCanvas);
 
         frame.setLayout(null);
-        frame.setSize(takenPieceCanvas.getWidth() + takenPieceCanvas.getX() + boardCanvas.getX(), size);
+        frame.setSize(takenPieceCanvas.getWidth() + boardCanvas.getWidth() + 2 * boardCanvas.getX(), size);
         frame.setVisible(true);
 
         g = ((Graphics2D) boardCanvas.getGraphics());
