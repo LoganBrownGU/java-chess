@@ -15,7 +15,7 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     // todo checkmark doesnt disappear when king goes out of check
 
     private final Frame frame;
-    private final Canvas canvas;
+    private final Canvas boardCanvas, takenPieceCanvas;
     private final Graphics2D g;
     private Board board;
     private static MouseEvent mouseEvent = null;
@@ -44,13 +44,13 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     private void showMessage(String message) {
         g.setFont(new Font("Helvetica", Font.BOLD, 36));
         FontMetrics metrics = g.getFontMetrics();
-        int x = (canvas.getWidth() - metrics.stringWidth(message)) / 2;
-        int y = (metrics.getAscent() + (canvas.getHeight() - (metrics.getAscent() + metrics.getDescent())) / 2);
+        int x = (boardCanvas.getWidth() - metrics.stringWidth(message)) / 2;
+        int y = (metrics.getAscent() + (boardCanvas.getHeight() - (metrics.getAscent() + metrics.getDescent())) / 2);
 
         g.setColor(Color.white);
         g.fill3DRect(x - 20, y - metrics.getAscent() - 10, metrics.stringWidth(message) + 40, metrics.getDescent() + metrics.getAscent() + 20, true);
 
-        g.setColor(canvas.backgroundColour);
+        g.setColor(boardCanvas.backgroundColour);
         g.drawString(message, x, y);
     }
 
@@ -64,9 +64,9 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
 
         waitForMouse();
 
-        Coordinate coord = canvas.coordinateOf(mouseEvent);
+        Coordinate coord = boardCanvas.coordinateOf(mouseEvent);
         highlighted = board.pieceAt(coord);
-        canvas.drawBoard(checked, board, highlighted);
+        boardCanvas.drawBoard(checked, board, highlighted);
 
         return board.pieceAt(coord);
     }
@@ -78,14 +78,14 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
 
         highlighted = null;
         moving = false;
-        return canvas.coordinateOf(e);
+        return boardCanvas.coordinateOf(e);
     }
 
     @Override
     public void update() {
         if (!active) return;
 
-        canvas.drawBoard(checked, board, highlighted);
+        boardCanvas.drawBoard(checked, board, highlighted);
     }
 
     @Override
@@ -94,8 +94,8 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
 
         showMessage(message);
 
-        canvas.removeMouseListener(this);
-        canvas.removeMouseMotionListener(this);
+        boardCanvas.removeMouseListener(this);
+        boardCanvas.removeMouseMotionListener(this);
 
         try {
             Thread.sleep(5000);
@@ -116,7 +116,7 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     @Override
     public void setBoard(Board board) {
         this.board = board;
-        this.canvas.setDivSize((int) Math.ceil((float) canvas.getWidth() / Math.max(board.maxX, board.maxY)));
+        this.boardCanvas.setDivSize((int) Math.ceil((float) boardCanvas.getWidth() / Math.max(board.maxX, board.maxY)));
     }
 
     @Override
@@ -159,16 +159,16 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
             showMessage("loading...");
             for (Piece piece: board.getPieces()) {
                 String iconName = piece.getPlayer().representation + piece.representation;
-                canvas.loadIcon(iconName);
+                boardCanvas.loadIcon(iconName);
             }
 
-            canvas.addMouseMotionListener(this);
-            canvas.addMouseListener(this);
+            boardCanvas.addMouseMotionListener(this);
+            boardCanvas.addMouseListener(this);
 
             update();
         } else {
-            canvas.removeMouseListener(this);
-            canvas.removeMouseMotionListener(this);
+            boardCanvas.removeMouseListener(this);
+            boardCanvas.removeMouseMotionListener(this);
         }
     }
 
@@ -198,25 +198,31 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     public void mouseMoved(MouseEvent e) {
         if (moving) return;
 
-        Piece piece = board.pieceAt(canvas.coordinateOf(e));
+        Piece piece = board.pieceAt(boardCanvas.coordinateOf(e));
 
         if (piece != null && piece != highlighted) {
-            highlighted = board.pieceAt(canvas.coordinateOf(e));
-            canvas.drawBoard(checked, board, highlighted);
+            highlighted = board.pieceAt(boardCanvas.coordinateOf(e));
+            boardCanvas.drawBoard(checked, board, highlighted);
         }
     }
 
     public GUIUserLayer() {
         frame = new Frame("Chess");
         int size = (int) (Math.min(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height) * 0.8);
-        canvas = new Canvas((int) (size * .9f), (int) (size * .9f), new Color(0xd0, 0xd0, 0xd0), new Color(0x30, 0x30, 0x30));
-        canvas.setLocation((int) (size * 0.05), (int) (size * 0.05));
-        frame.add(canvas);
+
+        boardCanvas = new Canvas((int) (size * .9f), (int) (size * .9f), new Color(0xd0, 0xd0, 0xd0), new Color(0x30, 0x30, 0x30));
+        boardCanvas.setLocation((int) (size * 0.05), (int) (size * 0.05));
+        frame.add(boardCanvas);
+
+        takenPieceCanvas = new Canvas(boardCanvas.getWidth(), boardCanvas.getHeight(), new Color(0xd0, 0xd0, 0xd0), new Color(0x30, 0x30, 0x30));
+        takenPieceCanvas.setLocation(boardCanvas.getWidth() + boardCanvas.getX() * 3, boardCanvas.getY());
+        frame.add(takenPieceCanvas);
+
         frame.setLayout(null);
-        frame.setSize(size * 2, size);
+        frame.setSize(takenPieceCanvas.getWidth() + takenPieceCanvas.getX() + boardCanvas.getX(), size);
         frame.setVisible(true);
 
-        g = ((Graphics2D) canvas.getGraphics());
+        g = ((Graphics2D) boardCanvas.getGraphics());
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         frame.addWindowListener(new WindowAdapter() {
