@@ -3,12 +3,13 @@ package main;
 import board.Board;
 import board.BoardFactory;
 import players.PlayerType;
+import userlayers.G3DUserLayer;
 import userlayers.GUIUserLayer;
 
 public class Main {
     public static void main(String[] args) {
 
-        Board board = BoardFactory.standardBoardFromPlayers(PlayerType.HUMAN, PlayerType.BAD_AI, new GUIUserLayer());
+        Board board = BoardFactory.standardBoardFromPlayers(PlayerType.HUMAN, PlayerType.BAD_AI, new G3DUserLayer());
         board.updateUserLayer();
 
         board.play();
