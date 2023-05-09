@@ -105,4 +105,8 @@ public class CommandLineUserLayer implements UserLayer {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public Board getBoard() {
+        return board;
+    }
 }

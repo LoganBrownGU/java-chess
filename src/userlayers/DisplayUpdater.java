@@ -5,6 +5,7 @@ import entities.Camera;
 import entities.Entity;
 import entities.Light;
 import models.TexturedModel;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 import pieces.Piece;
 import renderEngine.DisplayManager;
@@ -19,11 +20,11 @@ public class DisplayUpdater implements Runnable {
 
     private final int spacing;
     private final Board board;
-    private final MasterRenderer renderer;
     private final Camera camera;
     private final Light light;
     private final ArrayList<Entity> entities = new ArrayList<>();
-    private Loader loader;
+    private final Loader loader;
+    private final G3DUserLayer parent;
 
     private void addPieces() {
         entities.clear();
@@ -38,8 +39,11 @@ public class DisplayUpdater implements Runnable {
 
     @Override
     public void run() {
+        DisplayManager.createDisplay();
+        MasterRenderer renderer = new MasterRenderer("assets/shaders", camera);
 
-        while (true) {
+        while (Display.isCreated()) {
+            addPieces();
             camera.setPosition(new Vector3f(((float) board.maxX / 2) * spacing, 40, ((float) board.maxY / 2) * spacing));
 
             for (Entity entity : entities)
@@ -49,22 +53,21 @@ public class DisplayUpdater implements Runnable {
                 renderer.render(light, camera);
                 DisplayManager.updateDisplay();
             } catch (RuntimeException e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
-
-            System.out.println("rendered");
         }
+
+        System.out.println("end");
+        parent.endGame();
     }
 
-    public DisplayUpdater(Board board, int spacing) {
+    public DisplayUpdater(Board board, int spacing, G3DUserLayer parent) {
         this.board = board;
-        this.spacing = 2;
+        this.spacing = spacing;
 
-        DisplayManager.createDisplay();
         loader = new Loader();
-        addPieces();
         light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
         camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(90, 0, 0), 45);
-        this.renderer = new MasterRenderer("assets/shaders", camera);
+        this.parent = parent;
     }
 }
