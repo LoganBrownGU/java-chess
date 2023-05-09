@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="lwjgl-graphics-engine">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../lwjgl-graphics-engine/out/artifacts/lwjgl_graphics_engine_jar/lwjgl-graphics-engine.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

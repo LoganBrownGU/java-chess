@@ -67,6 +67,6 @@
     </orderEntry>
     <orderEntry type="library" name="windows" level="project" />
     <orderEntry type="library" name="jar" level="project" />
-    <orderEntry type="library" name="lwjgl-engine" level="project" />
+    <orderEntry type="library" name="lwjgl-graphics-engine" level="project" />
   </component>
 </module>

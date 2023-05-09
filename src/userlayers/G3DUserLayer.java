@@ -1,48 +1,22 @@
 package userlayers;
 
 import board.Board;
-import entities.Camera;
-import entities.Entity;
-import entities.Light;
 import main.Coordinate;
-import models.TexturedModel;
-import org.lwjgl.util.vector.Vector3f;
 import pieces.Piece;
 import players.Player;
-import renderEngine.DisplayManager;
-import renderEngine.Loader;
-import renderEngine.MasterRenderer;
-import renderEngine.OBJLoader;
-import textures.ModelTexture;
-
-import java.util.Random;
 
 public class G3DUserLayer implements UserLayer {
 
     private Board board;
-    private final Camera camera = new Camera();
-    private MasterRenderer renderer;
-    private Loader loader;
-    private final Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
     private boolean active = false;
+    private Thread displayThread;
 
     private void addPieces() {
-        int spacing = 2;
-        camera.setPitch(90);
-        camera.setRoll(0);
-        camera.setYaw(0);
-        camera.setPosition(new Vector3f(((float) board.maxX / 2) * spacing, 40, ((float) board.maxY / 2) * spacing));
+        if (!displayThread.isAlive())
+            displayThread.start();
+        else if (displayThread.isInterrupted())
+            displayThread.start();
 
-        for (int i = 0; i < 120; i++) {
-            for (Piece piece : board.getPieces()) {
-                TexturedModel model = new TexturedModel(OBJLoader.loadObjModel("default_models/pawn", loader), new ModelTexture(loader.loadTexture("w")));
-                Entity entity = new Entity(model, new Vector3f(piece.getPosition().x * spacing, 0, piece.getPosition().y * spacing), 0, 0, 0, 1);
-                renderer.processEntity(entity);
-            }
-
-            renderer.render(light, camera);
-            DisplayManager.updateDisplay();
-        }
     }
 
     @Override
@@ -92,10 +66,9 @@ public class G3DUserLayer implements UserLayer {
         this.active = active;
 
         if (active) {
-            DisplayManager.createDisplay();
-            loader = new Loader();
-            camera.setFov(45);
-            renderer = new MasterRenderer(camera);
+            displayThread = new Thread(new DisplayUpdater(board, 2));
+        } else {
+            displayThread.interrupt();
         }
     }
 
