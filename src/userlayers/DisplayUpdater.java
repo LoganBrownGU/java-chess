@@ -60,6 +60,7 @@ public class DisplayUpdater implements Runnable {
     public void run() {
         DisplayManager.createDisplay("Chess", 1280, 720, true, false);
         MasterRenderer renderer = new MasterRenderer("assets/shaders", camera);
+        renderer.enableFog();
         camera.setPosition(new Vector3f(((float) board.maxX / 2) * spacing, 10, (float) board.maxY * spacing * 2.5f));
 
         int count = 0;
