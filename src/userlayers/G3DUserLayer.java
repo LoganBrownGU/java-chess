@@ -13,6 +13,7 @@ public class G3DUserLayer implements UserLayer {
 
     private boolean active = false;
     private Thread displayThread;
+    private DisplayUpdater updater;
     private final Object lock = new Object();
     private Board board;
     private final Scanner sc = new Scanner(System.in);
@@ -23,7 +24,7 @@ public class G3DUserLayer implements UserLayer {
 
     @Override
     public Piece getPiece(Player p) {
-        Coordinate piecePosition = null;
+        /*Coordinate piecePosition = null;
         Piece piece;
 
         while ((piece = board.pieceAt(piecePosition)) == null || piecePosition == null) {
@@ -32,7 +33,22 @@ public class G3DUserLayer implements UserLayer {
             piecePosition = Coordinate.chessCoordToCoordinate(input);
         }
 
-        return piece;
+        return piece;*/
+
+        synchronized (updater) {
+            while (updater.getSelected() == null) {
+                try {
+                    updater.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        Piece selected = updater.getSelected();
+        System.out.println(selected);
+        updater.clearSelected();
+        return selected;
     }
 
     @Override
@@ -110,7 +126,8 @@ public class G3DUserLayer implements UserLayer {
         this.active = active;
 
         if (active) {
-            displayThread = new Thread(new DisplayUpdater(this.board, 2, this));
+            updater = new DisplayUpdater(this.board, 2, this, lock);
+            displayThread = new Thread(updater);
         } else {
             displayThread.interrupt();
         }
