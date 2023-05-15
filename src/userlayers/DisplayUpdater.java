@@ -6,8 +6,8 @@ import entities.Entity;
 import entities.Light;
 import gui.GUIRenderer;
 import gui.GUITexture;
+import main.Coordinate;
 import models.TexturedModel;
-import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
@@ -34,14 +34,15 @@ public class DisplayUpdater implements Runnable {
     private final Loader loader;
     private final G3DUserLayer parent;
     private Entity boardModel = null;
-    private Piece selected = null;
+    private Piece selectedPiece = null;
+    private Coordinate selectedSquare = null;
     private MousePicker mousePicker;
     private final Object lock;
     private MasterRenderer renderer;
     private GUIRenderer guiRenderer;
     ArrayList<GUITexture> guis = new ArrayList<>();
 
-    private void addPieces() {
+    private void updatePieces() {
         int[] directions = new int[board.getPlayers().size()];
         for (Piece piece : board.getPieces()) {
             int idx = board.getPlayers().indexOf(piece.getPlayer());
@@ -83,6 +84,34 @@ public class DisplayUpdater implements Runnable {
         guiRenderer = new GUIRenderer(loader);
     }
 
+    private void initBoard() {
+        TexturedModel model = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/board.obj", loader),
+                new ModelTexture(loader.loadTexture("assets/default_textures/board.png")));
+        boardModel = new Entity(model, new Vector3f(-1, 0, -1), 0, 0, 0, 1, 0);
+    }
+
+    private void processEntities() {
+        for (Piece piece : board.getPieces()) {
+            Entity entity = entities.get(piece);
+            if (entity == null) continue;
+
+            renderer.processEntity(entities.get(piece));
+        }
+    }
+
+    private void checkMouse() {
+        if (Mouse.isButtonDown(0)) {
+            mousePicker.update();
+            for (Piece piece: board.getPieces()) {
+                Entity entity = entities.get(piece);
+                if (mousePicker.isIntersecting(entity.getPosition(), entity.hitRadius)) {
+                    selectedPiece = piece;
+                    synchronized (this) { this.notify(); }
+                }
+            }
+        }
+    }
+
     @Override
     public void run() {
         init();
@@ -92,32 +121,13 @@ public class DisplayUpdater implements Runnable {
             long start = System.nanoTime();
 
             camera.move(mousePicker);
-            addPieces();
+            updatePieces();
 
-            if (boardModel == null) {
-                TexturedModel model = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/board.obj", loader),
-                        new ModelTexture(loader.loadTexture("assets/default_textures/board.png")));
-                boardModel = new Entity(model, new Vector3f(-1, 0, -1), 0, 0, 0, 1, 0);
-            }
-
+            if (boardModel == null) initBoard();
             renderer.processEntity(boardModel);
-            for (Piece piece : board.getPieces()) {
-                Entity entity = entities.get(piece);
-                if (entity == null) continue;
+            processEntities();
 
-                renderer.processEntity(entities.get(piece));
-            }
-
-            if (Mouse.isButtonDown(0)) {
-                mousePicker.update();
-                for (Piece piece: board.getPieces()) {
-                    Entity entity = entities.get(piece);
-                    if (mousePicker.isIntersecting(entity.getPosition(), entity.hitRadius)) {
-                        selected = piece;
-                        synchronized (this) { this.notify(); }
-                    }
-                }
-            }
+            checkMouse();
 
             try {
                 renderer.render(light, camera);
@@ -134,6 +144,10 @@ public class DisplayUpdater implements Runnable {
             }
         }
 
+
+        renderer.cleanUp();
+        guiRenderer.cleanUp();
+        loader.cleanUp();
         System.out.println("end");
         parent.endGame();
     }
@@ -149,11 +163,19 @@ public class DisplayUpdater implements Runnable {
         this.lock = lock;
     }
 
-    public Piece getSelected() {
-        return selected;
+    public Piece getSelectedPiece() {
+        return selectedPiece;
     }
 
     public void clearSelected() {
-        this.selected = null;
+        this.selectedPiece = null;
+    }
+
+    public Coordinate getSelectedSquare() {
+        return selectedSquare;
+    }
+
+    public void clearSelectedSquare() {
+        this.selectedSquare = null;
     }
 }
