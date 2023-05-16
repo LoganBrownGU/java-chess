@@ -12,9 +12,18 @@ uniform sampler2D modelTexture;
 uniform vec3 lightColour;
 uniform float shineDamper;
 uniform float reflectivity;
-uniform float min_brightness = 0.5;
 uniform vec3 skyColour;
-uniform int cel_num = 5;
+
+const float min_brightness = 0.5;
+const int cel_num = 5;
+
+float cel_shade(float brightness) {
+    brightness *= cel_num;
+    brightness = round(brightness);
+    brightness /= cel_num;
+
+    return brightness;
+}
 
 void main(void){
 
@@ -23,9 +32,7 @@ void main(void){
 
     float nDotl = dot(unitNormal, unitLightVector);
     float brightness = max(nDotl, 0.1);
-    brightness *= cel_num;
-    brightness = round(brightness);
-    brightness /= cel_num;
+        brightness = cel_shade(brightness);
 
     vec3 diffuse = brightness * lightColour;
 

@@ -1,12 +1,11 @@
 package userlayers;
 
 import board.Board;
-import entities.Camera;
-import entities.Entity;
-import entities.Light;
+import entities.*;
 import gui.GUIRenderer;
 import gui.GUITexture;
 import main.Coordinate;
+import models.RawModel;
 import models.TexturedModel;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -19,6 +18,7 @@ import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
 import textures.ModelTexture;
+import toolbox.Maths;
 import toolbox.MousePicker;
 
 import java.util.ArrayList;
@@ -31,13 +31,14 @@ public class DisplayUpdater implements Runnable {
     private final Camera camera;
     private final Light light;
     private final HashMap<Piece, Entity> entities = new HashMap<>();
+    private final HashMap<Coordinate, Entity> squares = new HashMap<>();
     private final Loader loader;
     private final G3DUserLayer parent;
-    private Entity boardModel = null;
     private Piece selectedPiece = null;
+    private boolean selectingPiece = false;
     private Coordinate selectedSquare = null;
+    private boolean selectingSquare = false;
     private MousePicker mousePicker;
-    private final Object lock;
     private MasterRenderer renderer;
     private GUIRenderer guiRenderer;
     ArrayList<GUITexture> guis = new ArrayList<>();
@@ -58,7 +59,8 @@ public class DisplayUpdater implements Runnable {
                     TexturedModel model = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/" + piece.representation + ".obj", loader),
                             new ModelTexture(loader.loadTexture("assets/default_textures/" + piece.getPlayer().representation + ".png")));
 
-                    Entity entity = new Entity(model, new Vector3f(piece.getPosition().x * spacing, 0, piece.getPosition().y * spacing), 0, 90 * directions[playerIdx], 0, 1, 1);
+                    Vector3f pos = new Vector3f(piece.getPosition().x * spacing, 0, piece.getPosition().y * spacing);
+                    Entity entity = new Entity(model, pos, 0, 90 * directions[playerIdx], 0, 1, new SpherePicker(pos, 1));
                     entities.put(piece, entity);
                 } catch (NullPointerException e) {
                     e.printStackTrace();
@@ -85,9 +87,27 @@ public class DisplayUpdater implements Runnable {
     }
 
     private void initBoard() {
-        TexturedModel model = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/board.obj", loader),
-                new ModelTexture(loader.loadTexture("assets/default_textures/board.png")));
-        boardModel = new Entity(model, new Vector3f(-1, 0, -1), 0, 0, 0, 1, 0);
+        int squareSize = 2;
+        ModelTexture black = new ModelTexture(loader.loadTexture("assets/default_textures/b.png"));
+        ModelTexture white = new ModelTexture(loader.loadTexture("assets/default_textures/w.png"));
+        RawModel model = OBJLoader.loadObjModel("assets/default_models/board_square.obj", loader);
+
+        for (int i = 0; i < board.maxX; i++) {
+            for (int j = 0; j < board.maxY; j++) {
+                ModelTexture tex;
+                if (i % 2 == 0) tex = (j % 2 == 0 ? white : black);
+                else tex = (j % 2 != 0 ? white : black);
+
+                TexturedModel txModel = new TexturedModel(model, tex);
+                Vector3f pos = new Vector3f(i*squareSize, 0, j*squareSize);
+                squares.put(new Coordinate(i, j), new Entity(txModel, pos, 0, 0, 0, squareSize, new SpherePicker(pos, (float) squareSize / 2)));
+                System.out.println(new Coordinate(i, j));
+            }
+        }
+
+        for (Coordinate coord : squares.keySet()) {
+            System.out.println(coord);
+        }
     }
 
     private void processEntities() {
@@ -95,18 +115,47 @@ public class DisplayUpdater implements Runnable {
             Entity entity = entities.get(piece);
             if (entity == null) continue;
 
-            renderer.processEntity(entities.get(piece));
+            renderer.processEntity(entity);
+        }
+    }
+
+    private void processBoard() {
+        for (int i = 0; i < board.maxX; i++) {
+            for (int j = 0; j < board.maxY; j++) {
+                Entity entity = squares.get(new Coordinate(i, j));
+                if (entity == null) continue;
+                renderer.processEntity(entity);
+            }
         }
     }
 
     private void checkMouse() {
         if (Mouse.isButtonDown(0)) {
             mousePicker.update();
-            for (Piece piece: board.getPieces()) {
-                Entity entity = entities.get(piece);
-                if (mousePicker.isIntersecting(entity.getPosition(), entity.hitRadius)) {
-                    selectedPiece = piece;
-                    synchronized (this) { this.notify(); }
+
+            if (selectingPiece) {
+                for (Piece piece : board.getPieces()) {
+                    Entity entity = entities.get(piece);
+                    if (entity.getPicker().isIntersecting(mousePicker.getCurrentRay(), camera.getPosition())) {
+                        selectedPiece = piece;
+                        synchronized (this) {
+                            this.notify();
+                        }
+                        break;
+                    }
+                }
+            }
+
+            if (selectingSquare) {
+                for (Coordinate coord : squares.keySet()) {
+                    Entity entity = squares.get(coord);
+                    if (entity.getPicker().isIntersecting(mousePicker.getCurrentRay(), camera.getPosition())) {
+                        selectedSquare = coord;
+                        synchronized (this) {
+                            this.notify();
+                        }
+                        break;
+                    }
                 }
             }
         }
@@ -120,12 +169,12 @@ public class DisplayUpdater implements Runnable {
         while (Display.isCreated()) {
             long start = System.nanoTime();
 
-            camera.move(mousePicker);
+            camera.move(renderer.getProjectionMatrix(), Maths.createViewMatrix(camera));
             updatePieces();
 
-            if (boardModel == null) initBoard();
-            renderer.processEntity(boardModel);
+            if (squares.isEmpty()) initBoard();
             processEntities();
+            processBoard();
 
             checkMouse();
 
@@ -152,7 +201,7 @@ public class DisplayUpdater implements Runnable {
         parent.endGame();
     }
 
-    public DisplayUpdater(Board board, int spacing, G3DUserLayer parent, Object lock) {
+    public DisplayUpdater(Board board, int spacing, G3DUserLayer parent) {
         this.board = board;
         this.spacing = spacing;
 
@@ -160,7 +209,6 @@ public class DisplayUpdater implements Runnable {
         light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
         camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(90, 0, 0), 45);
         this.parent = parent;
-        this.lock = lock;
     }
 
     public Piece getSelectedPiece() {
@@ -177,5 +225,13 @@ public class DisplayUpdater implements Runnable {
 
     public void clearSelectedSquare() {
         this.selectedSquare = null;
+    }
+
+    public void setSelectingPiece(boolean selectingPiece) {
+        this.selectingPiece = selectingPiece;
+    }
+
+    public void setSelectingSquare(boolean selectingSquare) {
+        this.selectingSquare = selectingSquare;
     }
 }
