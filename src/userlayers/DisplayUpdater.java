@@ -1,7 +1,10 @@
 package userlayers;
 
 import board.Board;
-import entities.*;
+import entities.Camera;
+import entities.Entity;
+import entities.Light;
+import entities.SpherePicker;
 import gui.GUIRenderer;
 import gui.GUITexture;
 import main.Coordinate;
@@ -9,7 +12,6 @@ import models.RawModel;
 import models.TexturedModel;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import pieces.Pawn;
 import pieces.Piece;
@@ -74,14 +76,11 @@ public class DisplayUpdater implements Runnable {
         }
     }
 
-    private void updateHighlights() {
+    private void updateHighlights(ArrayList<Coordinate> moves) {
         highlights.clear();
 
-        if (selectedPiece == null) return;
-
-        for (Coordinate move : selectedPiece.possibleMoves()) {
-            Entity entity = new Entity(highlightModel, new Vector3f(move.x * spacing, 1, move.y * spacing), 180, 0, 0, 1, null);
-
+        for (Coordinate move : moves) {
+            Entity entity = new Entity(highlightModel, new Vector3f(move.x * spacing, 0, move.y * spacing), 0, 0, 0, 0.8f, null);
             highlights.put(move, entity);
         }
     }
@@ -91,15 +90,12 @@ public class DisplayUpdater implements Runnable {
         renderer = new MasterRenderer("assets/shaders", camera);
         mousePicker = new MousePicker(renderer.getProjectionMatrix(), camera);
         renderer.disableFog();
-        camera.setPosition(new Vector3f((float) board.maxX * spacing * .5f, 40, (float) board.maxY * spacing * .5f));
-
-        float aspect = (float) Display.getWidth() / Display.getHeight();
-        float guiSize = .03f;
-        guis.add(new GUITexture(loader.loadTexture("assets/crosshair.png"), new Vector2f(0, 0), new Vector2f(guiSize, guiSize * aspect)));
+        camera.setPosition(new Vector3f((float) (board.maxX - 1) * .5f * spacing, 100, -(float) (board.maxY - 1) * 1.5f * spacing));
+        camera.setRotation(new Vector3f(74, -180, 0));
 
         guiRenderer = new GUIRenderer(loader);
 
-        highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/pn.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/b.png")));
+        highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png")));
     }
 
     private void initBoard() {
@@ -115,7 +111,7 @@ public class DisplayUpdater implements Runnable {
                 else tex = (j % 2 != 0 ? white : black);
 
                 TexturedModel txModel = new TexturedModel(model, tex);
-                Vector3f pos = new Vector3f(i*squareSize, 0, j*squareSize);
+                Vector3f pos = new Vector3f(i * squareSize, 0, j * squareSize);
                 squares.put(new Coordinate(i, j), new Entity(txModel, pos, 0, 0, 0, squareSize, new SpherePicker(pos, (float) squareSize / 2)));
             }
         }
@@ -141,32 +137,25 @@ public class DisplayUpdater implements Runnable {
     }
 
     private void checkMouse() {
-        if (Mouse.isButtonDown(0)) {
-            mousePicker.update();
-
-            if (selectingPiece) {
-                for (Piece piece : board.getPieces()) {
-                    Entity entity = entities.get(piece);
-                    if (entity.getPicker().isIntersecting(mousePicker.getCurrentRay(), camera.getPosition())) {
-                        selectedPiece = piece;
-                        synchronized (this) {
-                            this.notify();
-                        }
-                        break;
-                    }
-                }
+        for (Piece piece : board.getPieces()) {
+            Entity entity = entities.get(piece);
+            if (entity.getPicker().isIntersecting(mousePicker.getCurrentRay(), camera.getPosition())) {
+                if (Mouse.isButtonDown(0) && selectingPiece) {
+                    selectedPiece = piece;
+                    synchronized (this) { this.notify(); }
+                    break;
+                } else if (!selectingSquare) updateHighlights(piece.possibleMoves());
             }
+        }
 
-            if (selectingSquare) {
-                for (Coordinate coord : squares.keySet()) {
-                    Entity entity = squares.get(coord);
-                    if (entity.getPicker().isIntersecting(mousePicker.getCurrentRay(), camera.getPosition())) {
-                        selectedSquare = coord;
-                        synchronized (this) {
-                            this.notify();
-                        }
-                        break;
-                    }
+        if (Mouse.isButtonDown(0) && selectingSquare) {
+            for (Coordinate coord : squares.keySet()) {
+                Entity entity = squares.get(coord);
+
+                if (entity.getPicker().isIntersecting(mousePicker.getCurrentRay(), camera.getPosition())) {
+                    selectedSquare = coord;
+                    synchronized (this) { this.notify(); }
+                    break;
                 }
             }
         }
@@ -182,7 +171,6 @@ public class DisplayUpdater implements Runnable {
 
             camera.move(renderer.getProjectionMatrix(), Maths.createViewMatrix(camera));
             updatePieces();
-            updateHighlights();
 
             if (squares.isEmpty()) initBoard();
             processEntities();
@@ -206,7 +194,6 @@ public class DisplayUpdater implements Runnable {
             }
         }
 
-
         renderer.cleanUp();
         guiRenderer.cleanUp();
         loader.cleanUp();
@@ -220,7 +207,7 @@ public class DisplayUpdater implements Runnable {
 
         loader = new Loader();
         light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
-        camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(90, 0, 0), 45);
+        camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(90, 0, 0), 20);
         this.parent = parent;
     }
 
