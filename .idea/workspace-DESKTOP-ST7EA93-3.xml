@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYZE_INJECTED_CODE" value="false" />
+  </component>
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="java-chess:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="da8249e4-0e92-4adc-9c5c-07c1fa1ba61d" name="Changes" comment="removed the not actually strategy interfaces">
+      <change beforePath="$PROJECT_DIR$/src/userlayers/Canvas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/userlayers/Canvas.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/userlayers/GUIUserLayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/userlayers/GUIUserLayer.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+        <option value="Interface" />
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2NuWemTuKG003OtzoiFqxoNvJHi" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;create.test.in.the.same.root&quot;: &quot;true&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/logan/Downloads/factorycoffee&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Errors&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\logan\OneDrive - University of Glasgow\CS\personal\java-chess\assets\default_icons" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\logan\OneDrive - University of Glasgow\CS\personal\java-chess\src\pieces" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="tests" />
+      <recent name="main" />
+      <recent name="pieces" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.app">
+    <configuration name="app" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="19" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="main.Main" />
+      <module name="java-chess" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PawnTest.recreateJumpingBug" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="java-chess" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="tests" />
+      <option name="MAIN_CLASS_NAME" value="tests.PawnTest" />
+      <option name="METHOD_NAME" value="recreateJumpingBug" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PawnTest.recreateTakingBug2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="java-chess" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="tests" />
+      <option name="MAIN_CLASS_NAME" value="tests.PawnTest" />
+      <option name="METHOD_NAME" value="recreateTakingBug2" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="QueenTest.recreateWrongCheckBug" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="java-chess" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="tests" />
+      <option name="MAIN_CLASS_NAME" value="tests.QueenTest" />
+      <option name="METHOD_NAME" value="recreateWrongCheckBug" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RookTest.castling" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="java-chess" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pieces.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="pieces" />
+      <option name="MAIN_CLASS_NAME" value="pieces.RookTest" />
+      <option name="METHOD_NAME" value="castling" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RookTest.testSameFileTake" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="java-chess" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pieces.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="pieces" />
+      <option name="MAIN_CLASS_NAME" value="pieces.RookTest" />
+      <option name="METHOD_NAME" value="testSameFileTake" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="tests" type="JUnit" factoryName="JUnit">
+      <module name="java-chess" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.app" />
+      <item itemvalue="JUnit.tests" />
+      <item itemvalue="JUnit.PawnTest.recreateJumpingBug" />
+      <item itemvalue="JUnit.QueenTest.recreateWrongCheckBug" />
+      <item itemvalue="JUnit.PawnTest.recreateTakingBug2" />
+      <item itemvalue="JUnit.RookTest.castling" />
+      <item itemvalue="JUnit.RookTest.testSameFileTake" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.QueenTest.recreateWrongCheckBug" />
+        <item itemvalue="JUnit.PawnTest.recreateJumpingBug" />
+        <item itemvalue="JUnit.PawnTest.recreateTakingBug2" />
+        <item itemvalue="JUnit.RookTest.castling" />
+        <item itemvalue="JUnit.RookTest.testSameFileTake" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="da8249e4-0e92-4adc-9c5c-07c1fa1ba61d" name="Changes" comment="" />
+      <created>1680514548922</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1680514548922</updated>
+      <workItem from="1680514551142" duration="101000" />
+      <workItem from="1680527552465" duration="21338000" />
+      <workItem from="1680595236313" duration="749000" />
+      <workItem from="1680627298633" duration="3203000" />
+      <workItem from="1680784366016" duration="1445000" />
+      <workItem from="1680785840902" duration="13630000" />
+      <workItem from="1680802884183" duration="99000" />
+      <workItem from="1680812653556" duration="1923000" />
+      <workItem from="1680855854481" duration="3584000" />
+      <workItem from="1680861731460" duration="1228000" />
+      <workItem from="1680946361011" duration="806000" />
+      <workItem from="1680953234836" duration="3435000" />
+      <workItem from="1681129998587" duration="3492000" />
+      <workItem from="1681379935943" duration="872000" />
+      <workItem from="1681392640009" duration="5808000" />
+      <workItem from="1681487206568" duration="251000" />
+      <workItem from="1681734781485" duration="1154000" />
+      <workItem from="1681914524268" duration="1416000" />
+      <workItem from="1681988331475" duration="3529000" />
+      <workItem from="1681991967702" duration="843000" />
+      <workItem from="1681996739617" duration="509000" />
+      <workItem from="1681997384967" duration="870000" />
+      <workItem from="1681998741120" duration="736000" />
+      <workItem from="1682002039452" duration="741000" />
+      <workItem from="1682074207566" duration="8804000" />
+      <workItem from="1682083672991" duration="1652000" />
+      <workItem from="1682157054525" duration="14000" />
+      <workItem from="1683035330832" duration="5657000" />
+      <workItem from="1683104508388" duration="95000" />
+      <workItem from="1683112661771" duration="13723000" />
+      <workItem from="1683126572959" duration="182000" />
+      <workItem from="1683153714751" duration="1364000" />
+      <workItem from="1683188744089" duration="285000" />
+      <workItem from="1683189102305" duration="311000" />
+      <workItem from="1683190004581" duration="9067000" />
+      <workItem from="1683205032910" duration="8105000" />
+      <workItem from="1683217350346" duration="580000" />
+      <workItem from="1683217970679" duration="303000" />
+      <workItem from="1683220473959" duration="1274000" />
+      <workItem from="1683276243778" duration="2425000" />
+      <workItem from="1683284565073" duration="15557000" />
+      <workItem from="1683303625661" duration="1896000" />
+      <workItem from="1683311422088" duration="1291000" />
+      <workItem from="1683363392540" duration="2510000" />
+      <workItem from="1683377406438" duration="528000" />
+      <workItem from="1683541061625" duration="25000" />
+      <workItem from="1683542938350" duration="699000" />
+      <workItem from="1683545134638" duration="883000" />
+      <workItem from="1683546221451" duration="742000" />
+      <workItem from="1683888526566" duration="5000" />
+    </task>
+    <task id="LOCAL-00001" summary="added second canvas for taken pieces to be displayed">
+      <created>1683545625199</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1683545625199</updated>
+    </task>
+    <task id="LOCAL-00002" summary="removed the not actually strategy interfaces">
+      <created>1683545909682</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1683545909682</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="added second canvas for taken pieces to be displayed" />
+    <MESSAGE value="removed the not actually strategy interfaces" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed the not actually strategy interfaces" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
