@@ -32,6 +32,8 @@ public class DisplayUpdater implements Runnable {
     private final Light light;
     private final HashMap<Piece, Entity> entities = new HashMap<>();
     private final HashMap<Coordinate, Entity> squares = new HashMap<>();
+    private final HashMap<Coordinate, Entity> highlights = new HashMap<>();
+    private TexturedModel highlightModel;
     private final Loader loader;
     private final G3DUserLayer parent;
     private Piece selectedPiece = null;
@@ -72,6 +74,18 @@ public class DisplayUpdater implements Runnable {
         }
     }
 
+    private void updateHighlights() {
+        highlights.clear();
+
+        if (selectedPiece == null) return;
+
+        for (Coordinate move : selectedPiece.possibleMoves()) {
+            Entity entity = new Entity(highlightModel, new Vector3f(move.x * spacing, 1, move.y * spacing), 180, 0, 0, 1, null);
+
+            highlights.put(move, entity);
+        }
+    }
+
     private void init() {
         DisplayManager.createDisplay("Chess", 1280, 720, true, false);
         renderer = new MasterRenderer("assets/shaders", camera);
@@ -84,6 +98,8 @@ public class DisplayUpdater implements Runnable {
         guis.add(new GUITexture(loader.loadTexture("assets/crosshair.png"), new Vector2f(0, 0), new Vector2f(guiSize, guiSize * aspect)));
 
         guiRenderer = new GUIRenderer(loader);
+
+        highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/pn.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/b.png")));
     }
 
     private void initBoard() {
@@ -101,12 +117,7 @@ public class DisplayUpdater implements Runnable {
                 TexturedModel txModel = new TexturedModel(model, tex);
                 Vector3f pos = new Vector3f(i*squareSize, 0, j*squareSize);
                 squares.put(new Coordinate(i, j), new Entity(txModel, pos, 0, 0, 0, squareSize, new SpherePicker(pos, (float) squareSize / 2)));
-                System.out.println(new Coordinate(i, j));
             }
-        }
-
-        for (Coordinate coord : squares.keySet()) {
-            System.out.println(coord);
         }
     }
 
@@ -120,13 +131,13 @@ public class DisplayUpdater implements Runnable {
     }
 
     private void processBoard() {
-        for (int i = 0; i < board.maxX; i++) {
-            for (int j = 0; j < board.maxY; j++) {
-                Entity entity = squares.get(new Coordinate(i, j));
-                if (entity == null) continue;
-                renderer.processEntity(entity);
-            }
-        }
+        for (Entity entity : squares.values())
+            if (entity != null) renderer.processEntity(entity);
+    }
+
+    private void processHighlights() {
+        for (Entity entity : highlights.values())
+            if (entity != null) renderer.processEntity(entity);
     }
 
     private void checkMouse() {
@@ -171,10 +182,12 @@ public class DisplayUpdater implements Runnable {
 
             camera.move(renderer.getProjectionMatrix(), Maths.createViewMatrix(camera));
             updatePieces();
+            updateHighlights();
 
             if (squares.isEmpty()) initBoard();
             processEntities();
             processBoard();
+            processHighlights();
 
             checkMouse();
 
