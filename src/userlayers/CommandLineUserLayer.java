@@ -64,8 +64,9 @@ public class CommandLineUserLayer implements UserLayer {
         Coordinate movePosition = null;
 
         while (movePosition == null) {
-            System.out.print("Enter position to move piece to: ");
+            System.out.print("Enter position to move piece to (c to cancel): ");
             String input = sc.nextLine();
+            if (input.equals("c")) return null;
             movePosition = Coordinate.chessCoordToCoordinate(input);
         }
 

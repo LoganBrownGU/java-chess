@@ -76,9 +76,12 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
         moving = true;
         MouseEvent e = waitForMouse();
 
+        boolean clickedOff = !highlighted.possibleMoves().contains(boardCanvas.coordinateOf(e));
         highlighted = null;
         moving = false;
-        return boardCanvas.coordinateOf(e);
+        boardCanvas.drawBoard(checked, board, null);
+
+        return clickedOff ? null : boardCanvas.coordinateOf(e);
     }
 
     @Override

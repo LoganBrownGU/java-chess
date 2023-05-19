@@ -13,6 +13,8 @@ public abstract class Player {
     public abstract Piece getPiece();
     public abstract Coordinate getMove(Piece pieceToMove);
 
+    //public abstract void cancelMove();
+
     public Player(char representation, Board board) {
         this.representation = representation;
         this.board = board;

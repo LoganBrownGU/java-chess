@@ -3,6 +3,7 @@ package main;
 import board.Board;
 import board.BoardFactory;
 import players.PlayerType;
+import userlayers.CommandLineUserLayer;
 import userlayers.G3DUserLayer;
 import userlayers.GUIUserLayer;
 

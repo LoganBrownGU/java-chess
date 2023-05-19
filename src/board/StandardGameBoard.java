@@ -74,8 +74,14 @@ public class StandardGameBoard extends Board {
 
             gameLoop: for (Player player : super.getPlayers()) {
 
-                Piece pieceToMove = player.getPiece();
-                Coordinate move = player.getMove(pieceToMove);
+                // todo could set both to null and while loop
+                Piece pieceToMove = null;
+                Coordinate move = null;
+                // since getMove could return null if player cancels move, we loop until getMove returns true
+                while (move == null) {
+                    pieceToMove = player.getPiece();
+                    move = player.getMove(pieceToMove);
+                }
                 Piece pieceAtMove = super.pieceAt(move);
 
                 if (pieceAtMove != null) super.removePiece(pieceAtMove);
