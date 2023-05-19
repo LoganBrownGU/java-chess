@@ -47,17 +47,24 @@ public class G3DUserLayer implements UserLayer {
         updater.setSelectingSquare(true);
         updater.clearSelectedSquare();
         synchronized (updater) {
-            while (updater.getSelectedSquare() == null) {
-                try {
-                    updater.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                updater.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
 
         Coordinate movePosition = updater.getSelectedSquare();
         updater.setSelectingSquare(false);
+
+        if (movePosition == null) {
+            updater.setSelectingPiece(false);
+            updater.setSelectingSquare(false);
+            updater.clearSelected();
+            updater.clearSelectedSquare();
+            return null;
+        }
+
         return movePosition;
     }
 
@@ -91,7 +98,9 @@ public class G3DUserLayer implements UserLayer {
             while (!cm.isFinished()) {
                 try {
                     lock.wait();
-                } catch (InterruptedException e) { throw new RuntimeException(e); }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
 

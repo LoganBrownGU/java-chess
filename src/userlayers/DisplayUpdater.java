@@ -1,10 +1,7 @@
 package userlayers;
 
 import board.Board;
-import entities.Camera;
-import entities.Entity;
-import entities.Light;
-import entities.SpherePicker;
+import entities.*;
 import gui.GUIRenderer;
 import gui.GUITexture;
 import main.Coordinate;
@@ -46,6 +43,12 @@ public class DisplayUpdater implements Runnable {
     private MasterRenderer renderer;
     private GUIRenderer guiRenderer;
     ArrayList<GUITexture> guis = new ArrayList<>();
+    private final boolean[] mouseButtonsReleased = new boolean[3];
+
+    private void updateMouseButtons() {
+        for (int i = 0; i < mouseButtonsReleased.length; i++)
+            mouseButtonsReleased[i] = Mouse.next() && !Mouse.getEventButtonState() && Mouse.getEventButton() == i;
+    }
 
     private void updatePieces() {
         int[] directions = new int[board.getPlayers().size()];
@@ -112,7 +115,9 @@ public class DisplayUpdater implements Runnable {
 
                 TexturedModel txModel = new TexturedModel(model, tex);
                 Vector3f pos = new Vector3f(i * squareSize, 0, j * squareSize);
-                squares.put(new Coordinate(i, j), new Entity(txModel, pos, 0, 0, 0, squareSize, new SpherePicker(pos, (float) squareSize / 2)));
+                Vector3f min = new Vector3f(pos.x - (float) squareSize / 2, 0, pos.z - (float) squareSize / 2);
+                Vector3f max = new Vector3f(min.x + squareSize, 0, min.z + squareSize);
+                squares.put(new Coordinate(i, j), new Entity(txModel, pos, 0, 0, 0, squareSize, new AABBPicker(min, max)));
             }
         }
     }
@@ -140,24 +145,29 @@ public class DisplayUpdater implements Runnable {
         for (Piece piece : board.getPieces()) {
             Entity entity = entities.get(piece);
             if (entity.getPicker().isIntersecting(mousePicker.getCurrentRay(), camera.getPosition())) {
-                if (Mouse.isButtonDown(0) && selectingPiece) {
+                if (mouseButtonsReleased[0] && selectingPiece) {
                     selectedPiece = piece;
                     synchronized (this) { this.notify(); }
                     break;
-                } else if (!selectingSquare) updateHighlights(piece.possibleMoves());
+                } else if (!selectingSquare)
+                    updateHighlights(piece.possibleMoves());
             }
         }
 
-        if (Mouse.isButtonDown(0) && selectingSquare) {
+        if (mouseButtonsReleased[0] && selectingSquare) {
             for (Coordinate coord : squares.keySet()) {
                 Entity entity = squares.get(coord);
 
-                if (entity.getPicker().isIntersecting(mousePicker.getCurrentRay(), camera.getPosition())) {
+                if (entity.getPicker().isIntersecting(mousePicker.getCurrentRay(), camera.getPosition()) && selectedPiece.possibleMoves().contains(coord)) {
                     selectedSquare = coord;
                     synchronized (this) { this.notify(); }
-                    break;
+                    return;
                 }
             }
+
+            selectedSquare = null;
+            highlights.clear();
+            synchronized (this) { this.notify(); }
         }
     }
 
@@ -166,11 +176,12 @@ public class DisplayUpdater implements Runnable {
         init();
 
         int count = 0;
-        while (Display.isCreated()) {
+        while (!Display.isCloseRequested()) {
             long start = System.nanoTime();
 
             camera.move(renderer.getProjectionMatrix(), Maths.createViewMatrix(camera));
             updatePieces();
+            updateMouseButtons();
 
             if (squares.isEmpty()) initBoard();
             processEntities();
@@ -197,7 +208,7 @@ public class DisplayUpdater implements Runnable {
         renderer.cleanUp();
         guiRenderer.cleanUp();
         loader.cleanUp();
-        System.out.println("end");
+        Display.destroy();
         parent.endGame();
     }
 
