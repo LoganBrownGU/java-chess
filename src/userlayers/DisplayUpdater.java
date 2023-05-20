@@ -90,11 +90,11 @@ public class DisplayUpdater implements Runnable {
 
     private void init() {
         DisplayManager.createDisplay("Chess", 1280, 720, true, false);
-        renderer = new MasterRenderer("assets/shaders", camera);
+        renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/paris_low_res", camera);
         mousePicker = new MousePicker(renderer.getProjectionMatrix(), camera);
         renderer.disableFog();
-        camera.setPosition(new Vector3f((float) (board.maxX - 1) * .5f * spacing, 100, -(float) (board.maxY - 1) * 1.5f * spacing));
-        camera.setRotation(new Vector3f(74, -180, 0));
+        camera.setPosition(new Vector3f((float) (board.maxX - 1) * .5f * spacing, 40, -(float) (board.maxY - 1) * 1.5f * spacing));
+        camera.setRotation(new Vector3f(55, -180, 0));
 
         guiRenderer = new GUIRenderer(loader);
 
@@ -218,7 +218,7 @@ public class DisplayUpdater implements Runnable {
 
         loader = new Loader();
         light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
-        camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(90, 0, 0), 20);
+        camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(90, 0, 0), 70);
         this.parent = parent;
     }
 

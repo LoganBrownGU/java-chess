@@ -32,7 +32,7 @@ void main(void){
 
     float nDotl = dot(unitNormal, unitLightVector);
     float brightness = max(nDotl, 0.1);
-        brightness = cel_shade(brightness);
+    //brightness = cel_shade(brightness);
 
     vec3 diffuse = brightness * lightColour;
 

@@ -5,8 +5,6 @@ import main.Coordinate;
 import pieces.Piece;
 import players.Player;
 
-import java.util.Scanner;
-
 public class G3DUserLayer implements UserLayer {
 
     // todo camera update shouldn't be tied to framerate
@@ -16,7 +14,6 @@ public class G3DUserLayer implements UserLayer {
     private DisplayUpdater updater;
     private final Object lock = new Object();
     private Board board;
-    private final Scanner sc = new Scanner(System.in);
 
     protected void endGame() {
         System.exit(0);
