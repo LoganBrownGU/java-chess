@@ -45,6 +45,8 @@ public class DisplayUpdater implements Runnable {
     private GUIRenderer guiRenderer;
     ArrayList<GUITexture> guis = new ArrayList<>();
     private final boolean[] mouseButtonsReleased = new boolean[3];
+    private Coordinate checkmarkLocation = null;
+    private TexturedModel checkmarkModel;
 
     private void updateMouseButtons() {
         for (int i = 0; i < mouseButtonsReleased.length; i++)
@@ -94,8 +96,8 @@ public class DisplayUpdater implements Runnable {
     }
 
     private void init() {
-        DisplayManager.createDisplay("Chess", 1280, 720, true, true);
-        renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/paris", camera);
+        DisplayManager.createDisplay("Chess", 1280, 720, true, false);
+        renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/paris_low_res", camera);
         mousePicker = new MousePicker(renderer.getProjectionMatrix(), camera);
         renderer.disableFog();
         camera.setPosition(new Vector3f((float) (board.maxX - 1) * .5f * spacing, 40, -(float) (board.maxY - 1) * 1.5f * spacing));
@@ -104,6 +106,7 @@ public class DisplayUpdater implements Runnable {
         guiRenderer = new GUIRenderer(loader);
 
         highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png")));
+        checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png")));
     }
 
     private void initBoard() {
@@ -144,6 +147,16 @@ public class DisplayUpdater implements Runnable {
     private void processHighlights() {
         for (Entity entity : highlights.values())
             if (entity != null) renderer.processEntity(entity);
+    }
+    private void processCheckmark() {
+        if (checkmarkLocation == null) return;
+
+        Vector3f pos = new Vector3f(checkmarkLocation.x * spacing, spacing * 3f, checkmarkLocation.y * spacing);
+        Vector3f vectorToCamera = Vector3f.sub(pos, camera.getPosition(), null);
+        double rotY = Math.atan2(vectorToCamera.x, vectorToCamera.z) + Math.PI;
+
+        Entity checkmark = new Entity(checkmarkModel, pos, 0, (float) Math.toDegrees(rotY), 0, .3f, null);
+        renderer.processEntity(checkmark);
     }
 
     private void checkMouse() {
@@ -192,6 +205,7 @@ public class DisplayUpdater implements Runnable {
             processEntities();
             processBoard();
             processHighlights();
+            processCheckmark();
 
             checkMouse();
 
@@ -251,5 +265,13 @@ public class DisplayUpdater implements Runnable {
 
     public void setSelectingSquare(boolean selectingSquare) {
         this.selectingSquare = selectingSquare;
+    }
+
+    public void setCheckmarkLocation(Coordinate checkmarkLocation) {
+        this.checkmarkLocation = checkmarkLocation;
+    }
+
+    public void clearCheckmarkLocation() {
+        this.checkmarkLocation = null;
     }
 }

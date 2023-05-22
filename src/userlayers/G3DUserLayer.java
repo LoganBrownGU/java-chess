@@ -112,6 +112,8 @@ public class G3DUserLayer implements UserLayer {
             displayThread.start();
         else if (displayThread.isInterrupted())
             displayThread.start();
+
+        updater.clearCheckmarkLocation();
     }
 
     @Override
@@ -121,7 +123,7 @@ public class G3DUserLayer implements UserLayer {
 
     @Override
     public void showCheck(Player checking, Player checked) {
-
+        updater.setCheckmarkLocation(checked.getSovereign().getPosition());
     }
 
     @Override

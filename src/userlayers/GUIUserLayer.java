@@ -95,16 +95,12 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     public void showWinner(Player winner) {
         String message = winner + " wins!";
 
-        showMessage(message);
-
-        boardCanvas.removeMouseListener(this);
         boardCanvas.removeMouseMotionListener(this);
 
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        showMessage(message);
+        waitForMouse();
+
+        boardCanvas.removeMouseListener(this);
 
         frame.dispose();
     }
