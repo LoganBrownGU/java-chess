@@ -28,7 +28,8 @@ public class DisplayUpdater implements Runnable {
     private final int spacing;
     private final Board board;
     private final Camera camera;
-    private final Light light;
+    private final Light sun;
+    private final ArrayList<Light> highlightLights = new ArrayList<>();
     private final HashMap<Piece, Entity> entities = new HashMap<>();
     private final HashMap<Coordinate, Entity> squares = new HashMap<>();
     private final HashMap<Coordinate, Entity> highlights = new HashMap<>();
@@ -81,16 +82,20 @@ public class DisplayUpdater implements Runnable {
 
     private void updateHighlights(ArrayList<Coordinate> moves) {
         highlights.clear();
+        highlightLights.clear();
 
         for (Coordinate move : moves) {
-            Entity entity = new Entity(highlightModel, new Vector3f(move.x * spacing, 0, move.y * spacing), 0, 0, 0, 0.8f, null);
+            Vector3f pos = new Vector3f(move.x * spacing, 0, move.y * spacing);
+            Entity entity = new Entity(highlightModel, pos, 0, 0, 0, 0.8f, null);
+            Light light = new Light(pos, new Vector3f(.5f, .5f, 0), true);
             highlights.put(move, entity);
+            highlightLights.add(light);
         }
     }
 
     private void init() {
-        DisplayManager.createDisplay("Chess", 1280, 720, true, false);
-        renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/paris_low_res", camera);
+        DisplayManager.createDisplay("Chess", 1280, 720, true, true);
+        renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/paris", camera);
         mousePicker = new MousePicker(renderer.getProjectionMatrix(), camera);
         renderer.disableFog();
         camera.setPosition(new Vector3f((float) (board.maxX - 1) * .5f * spacing, 40, -(float) (board.maxY - 1) * 1.5f * spacing));
@@ -191,7 +196,9 @@ public class DisplayUpdater implements Runnable {
             checkMouse();
 
             try {
-                renderer.render(light, camera);
+                ArrayList<Light> lights = new ArrayList<>(highlightLights);
+                lights.add(sun);
+                renderer.render(lights, camera);
                 guiRenderer.render(guis);
                 DisplayManager.updateDisplay();
             } catch (RuntimeException e) {
@@ -217,7 +224,7 @@ public class DisplayUpdater implements Runnable {
         this.spacing = spacing;
 
         loader = new Loader();
-        light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
+        sun = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1), false);
         camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(90, 0, 0), 70);
         this.parent = parent;
     }
