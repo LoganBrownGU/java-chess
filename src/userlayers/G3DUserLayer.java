@@ -127,6 +127,11 @@ public class G3DUserLayer implements UserLayer {
     }
 
     @Override
+    public void showPieceTaken(Piece takenPiece) {
+
+    }
+
+    @Override
     public void setActive(boolean active) {
         this.active = active;
 

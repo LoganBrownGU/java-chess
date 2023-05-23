@@ -54,6 +54,11 @@ class PawnTest {
             }
 
             @Override
+            public void showPieceTaken(Piece takenPiece) {
+
+            }
+
+            @Override
             public String getPromotion() {
                 return "QUEEN";
             }

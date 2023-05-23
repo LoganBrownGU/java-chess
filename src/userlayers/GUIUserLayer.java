@@ -113,6 +113,11 @@ public class GUIUserLayer implements UserLayer, MouseListener, MouseMotionListen
     }
 
     @Override
+    public void showPieceTaken(Piece takenPiece) {
+        // todo implement this
+    }
+
+    @Override
     public void setBoard(Board board) {
         this.board = board;
         this.boardCanvas.setDivSize((int) Math.ceil((float) boardCanvas.getWidth() / Math.max(board.maxX, board.maxY)));

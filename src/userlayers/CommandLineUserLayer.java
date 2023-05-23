@@ -89,6 +89,11 @@ public class CommandLineUserLayer implements UserLayer {
     }
 
     @Override
+    public void showPieceTaken(Piece takenPiece) {
+
+    }
+
+    @Override
     public String getPromotion() {
         System.out.println("which piece would you like to promote to?");
         Scanner sc = new Scanner(System.in);

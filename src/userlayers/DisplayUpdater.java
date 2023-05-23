@@ -12,6 +12,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 import pieces.Pawn;
 import pieces.Piece;
+import players.Player;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -33,6 +34,7 @@ public class DisplayUpdater implements Runnable {
     private final HashMap<Piece, Entity> entities = new HashMap<>();
     private final HashMap<Coordinate, Entity> squares = new HashMap<>();
     private final HashMap<Coordinate, Entity> highlights = new HashMap<>();
+    private final HashMap<Player, Piece> takenPieces = new HashMap<>();
     private TexturedModel highlightModel;
     private final Loader loader;
     private final G3DUserLayer parent;
