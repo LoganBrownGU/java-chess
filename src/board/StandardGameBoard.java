@@ -84,7 +84,10 @@ public class StandardGameBoard extends Board {
                 }
                 Piece pieceAtMove = super.pieceAt(move);
 
-                if (pieceAtMove != null) super.removePiece(pieceAtMove);
+                if (pieceAtMove != null) {
+                    super.getUserLayer().showPieceTaken(pieceAtMove);
+                    super.removePiece(pieceAtMove);
+                }
                 pieceToMove.setPosition(move);
 
                 // for normal checkmate where player checkmates opponent

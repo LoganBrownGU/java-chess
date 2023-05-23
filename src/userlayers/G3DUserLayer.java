@@ -34,7 +34,6 @@ public class G3DUserLayer implements UserLayer {
         }
 
         Piece selected = updater.getSelectedPiece();
-        System.out.println(selected);
         updater.setSelectingPiece(false);
         return selected;
     }
@@ -128,7 +127,7 @@ public class G3DUserLayer implements UserLayer {
 
     @Override
     public void showPieceTaken(Piece takenPiece) {
-
+        updater.updateTakenPieces(takenPiece);
     }
 
     @Override

@@ -9,6 +9,7 @@ import models.RawModel;
 import models.TexturedModel;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import pieces.Pawn;
 import pieces.Piece;
@@ -31,10 +32,10 @@ public class DisplayUpdater implements Runnable {
     private final Camera camera;
     private final Light sun;
     private final ArrayList<Light> highlightLights = new ArrayList<>();
+    private final ArrayList<GUITexture> takenPieces = new ArrayList<>();
     private final HashMap<Piece, Entity> entities = new HashMap<>();
     private final HashMap<Coordinate, Entity> squares = new HashMap<>();
     private final HashMap<Coordinate, Entity> highlights = new HashMap<>();
-    private final HashMap<Player, Piece> takenPieces = new HashMap<>();
     private TexturedModel highlightModel;
     private final Loader loader;
     private final G3DUserLayer parent;
@@ -49,6 +50,7 @@ public class DisplayUpdater implements Runnable {
     private final boolean[] mouseButtonsReleased = new boolean[3];
     private Coordinate checkmarkLocation = null;
     private TexturedModel checkmarkModel;
+    private Piece takenPiece = null;
 
     private void updateMouseButtons() {
         for (int i = 0; i < mouseButtonsReleased.length; i++)
@@ -106,6 +108,8 @@ public class DisplayUpdater implements Runnable {
         camera.setRotation(new Vector3f(55, -180, 0));
 
         guiRenderer = new GUIRenderer(loader);
+        guis.add(new GUITexture(loader.loadTexture("assets/default_textures/w.png"), new Vector2f(-1 + 2f / 10, 0), new Vector2f(2f / 10, 2)));
+        guis.add(new GUITexture(loader.loadTexture("assets/default_textures/b.png"), new Vector2f(1 - 2f / 10, 0), new Vector2f(2f / 10, 2)));
 
         highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png")));
         checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png")));
@@ -150,6 +154,7 @@ public class DisplayUpdater implements Runnable {
         for (Entity entity : highlights.values())
             if (entity != null) renderer.processEntity(entity);
     }
+
     private void processCheckmark() {
         if (checkmarkLocation == null) return;
 
@@ -161,13 +166,38 @@ public class DisplayUpdater implements Runnable {
         renderer.processEntity(checkmark);
     }
 
+    private void processTakenPieces() {
+        if (takenPiece == null) return;
+
+        int index = takenPieces.size();
+
+        float aspect = (float) Display.getWidth() / Display.getHeight();
+
+        float div = 2f / 40;
+        Vector2f scale = new Vector2f(div, div * aspect);
+
+        int wrap = 4;
+        float x = (float) -1 + scale.x / 2 + (index % wrap) * div;
+        float y = (float) (1 - scale.y - Math.floor((double) index / wrap) * scale.y * 2);
+        System.out.println(scale);
+
+
+        String rep = takenPiece.getPlayer().representation + takenPiece.representation;
+        GUITexture icon = new GUITexture(loader.loadTexture("assets/default_icons/" + rep + ".png"), new Vector2f(x, y), scale);
+        takenPieces.add(icon);
+
+        takenPiece = null;
+    }
+
     private void checkMouse() {
         for (Piece piece : board.getPieces()) {
             Entity entity = entities.get(piece);
             if (entity.getPicker().isIntersecting(mousePicker.getCurrentRay(), camera.getPosition())) {
                 if (mouseButtonsReleased[0] && selectingPiece) {
                     selectedPiece = piece;
-                    synchronized (this) { this.notify(); }
+                    synchronized (this) {
+                        this.notify();
+                    }
                     break;
                 } else if (!selectingSquare)
                     updateHighlights(piece.possibleMoves());
@@ -180,14 +210,18 @@ public class DisplayUpdater implements Runnable {
 
                 if (entity.getPicker().isIntersecting(mousePicker.getCurrentRay(), camera.getPosition()) && selectedPiece.possibleMoves().contains(coord)) {
                     selectedSquare = coord;
-                    synchronized (this) { this.notify(); }
+                    synchronized (this) {
+                        this.notify();
+                    }
                     return;
                 }
             }
 
             selectedSquare = null;
             highlights.clear();
-            synchronized (this) { this.notify(); }
+            synchronized (this) {
+                this.notify();
+            }
         }
     }
 
@@ -208,6 +242,7 @@ public class DisplayUpdater implements Runnable {
             processBoard();
             processHighlights();
             processCheckmark();
+            processTakenPieces();
 
             checkMouse();
 
@@ -216,6 +251,7 @@ public class DisplayUpdater implements Runnable {
                 lights.add(sun);
                 renderer.render(lights, camera);
                 guiRenderer.render(guis);
+                guiRenderer.render(takenPieces);
                 DisplayManager.updateDisplay();
             } catch (RuntimeException e) {
                 e.printStackTrace();
@@ -275,5 +311,9 @@ public class DisplayUpdater implements Runnable {
 
     public void clearCheckmarkLocation() {
         this.checkmarkLocation = null;
+    }
+
+    public void updateTakenPieces(Piece takenPiece) {
+        this.takenPiece = takenPiece;
     }
 }
