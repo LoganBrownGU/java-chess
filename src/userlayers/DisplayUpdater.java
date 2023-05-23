@@ -32,7 +32,7 @@ public class DisplayUpdater implements Runnable {
     private final Camera camera;
     private final Light sun;
     private final ArrayList<Light> highlightLights = new ArrayList<>();
-    private final ArrayList<GUITexture> takenPieces = new ArrayList<>();
+    private final HashMap<Player, ArrayList<GUITexture>> takenPieces = new HashMap<>();
     private final HashMap<Piece, Entity> entities = new HashMap<>();
     private final HashMap<Coordinate, Entity> squares = new HashMap<>();
     private final HashMap<Coordinate, Entity> highlights = new HashMap<>();
@@ -101,15 +101,15 @@ public class DisplayUpdater implements Runnable {
 
     private void init() {
         DisplayManager.createDisplay("Chess", 1280, 720, true, false);
-        renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/paris_low_res", camera);
+        renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/sea", camera);
         mousePicker = new MousePicker(renderer.getProjectionMatrix(), camera);
         renderer.disableFog();
-        camera.setPosition(new Vector3f((float) (board.maxX - 1) * .5f * spacing, 40, -(float) (board.maxY - 1) * 1.5f * spacing));
+        camera.setPosition(new Vector3f((float) (board.maxX - 1) * .5f * spacing, 20, -(float) (board.maxY - 1) * .6f * spacing));
         camera.setRotation(new Vector3f(55, -180, 0));
 
         guiRenderer = new GUIRenderer(loader);
-        guis.add(new GUITexture(loader.loadTexture("assets/default_textures/w.png"), new Vector2f(-1 + 2f / 10, 0), new Vector2f(2f / 10, 2)));
-        guis.add(new GUITexture(loader.loadTexture("assets/default_textures/b.png"), new Vector2f(1 - 2f / 10, 0), new Vector2f(2f / 10, 2)));
+        guis.add(new GUITexture(loader.loadTexture("assets/default_textures/b.png"), new Vector2f(-1 + 2f / 20, 0), new Vector2f(2f / 10, 2)));
+        guis.add(new GUITexture(loader.loadTexture("assets/default_textures/w.png"), new Vector2f(1 - 2f / 20, 0), new Vector2f(2f / 10, 2)));
 
         highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png")));
         checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png")));
@@ -168,8 +168,9 @@ public class DisplayUpdater implements Runnable {
 
     private void processTakenPieces() {
         if (takenPiece == null) return;
+        takenPieces.computeIfAbsent(takenPiece.getPlayer(), k -> new ArrayList<>());
 
-        int index = takenPieces.size();
+        int index = takenPieces.get(takenPiece.getPlayer()).size();
 
         float aspect = (float) Display.getWidth() / Display.getHeight();
 
@@ -177,14 +178,17 @@ public class DisplayUpdater implements Runnable {
         Vector2f scale = new Vector2f(div, div * aspect);
 
         int wrap = 4;
-        float x = (float) -1 + scale.x / 2 + (index % wrap) * div;
-        float y = (float) (1 - scale.y - Math.floor((double) index / wrap) * scale.y * 2);
-        System.out.println(scale);
+        float x, y = (float) (1 - scale.y * 1.5f - Math.floor((double) index / wrap) * scale.y * 2);
 
+        if (board.getPlayers().indexOf(takenPiece.getPlayer()) % 2 == 0)
+            x = (float) -1 + scale.x + (index % wrap) * div;
+        else
+            x = (float) 1 - scale.x - (index % wrap) * div;
+        System.out.println(scale);
 
         String rep = takenPiece.getPlayer().representation + takenPiece.representation;
         GUITexture icon = new GUITexture(loader.loadTexture("assets/default_icons/" + rep + ".png"), new Vector2f(x, y), scale);
-        takenPieces.add(icon);
+        takenPieces.get(takenPiece.getPlayer()).add(icon);
 
         takenPiece = null;
     }
@@ -251,7 +255,9 @@ public class DisplayUpdater implements Runnable {
                 lights.add(sun);
                 renderer.render(lights, camera);
                 guiRenderer.render(guis);
-                guiRenderer.render(takenPieces);
+
+                for (ArrayList<GUITexture> textures : takenPieces.values())
+                    guiRenderer.render(textures);
                 DisplayManager.updateDisplay();
             } catch (RuntimeException e) {
                 e.printStackTrace();
