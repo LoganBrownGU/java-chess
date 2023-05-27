@@ -2,8 +2,11 @@ package userlayers;
 
 import board.Board;
 import entities.*;
+import fontRendering.TextMaster;
+import gui.GUIMaster;
 import gui.GUIRenderer;
 import gui.GUITexture;
+import gui.TextField;
 import main.Coordinate;
 import models.RawModel;
 import models.TexturedModel;
@@ -19,6 +22,7 @@ import renderEngine.Loader;
 import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
 import textures.ModelTexture;
+import toolbox.Colours;
 import toolbox.Maths;
 import toolbox.MousePicker;
 
@@ -46,7 +50,6 @@ public class DisplayUpdater implements Runnable {
     private MousePicker mousePicker;
     private MasterRenderer renderer;
     private GUIRenderer guiRenderer;
-    ArrayList<GUITexture> guis = new ArrayList<>();
     private final boolean[] mouseButtonsReleased = new boolean[3];
     private Coordinate checkmarkLocation = null;
     private TexturedModel checkmarkModel;
@@ -100,19 +103,34 @@ public class DisplayUpdater implements Runnable {
     }
 
     private void init() {
-        DisplayManager.createDisplay("Chess", 1280, 720, true, false);
+        DisplayManager.createDisplay("Chess", 1280, 720, true, true);
         renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/sea", camera);
         mousePicker = new MousePicker(renderer.getProjectionMatrix(), camera);
         renderer.disableFog();
         camera.setPosition(new Vector3f((float) (board.maxX - 1) * .5f * spacing, 20, -(float) (board.maxY - 1) * .6f * spacing));
         camera.setRotation(new Vector3f(55, -180, 0));
 
-        guiRenderer = new GUIRenderer(loader);
-        guis.add(new GUITexture(loader.loadTexture("assets/default_textures/b.png"), new Vector2f(-1 + 2f / 20, 0), new Vector2f(2f / 10, 2)));
-        guis.add(new GUITexture(loader.loadTexture("assets/default_textures/w.png"), new Vector2f(1 - 2f / 20, 0), new Vector2f(2f / 10, 2)));
+        guiRenderer = new GUIRenderer(loader, "assets/shaders/guiVertexShader.glsl");
+
+        TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
+        GUIMaster.setFont(loader, "assets/fonts/arial");
+        TextField tField = new TextField(Colours.DARK_GREY, Colours.WHITE, new Vector2f((float) Display.getWidth() / 10, Display.getHeight() / 2), new Vector2f((float) Display.getWidth() / 5, Display.getHeight()), "", 0);
+        tField.add();
+        tField = new TextField(Colours.WHITE, Colours.DARK_GREY, new Vector2f(Display.getWidth() - Display.getWidth() / 10, Display.getHeight() / 2), new Vector2f((float) Display.getWidth() / 5, Display.getHeight()), "", 0);
+        tField.add();
+        tField = new TextField(Colours.DARK_GREY, Colours.WHITE, new Vector2f(Display.getWidth() / 10, Display.getHeight() / 20), new Vector2f((float) Display.getWidth() / 5, Display.getHeight() / 10), "Pieces taken by white", 0);
+        tField.add();
+        tField = new TextField(Colours.WHITE, Colours.DARK_GREY, new Vector2f(Display.getWidth() - Display.getWidth() / 10, Display.getHeight() / 20), new Vector2f((float) Display.getWidth() / 5, Display.getHeight() / 10), "Pieces taken by black", 0);
+        tField.add();
 
         highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png")));
         checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png")));
+
+
+        for (int i = 0; i < 30; i++) {
+            takenPiece = board.getPieces().get(i);
+            processTakenPieces();
+        }
     }
 
     private void initBoard() {
@@ -178,13 +196,12 @@ public class DisplayUpdater implements Runnable {
         Vector2f scale = new Vector2f(div, div * aspect);
 
         int wrap = 4;
-        float x, y = (float) (1 - scale.y * 1.5f - Math.floor((double) index / wrap) * scale.y * 2);
+        float x, y = (float) (1 - scale.y * 1.5f - Math.floor((double) index / wrap) * scale.y * 2 - .2f);
 
         if (board.getPlayers().indexOf(takenPiece.getPlayer()) % 2 == 0)
-            x = (float) -1 + scale.x + (index % wrap) * div;
+            x = (float) -1 + scale.x + (index % wrap) * (div + .04f);
         else
-            x = (float) 1 - scale.x - (index % wrap) * div;
-        System.out.println(scale);
+            x = (float) 1 - scale.x - (index % wrap) * (div + .04f);
 
         String rep = takenPiece.getPlayer().representation + takenPiece.representation;
         GUITexture icon = new GUITexture(loader.loadTexture("assets/default_icons/" + rep + ".png"), new Vector2f(x, y), scale);
@@ -254,10 +271,13 @@ public class DisplayUpdater implements Runnable {
                 ArrayList<Light> lights = new ArrayList<>(highlightLights);
                 lights.add(sun);
                 renderer.render(lights, camera);
-                guiRenderer.render(guis);
+                GUIMaster.render(guiRenderer);
 
                 for (ArrayList<GUITexture> textures : takenPieces.values())
                     guiRenderer.render(textures);
+
+                TextMaster.render();
+
                 DisplayManager.updateDisplay();
             } catch (RuntimeException e) {
                 e.printStackTrace();
@@ -283,7 +303,7 @@ public class DisplayUpdater implements Runnable {
 
         loader = new Loader();
         sun = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1), false);
-        camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(90, 0, 0), 70);
+        camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(90, 0, 0), 60);
         this.parent = parent;
     }
 
