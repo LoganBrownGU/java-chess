@@ -74,7 +74,7 @@ public class DisplayUpdater implements Runnable {
                 // load
                 try {
                     TexturedModel model = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/" + piece.representation + ".obj", loader),
-                            new ModelTexture(loader.loadTexture("assets/default_textures/" + piece.getPlayer().representation + ".png")));
+                            new ModelTexture(loader.loadTexture("assets/default_textures/" + piece.getPlayer().representation + ".png"), false));
 
                     Vector3f pos = new Vector3f(piece.getPosition().x * spacing, 0, piece.getPosition().y * spacing);
                     Entity entity = new Entity(model, pos, 0, 90 * directions[playerIdx], 0, 1, new SpherePicker(pos, 1));
@@ -103,7 +103,7 @@ public class DisplayUpdater implements Runnable {
     }
 
     private void init() {
-        DisplayManager.createDisplay("Chess", 1280, 720, true, true);
+        DisplayManager.createDisplay("Chess", 1280, 720, true);
         renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/sea", camera);
         mousePicker = new MousePicker(renderer.getProjectionMatrix(), camera);
         renderer.disableFog();
@@ -123,8 +123,8 @@ public class DisplayUpdater implements Runnable {
         tField = new TextField(Colours.WHITE, Colours.DARK_GREY, new Vector2f(Display.getWidth() - Display.getWidth() / 10, Display.getHeight() / 20), new Vector2f((float) Display.getWidth() / 5, Display.getHeight() / 10), "Pieces taken by black", 0);
         tField.add();
 
-        highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png")));
-        checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png")));
+        highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), true));
+        checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), false));
 
 
         for (int i = 0; i < 30; i++) {
@@ -135,8 +135,8 @@ public class DisplayUpdater implements Runnable {
 
     private void initBoard() {
         int squareSize = 2;
-        ModelTexture black = new ModelTexture(loader.loadTexture("assets/default_textures/b.png"));
-        ModelTexture white = new ModelTexture(loader.loadTexture("assets/default_textures/w.png"));
+        ModelTexture black = new ModelTexture(loader.loadTexture("assets/default_textures/b.png"), false);
+        ModelTexture white = new ModelTexture(loader.loadTexture("assets/default_textures/w.png"), true);
         RawModel model = OBJLoader.loadObjModel("assets/default_models/board_square.obj", loader);
 
         for (int i = 0; i < board.maxX; i++) {
@@ -246,6 +246,14 @@ public class DisplayUpdater implements Runnable {
         }
     }
 
+    private void processAll() {
+        processEntities();
+        processBoard();
+        processHighlights();
+        processCheckmark();
+        processTakenPieces();
+    }
+
     @Override
     public void run() {
         init();
@@ -259,11 +267,7 @@ public class DisplayUpdater implements Runnable {
             updateMouseButtons();
 
             if (squares.isEmpty()) initBoard();
-            processEntities();
-            processBoard();
-            processHighlights();
-            processCheckmark();
-            processTakenPieces();
+            processAll();
 
             checkMouse();
 
