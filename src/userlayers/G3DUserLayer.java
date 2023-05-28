@@ -117,7 +117,7 @@ public class G3DUserLayer implements UserLayer {
 
     @Override
     public void showWinner(Player winner) {
-
+        updater.setWinner(winner);
     }
 
     @Override

@@ -39,6 +39,7 @@ public class DisplayUpdater implements Runnable {
     private final HashMap<Player, ArrayList<GUITexture>> takenPieces = new HashMap<>();
     private final HashMap<Piece, Entity> entities = new HashMap<>();
     private final HashMap<Coordinate, Entity> squares = new HashMap<>();
+    private Entity border;
     private final HashMap<Coordinate, Entity> highlights = new HashMap<>();
     private TexturedModel highlightModel;
     private final Loader loader;
@@ -54,6 +55,7 @@ public class DisplayUpdater implements Runnable {
     private Coordinate checkmarkLocation = null;
     private TexturedModel checkmarkModel;
     private Piece takenPiece = null;
+    private Player winner = null;
 
     private void updateMouseButtons() {
         for (int i = 0; i < mouseButtonsReleased.length; i++)
@@ -94,16 +96,17 @@ public class DisplayUpdater implements Runnable {
         highlightLights.clear();
 
         for (Coordinate move : moves) {
+            float brightness = 2.3f / moves.size();
             Vector3f pos = new Vector3f(move.x * spacing, 0, move.y * spacing);
-            Entity entity = new Entity(highlightModel, pos, 0, 0, 0, 0.8f, null);
-            Light light = new Light(pos, new Vector3f(.5f, .5f, 0), true);
+            Entity entity = new Entity(highlightModel, pos, 0, 0, 0, 0.4f, null);
+            Light light = new Light(pos, new Vector3f(brightness, brightness, 0), true);
             highlights.put(move, entity);
             highlightLights.add(light);
         }
     }
 
     private void init() {
-        DisplayManager.createDisplay("Chess", 1280, 720, true);
+        DisplayManager.createDisplay("Chess", 1280, 720, false);
         renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/sea", camera);
         mousePicker = new MousePicker(renderer.getProjectionMatrix(), camera);
         renderer.disableFog();
@@ -118,19 +121,19 @@ public class DisplayUpdater implements Runnable {
         tField.add();
         tField = new TextField(Colours.WHITE, Colours.DARK_GREY, new Vector2f(Display.getWidth() - Display.getWidth() / 10, Display.getHeight() / 2), new Vector2f((float) Display.getWidth() / 5, Display.getHeight()), "", 0);
         tField.add();
-        tField = new TextField(Colours.DARK_GREY, Colours.WHITE, new Vector2f(Display.getWidth() / 10, Display.getHeight() / 20), new Vector2f((float) Display.getWidth() / 5, Display.getHeight() / 10), "Pieces taken by white", 0);
+        tField = new TextField(Colours.DARK_GREY, Colours.WHITE, new Vector2f(Display.getWidth() / 10, Display.getHeight() / 20), new Vector2f((float) Display.getWidth() / 5, Display.getHeight() / 10), "Pieces taken by black", 0);
         tField.add();
-        tField = new TextField(Colours.WHITE, Colours.DARK_GREY, new Vector2f(Display.getWidth() - Display.getWidth() / 10, Display.getHeight() / 20), new Vector2f((float) Display.getWidth() / 5, Display.getHeight() / 10), "Pieces taken by black", 0);
+        tField = new TextField(Colours.WHITE, Colours.DARK_GREY, new Vector2f(Display.getWidth() - Display.getWidth() / 10, Display.getHeight() / 20), new Vector2f((float) Display.getWidth() / 5, Display.getHeight() / 10), "Pieces taken by white", 0);
         tField.add();
 
         highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), true));
         checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), false));
 
 
-        for (int i = 0; i < 30; i++) {
+        /*for (int i = 0; i < 30; i++) {
             takenPiece = board.getPieces().get(i);
             processTakenPieces();
-        }
+        }*/
     }
 
     private void initBoard() {
@@ -152,6 +155,9 @@ public class DisplayUpdater implements Runnable {
                 squares.put(new Coordinate(i, j), new Entity(txModel, pos, 0, 0, 0, squareSize, new AABBPicker(min, max)));
             }
         }
+
+        border = new Entity(new TexturedModel(OBJLoader.loadObjModel("assets/default_models/border.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/wood.png"), false)),
+                new Vector3f(0, 0, 0), 0, 0, 0, spacing, null);
     }
 
     private void processEntities() {
@@ -166,6 +172,8 @@ public class DisplayUpdater implements Runnable {
     private void processBoard() {
         for (Entity entity : squares.values())
             if (entity != null) renderer.processEntity(entity);
+
+        renderer.processEntity(border);
     }
 
     private void processHighlights() {
@@ -211,11 +219,23 @@ public class DisplayUpdater implements Runnable {
     }
 
     private void checkMouse() {
+        if (winner != null) {
+            if (Mouse.isButtonDown(0) && Mouse.next())
+                winner = null;
+            return;
+        }
+
         for (Piece piece : board.getPieces()) {
             Entity entity = entities.get(piece);
             if (entity.getPicker().isIntersecting(mousePicker.getCurrentRay(), camera.getPosition())) {
                 if (mouseButtonsReleased[0] && selectingPiece) {
                     selectedPiece = piece;
+                    System.out.println(selectedPiece);
+                    if (selectedPiece != null) {
+                        Vector3f pos = new Vector3f(selectedPiece.getPosition().x * spacing, 0, selectedPiece.getPosition().y * spacing);
+                        Light light = new Light(pos, new Vector3f(0, 1f, 0), true);
+                        highlightLights.add(light);
+                    }
                     synchronized (this) {
                         this.notify();
                     }
@@ -258,9 +278,7 @@ public class DisplayUpdater implements Runnable {
     public void run() {
         init();
 
-        int count = 0;
-        while (!Display.isCloseRequested()) {
-            long start = System.nanoTime();
+        while (!Display.isCloseRequested() && winner == null) {
 
             camera.move(renderer.getProjectionMatrix(), Maths.createViewMatrix(camera));
             updatePieces();
@@ -286,14 +304,24 @@ public class DisplayUpdater implements Runnable {
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
-
-            if (count++ == 60) {
-                long end = System.nanoTime() - start;
-                Display.setTitle("Chess " + Math.round(1_000_000_000d / end));
-                count = 0;
-            }
         }
 
+        highlightLights.clear();
+        highlights.clear();
+        if (winner != null)
+            GUIMaster.addElement(new TextField(Colours.BLACK, Colours.WHITE, new Vector2f(Display.getWidth() / 2, Display.getHeight() / 2), new Vector2f(Display.getWidth() / 4, Display.getHeight() / 4), winner.representation + " wins", 1));
+        while (winner != null && !Display.isCloseRequested()) {
+            checkMouse();
+            processAll();
+            ArrayList<Light> lights = new ArrayList<>();
+            lights.add(sun);
+            renderer.render(lights, camera);
+            GUIMaster.render(guiRenderer);
+            TextMaster.render();
+            DisplayManager.updateDisplay();
+        }
+
+        TextMaster.cleanUp();
         renderer.cleanUp();
         guiRenderer.cleanUp();
         loader.cleanUp();
@@ -345,5 +373,9 @@ public class DisplayUpdater implements Runnable {
 
     public void updateTakenPieces(Piece takenPiece) {
         this.takenPiece = takenPiece;
+    }
+
+    public void setWinner(Player winner) {
+        this.winner = winner;
     }
 }
