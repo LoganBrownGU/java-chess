@@ -4,10 +4,13 @@ import board.Board;
 import main.Coordinate;
 import pieces.Piece;
 import players.Player;
+import userlayers.graphics3d.DisplayUpdater;
 
 public class G3DUserLayer implements UserLayer {
 
     // todo camera update shouldn't be tied to framerate
+    // todo make camera abstract
+    // todo read in graphics settings from config file
 
     private boolean active = false;
     private Thread displayThread;
@@ -15,7 +18,7 @@ public class G3DUserLayer implements UserLayer {
     private final Object lock = new Object();
     private Board board;
 
-    protected void endGame() {
+    public void endGame() {
         System.exit(0);
     }
 

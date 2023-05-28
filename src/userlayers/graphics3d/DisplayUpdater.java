@@ -1,4 +1,4 @@
-package userlayers;
+package userlayers.graphics3d;
 
 import board.Board;
 import entities.*;
@@ -25,6 +25,7 @@ import textures.ModelTexture;
 import toolbox.Colours;
 import toolbox.Maths;
 import toolbox.MousePicker;
+import userlayers.G3DUserLayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -280,7 +281,7 @@ public class DisplayUpdater implements Runnable {
 
         while (!Display.isCloseRequested() && winner == null) {
 
-            camera.move(renderer.getProjectionMatrix(), Maths.createViewMatrix(camera));
+            camera.move(renderer.getProjectionMatrix());
             updatePieces();
             updateMouseButtons();
 
@@ -335,7 +336,7 @@ public class DisplayUpdater implements Runnable {
 
         loader = new Loader();
         sun = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1), false);
-        camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(90, 0, 0), 60);
+        camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(90, 0, 0), 60, new Vector3f(0, 0, 0));
         this.parent = parent;
     }
 
