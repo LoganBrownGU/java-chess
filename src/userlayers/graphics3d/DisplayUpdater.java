@@ -59,7 +59,7 @@ public class DisplayUpdater implements Runnable {
     private Player winner = null;
 
     private void init() {
-        DisplayManager.createDisplay("Chess", 1280, 720, true);
+        DisplayManager.createDisplay("Chess", 1280, 720, false);
         renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/sea", camera);
         mousePicker = new MousePicker(renderer.getProjectionMatrix(), camera);
         renderer.disableFog();
@@ -152,7 +152,7 @@ public class DisplayUpdater implements Runnable {
         }
 
         border = new Entity(new TexturedModel(OBJLoader.loadObjModel("assets/default_models/border.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/wood.png"), false)),
-                new Vector3f(), 0, 0, 0, new Vector3f(spacing * board.maxX, 1, spacing * board.maxY), null);
+                new Vector3f(spacing * board.maxX / 2 - spacing / 2, 0, spacing * board.maxY / 2 - spacing / 2), 0, 0, 0, new Vector3f(spacing * board.maxX, spacing, spacing * board.maxY), null);
     }
 
     private void processEntities() {

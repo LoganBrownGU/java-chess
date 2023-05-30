@@ -10,7 +10,7 @@ import userlayers.GUIUserLayer;
 public class Main {
     public static void main(String[] args) {
 
-        Board board = BoardFactory.hugeBoard(new CommandLineUserLayer());
+        Board board = BoardFactory.hugeBoard(new G3DUserLayer());
         board.updateUserLayer();
 
         board.play();

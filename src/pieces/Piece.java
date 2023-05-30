@@ -46,12 +46,13 @@ public abstract class Piece {
     public ArrayList<Coordinate> diagonalMoves() {
         ArrayList<Coordinate> moves = new ArrayList<>();
 
-        Coordinate min = new Coordinate(position.x - board.maxX, position.y - board.maxY);
-        Coordinate max = new Coordinate(position.x + board.maxX, position.y + board.maxY);
+        int offset = Math.max(board.maxX, board.maxY);
+        Coordinate min = new Coordinate(position.x - offset, position.y - offset);
+        Coordinate max = new Coordinate(position.x + offset, position.y + offset);
         moves.addAll(position.coordsBetween(min, board));
         moves.addAll(position.coordsBetween(max, board));
-        min = new Coordinate(position.x + board.maxX, position.y - board.maxY);
-        max = new Coordinate(position.x - board.maxX, position.y + board.maxY);
+        min = new Coordinate(position.x + offset, position.y - offset);
+        max = new Coordinate(position.x - offset, position.y + offset);
         moves.addAll(position.coordsBetween(min, board));
         moves.addAll(position.coordsBetween(max, board));
 
