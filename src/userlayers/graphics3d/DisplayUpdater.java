@@ -58,6 +58,31 @@ public class DisplayUpdater implements Runnable {
     private Piece takenPiece = null;
     private Player winner = null;
 
+    private void init() {
+        DisplayManager.createDisplay("Chess", 1280, 720, true);
+        renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/sea", camera);
+        mousePicker = new MousePicker(renderer.getProjectionMatrix(), camera);
+        renderer.disableFog();
+        camera.setPosition(new Vector3f((float) (board.maxX - 1) * .5f * spacing, 20, -(float) (board.maxY - 1) * .6f * spacing));
+        camera.setRotation(new Vector3f(60, 0, 0));
+
+        guiRenderer = new GUIRenderer(loader, "assets/shaders/guiVertexShader.glsl");
+
+        TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
+        GUIMaster.setFont(loader, "assets/fonts/arial");
+        TextField tField = new TextField(Colours.DARK_GREY, Colours.WHITE, new Vector2f((float) Display.getWidth() / 10, Display.getHeight() / 2), new Vector2f((float) Display.getWidth() / 5, Display.getHeight()), "", 0);
+        tField.add();
+        tField = new TextField(Colours.WHITE, Colours.DARK_GREY, new Vector2f(Display.getWidth() - Display.getWidth() / 10, Display.getHeight() / 2), new Vector2f((float) Display.getWidth() / 5, Display.getHeight()), "", 0);
+        tField.add();
+        tField = new TextField(Colours.DARK_GREY, Colours.WHITE, new Vector2f(Display.getWidth() / 10, Display.getHeight() / 20), new Vector2f((float) Display.getWidth() / 5, Display.getHeight() / 10), "Pieces taken by black", 0);
+        tField.add();
+        tField = new TextField(Colours.WHITE, Colours.DARK_GREY, new Vector2f(Display.getWidth() - Display.getWidth() / 10, Display.getHeight() / 20), new Vector2f((float) Display.getWidth() / 5, Display.getHeight() / 10), "Pieces taken by white", 0);
+        tField.add();
+
+        highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), true));
+        checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), false));
+    }
+
     private void updateMouseButtons() {
         for (int i = 0; i < mouseButtonsReleased.length; i++)
             mouseButtonsReleased[i] = Mouse.next() && !Mouse.getEventButtonState() && Mouse.getEventButton() == i;
@@ -106,37 +131,6 @@ public class DisplayUpdater implements Runnable {
         }
     }
 
-    private void init() {
-        DisplayManager.createDisplay("Chess", 1280, 720, false);
-        renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/sea", camera);
-        mousePicker = new MousePicker(renderer.getProjectionMatrix(), camera);
-        renderer.disableFog();
-        camera.setPosition(new Vector3f((float) (board.maxX - 1) * .5f * spacing, 20, -(float) (board.maxY - 1) * .6f * spacing));
-        camera.setRotation(new Vector3f(55, -180, 0));
-
-        guiRenderer = new GUIRenderer(loader, "assets/shaders/guiVertexShader.glsl");
-
-        TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
-        GUIMaster.setFont(loader, "assets/fonts/arial");
-        TextField tField = new TextField(Colours.DARK_GREY, Colours.WHITE, new Vector2f((float) Display.getWidth() / 10, Display.getHeight() / 2), new Vector2f((float) Display.getWidth() / 5, Display.getHeight()), "", 0);
-        tField.add();
-        tField = new TextField(Colours.WHITE, Colours.DARK_GREY, new Vector2f(Display.getWidth() - Display.getWidth() / 10, Display.getHeight() / 2), new Vector2f((float) Display.getWidth() / 5, Display.getHeight()), "", 0);
-        tField.add();
-        tField = new TextField(Colours.DARK_GREY, Colours.WHITE, new Vector2f(Display.getWidth() / 10, Display.getHeight() / 20), new Vector2f((float) Display.getWidth() / 5, Display.getHeight() / 10), "Pieces taken by black", 0);
-        tField.add();
-        tField = new TextField(Colours.WHITE, Colours.DARK_GREY, new Vector2f(Display.getWidth() - Display.getWidth() / 10, Display.getHeight() / 20), new Vector2f((float) Display.getWidth() / 5, Display.getHeight() / 10), "Pieces taken by white", 0);
-        tField.add();
-
-        highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), true));
-        checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), false));
-
-
-        /*for (int i = 0; i < 30; i++) {
-            takenPiece = board.getPieces().get(i);
-            processTakenPieces();
-        }*/
-    }
-
     private void initBoard() {
         int squareSize = 2;
         ModelTexture black = new ModelTexture(loader.loadTexture("assets/default_textures/b.png"), false);
@@ -158,7 +152,7 @@ public class DisplayUpdater implements Runnable {
         }
 
         border = new Entity(new TexturedModel(OBJLoader.loadObjModel("assets/default_models/border.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/wood.png"), false)),
-                new Vector3f(0, 0, 0), 0, 0, 0, spacing, null);
+                new Vector3f(), 0, 0, 0, new Vector3f(spacing * board.maxX, 1, spacing * board.maxY), null);
     }
 
     private void processEntities() {
@@ -287,7 +281,6 @@ public class DisplayUpdater implements Runnable {
 
             if (squares.isEmpty()) initBoard();
             processAll();
-
             checkMouse();
 
             try {
@@ -336,7 +329,7 @@ public class DisplayUpdater implements Runnable {
 
         loader = new Loader();
         sun = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1), false);
-        camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(90, 0, 0), 60, new Vector3f(0, 0, 0));
+        camera = new Camera(new Vector3f(0, 0, 0), new Vector3f(90, 0, 0), 60, new Vector3f((float) (board.maxX * spacing) / 2, 0, (float) (board.maxY * spacing) / 2));
         this.parent = parent;
     }
 
