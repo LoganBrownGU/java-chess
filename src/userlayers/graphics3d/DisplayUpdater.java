@@ -27,6 +27,9 @@ import toolbox.Maths;
 import toolbox.MousePicker;
 import userlayers.G3DUserLayer;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -59,7 +62,7 @@ public class DisplayUpdater implements Runnable {
     private Player winner = null;
 
     private void init() {
-        DisplayManager.createDisplay("Chess", 1280, 720, false);
+        DisplayManager.createDisplay("Chess", 1920, 1080, true);
         renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/sea", camera);
         mousePicker = new MousePicker(renderer.getProjectionMatrix(), camera);
         renderer.disableFog();
@@ -272,8 +275,13 @@ public class DisplayUpdater implements Runnable {
     @Override
     public void run() {
         init();
+        ArrayList<ArrayList<Long>> frameTimes = new ArrayList<>();
+        final int sampleLength = 1000;
+        final long startTime = System.currentTimeMillis();
 
         while (!Display.isCloseRequested() && winner == null) {
+            if ((System.currentTimeMillis() - startTime) / sampleLength >= frameTimes.size()) frameTimes.add(new ArrayList<Long>());
+            long start = System.currentTimeMillis();
 
             camera.move(renderer.getProjectionMatrix());
             updatePieces();
@@ -282,6 +290,9 @@ public class DisplayUpdater implements Runnable {
             if (squares.isEmpty()) initBoard();
             processAll();
             checkMouse();
+
+            long cpuTime = System.currentTimeMillis() - start;
+            start = System.currentTimeMillis();
 
             try {
                 ArrayList<Light> lights = new ArrayList<>(highlightLights);
@@ -298,6 +309,11 @@ public class DisplayUpdater implements Runnable {
             } catch (RuntimeException e) {
                 e.printStackTrace();
             }
+
+            long gpuTime = System.currentTimeMillis() - start;
+            if (frameTimes.get(frameTimes.size() - 1).size() == 0 && cpuTime + gpuTime != 0)
+                System.out.println("cpu: " + cpuTime + " gpu: " + gpuTime + " fps: " + 1000 / (gpuTime + cpuTime));
+            frameTimes.get(frameTimes.size() - 1).add(gpuTime + cpuTime);
         }
 
         highlightLights.clear();
@@ -320,6 +336,21 @@ public class DisplayUpdater implements Runnable {
         guiRenderer.cleanUp();
         loader.cleanUp();
         Display.destroy();
+
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter("assets/log.csv"));
+            for (int i = 0; i < frameTimes.size(); i++) {
+                long sum = 0;
+                for (Long frameTime : frameTimes.get(i))
+                    sum += frameTime;
+
+                bw.write(i + "," + sum / frameTimes.get(i).size() + "\n");
+            }
+            bw.close();
+        } catch (IOException | ArithmeticException e) {
+            e.printStackTrace();
+        }
+
         parent.endGame();
     }
 

@@ -21,7 +21,7 @@ public class Camera extends entities.Camera {
     }
 
     private void calculatePitchAndAngle() {
-        if (!Mouse.isButtonDown(2)) return;
+        if (!Mouse.isButtonDown(2) && !Mouse.isButtonDown(1)) return;
 
         if (getRotation().x >= 0 && getRotation().x <= MAX_PITCH)
             getRotation().x -= Mouse.getDY() * SENS_X;

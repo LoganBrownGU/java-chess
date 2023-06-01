@@ -41,8 +41,8 @@ void main(void){
     vec3 unitNormal = normalize(surfaceNormal);
     vec3 unitVectorToCamera = normalize(toCameraVector);
 
-    vec3 totalDiffuse = vec3(0f);
-    vec3 totalSpec = vec3(0f);
+    vec3 totalDiffuse = vec3(.0f);
+    vec3 totalSpec = vec3(.0f);
 
     for (int i = 0; i < max_lights && i < num_lights; i++) {
         float distanceToLight = length(toLightVectors[i]);
