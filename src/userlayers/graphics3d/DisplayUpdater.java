@@ -62,7 +62,7 @@ public class DisplayUpdater implements Runnable {
     private Player winner = null;
 
     private void init() {
-        DisplayManager.createDisplay("Chess", 1920, 1080, true);
+        DisplayManager.createDisplay("Chess", 1280, 720, false);
         renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/sea", camera);
         mousePicker = new MousePicker(renderer.getProjectionMatrix(), camera);
         renderer.disableFog();
@@ -73,14 +73,7 @@ public class DisplayUpdater implements Runnable {
 
         TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
         GUIMaster.setFont(loader, "assets/fonts/arial");
-        TextField tField = new TextField(Colours.DARK_GREY, Colours.WHITE, new Vector2f((float) Display.getWidth() / 10, Display.getHeight() / 2), new Vector2f((float) Display.getWidth() / 5, Display.getHeight()), "", 0);
-        tField.add();
-        tField = new TextField(Colours.WHITE, Colours.DARK_GREY, new Vector2f(Display.getWidth() - Display.getWidth() / 10, Display.getHeight() / 2), new Vector2f((float) Display.getWidth() / 5, Display.getHeight()), "", 0);
-        tField.add();
-        tField = new TextField(Colours.DARK_GREY, Colours.WHITE, new Vector2f(Display.getWidth() / 10, Display.getHeight() / 20), new Vector2f((float) Display.getWidth() / 5, Display.getHeight() / 10), "Pieces taken by black", 0);
-        tField.add();
-        tField = new TextField(Colours.WHITE, Colours.DARK_GREY, new Vector2f(Display.getWidth() - Display.getWidth() / 10, Display.getHeight() / 20), new Vector2f((float) Display.getWidth() / 5, Display.getHeight() / 10), "Pieces taken by white", 0);
-        tField.add();
+        GUIMaster.addGUI("assets/gui/main.xml");
 
         highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), true));
         checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), false));
