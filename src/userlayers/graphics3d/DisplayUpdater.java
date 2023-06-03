@@ -3,13 +3,11 @@ package userlayers.graphics3d;
 import board.Board;
 import entities.*;
 import fontRendering.TextMaster;
-import gui.GUIMaster;
-import gui.GUIRenderer;
-import gui.GUITexture;
-import gui.TextField;
+import gui.*;
 import main.Coordinate;
 import models.RawModel;
 import models.TexturedModel;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
@@ -78,6 +76,11 @@ public class DisplayUpdater implements Runnable {
 
         highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), true));
         checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), false));
+
+        for (int i = 0; i < 30; i++) {
+            takenPiece = board.getPieces().get(i);
+            processTakenPieces();
+        }
     }
 
     public void addService(Service service) {
@@ -206,22 +209,22 @@ public class DisplayUpdater implements Runnable {
 
     private void processTakenPieces() {
         if (takenPiece == null) return;
+
         takenPieces.computeIfAbsent(takenPiece.getPlayer(), k -> new ArrayList<>());
 
         int index = takenPieces.get(takenPiece.getPlayer()).size();
 
         float aspect = (float) Display.getWidth() / Display.getHeight();
-
-        float div = 2f / 40;
-        Vector2f scale = new Vector2f(div, div * aspect);
-
         int wrap = 4;
-        float x, y = (float) (1 - scale.y * 1.5f - Math.floor((double) index / wrap) * scale.y * 2 - .2f);
+        float div = .2f / wrap;
+        Vector2f scale = new Vector2f(div, div * aspect);
+        GUIElement title = GUIMaster.getElementByID("blacktitle");
+        float x, y = (float) (Math.floor((double) index / wrap) * scale.y * 1.1f + title.getSize().y + title.getPosition().y + scale.y / 2);
 
         if (board.getPlayers().indexOf(takenPiece.getPlayer()) % 2 == 0)
-            x = (float) -1 + scale.x + (index % wrap) * (div + .04f);
+            x = scale.x * (.5f + index % wrap);
         else
-            x = (float) 1 - scale.x - (index % wrap) * (div + .04f);
+            x = 1f - scale.x * (.5f + index % wrap);
 
         String rep = takenPiece.getPlayer().representation + takenPiece.representation;
         GUITexture icon = new GUITexture(loader.loadTexture("assets/default_icons/" + rep + ".png"), new Vector2f(x, y), scale);
@@ -309,6 +312,8 @@ public class DisplayUpdater implements Runnable {
             if (squares.isEmpty()) initBoard();
             processAll();
             checkMouse();
+            if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) GUIMaster.addFromFile("assets/pause_menu.xml");
+
             runServices();
             GUIMaster.checkEvents();
 
