@@ -6,7 +6,6 @@ import main.Coordinate;
 import pieces.Piece;
 import players.Player;
 import userlayers.graphics3d.DisplayUpdater;
-import userlayers.graphics3d.Service;
 
 public class G3DUserLayer implements UserLayer {
 
@@ -81,13 +80,13 @@ public class G3DUserLayer implements UserLayer {
             updater.addService((updater) -> {
                 GUIMaster.addFromFile("assets/gui/promotion.xml");
                 GUIMaster.applyActionEventToGroup("promotion", (element) -> {
-                    updater.promotedPiece = element.getId();
+                    updater.dialogueResponse = element.getId();
                     GUIMaster.removeGroup(element.getGroup());
                     synchronized (updater) {updater.notify();}
                 });
             });
 
-            while (updater.promotedPiece.equals("")) {
+            while (updater.dialogueResponse.equals("")) {
                 try {
                     updater.wait();
                 } catch (InterruptedException e) {
@@ -96,24 +95,35 @@ public class G3DUserLayer implements UserLayer {
             }
         }
 
-        return updater.promotedPiece;
+        String response = updater.dialogueResponse;
+        updater.dialogueResponse = "";
+        return response;
     }
 
     @Override
     public boolean confirmCastling() {
-        CastlingDialogueMenu cm = new CastlingDialogueMenu(100, 100, lock);
+        synchronized (updater) {
+            updater.addService((updater) -> {
+                GUIMaster.addFromFile("assets/gui/castling.xml");
+                GUIMaster.applyActionEventToGroup("castling", (element) -> {
+                    updater.dialogueResponse = element.getId();
+                    GUIMaster.removeGroup(element.getGroup());
+                    synchronized (updater) {updater.notify();}
+                });
+            });
 
-        synchronized (lock) {
-            while (!cm.isFinished()) {
+            while (updater.dialogueResponse.equals("")) {
                 try {
-                    lock.wait();
+                    updater.wait();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
         }
 
-        return cm.getConfirm();
+        boolean decision = updater.dialogueResponse.equals("yes");
+        updater.dialogueResponse = "";
+        return decision;
     }
 
     @Override

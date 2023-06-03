@@ -23,7 +23,6 @@ import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
 import textures.ModelTexture;
 import toolbox.Colours;
-import toolbox.Maths;
 import toolbox.MousePicker;
 import userlayers.G3DUserLayer;
 
@@ -61,7 +60,7 @@ public class DisplayUpdater implements Runnable {
     private Piece takenPiece = null;
     private Player winner = null;
     private final ArrayList<Service> services = new ArrayList<>();
-    public String promotedPiece = "";
+    public String dialogueResponse = "";
 
     private void init() {
         DisplayManager.createDisplay("Chess", 1280, 720, false);
@@ -76,7 +75,6 @@ public class DisplayUpdater implements Runnable {
         TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
         GUIMaster.setFont(loader, "assets/fonts/arial");
         GUIMaster.addFromFile("assets/gui/main.xml");
-        GUIMaster.addFromFile("assets/gui/castling.xml");
 
         highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), true));
         checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), false));
