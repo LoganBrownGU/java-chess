@@ -60,6 +60,7 @@ public class DisplayUpdater implements Runnable {
     private TexturedModel checkmarkModel;
     private Piece takenPiece = null;
     private Player winner = null;
+    private final ArrayList<Service> services = new ArrayList<>();
 
     private void init() {
         DisplayManager.createDisplay("Chess", 1280, 720, false);
@@ -73,10 +74,21 @@ public class DisplayUpdater implements Runnable {
 
         TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
         GUIMaster.setFont(loader, "assets/fonts/arial");
-        GUIMaster.addGUI("assets/gui/main.xml");
+        GUIMaster.addFromFile("assets/gui/main.xml");
 
         highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), true));
         checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), false));
+    }
+
+    public void addService(Service service) {
+        services.add(service);
+    }
+
+    private void runServices() {
+        for (Service service : services)
+            service.run(this);
+
+        services.clear();
     }
 
     private void updateMouseButtons() {
@@ -218,6 +230,10 @@ public class DisplayUpdater implements Runnable {
 
         for (Piece piece : board.getPieces()) {
             Entity entity = entities.get(piece);
+            if (entity == null) {
+                entities.remove(piece);
+                continue;
+            }
             if (entity.getPicker().isIntersecting(mousePicker.getCurrentRay(), camera.getPosition())) {
                 if (mouseButtonsReleased[0] && selectingPiece) {
                     selectedPiece = piece;

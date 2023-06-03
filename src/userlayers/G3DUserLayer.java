@@ -1,10 +1,12 @@
 package userlayers;
 
 import board.Board;
+import gui.GUIMaster;
 import main.Coordinate;
 import pieces.Piece;
 import players.Player;
 import userlayers.graphics3d.DisplayUpdater;
+import userlayers.graphics3d.Service;
 
 public class G3DUserLayer implements UserLayer {
 
@@ -74,7 +76,7 @@ public class G3DUserLayer implements UserLayer {
 
     @Override
     public String getPromotion() {
-        PromotionDialogueMenu pm = new PromotionDialogueMenu(100, 30, lock);
+        /*PromotionDialogueMenu pm = new PromotionDialogueMenu(100, 30, lock);
 
         synchronized (lock) {
             while (pm.getPiece() == null) {
@@ -86,7 +88,11 @@ public class G3DUserLayer implements UserLayer {
             }
         }
 
-        return pm.getPiece().toUpperCase();
+        return pm.getPiece().toUpperCase();*/
+
+        updater.addService(updater -> GUIMaster.addFromFile("assets/gui/dropdown.xml"));
+
+        return "";
     }
 
     @Override
