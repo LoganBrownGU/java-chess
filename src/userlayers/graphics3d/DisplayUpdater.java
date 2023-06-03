@@ -61,6 +61,7 @@ public class DisplayUpdater implements Runnable {
     private Piece takenPiece = null;
     private Player winner = null;
     private final ArrayList<Service> services = new ArrayList<>();
+    public String promotedPiece = "";
 
     private void init() {
         DisplayManager.createDisplay("Chess", 1280, 720, false);
@@ -75,20 +76,30 @@ public class DisplayUpdater implements Runnable {
         TextMaster.init(loader, "assets/shaders/fontVertex.glsl", "assets/shaders/fontFragment.glsl");
         GUIMaster.setFont(loader, "assets/fonts/arial");
         GUIMaster.addFromFile("assets/gui/main.xml");
+        GUIMaster.addFromFile("assets/gui/castling.xml");
 
         highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), true));
         checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), false));
     }
 
     public void addService(Service service) {
-        services.add(service);
+        synchronized (services) {
+            try {
+                services.wait();
+            } catch (InterruptedException e) {
+            }
+
+            services.add(service);
+        }
     }
 
     private void runServices() {
+
         for (Service service : services)
             service.run(this);
 
         services.clear();
+        synchronized (services) {services.notify();}
     }
 
     private void updateMouseButtons() {
@@ -289,7 +300,8 @@ public class DisplayUpdater implements Runnable {
         final long startTime = System.currentTimeMillis();
 
         while (!Display.isCloseRequested() && winner == null) {
-            if ((System.currentTimeMillis() - startTime) / sampleLength >= frameTimes.size()) frameTimes.add(new ArrayList<Long>());
+            if ((System.currentTimeMillis() - startTime) / sampleLength >= frameTimes.size())
+                frameTimes.add(new ArrayList<Long>());
             long start = System.currentTimeMillis();
 
             camera.move(renderer.getProjectionMatrix());
@@ -299,6 +311,8 @@ public class DisplayUpdater implements Runnable {
             if (squares.isEmpty()) initBoard();
             processAll();
             checkMouse();
+            runServices();
+            GUIMaster.checkEvents();
 
             long cpuTime = System.currentTimeMillis() - start;
             start = System.currentTimeMillis();

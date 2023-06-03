@@ -76,23 +76,27 @@ public class G3DUserLayer implements UserLayer {
 
     @Override
     public String getPromotion() {
-        /*PromotionDialogueMenu pm = new PromotionDialogueMenu(100, 30, lock);
 
-        synchronized (lock) {
-            while (pm.getPiece() == null) {
+        synchronized (updater) {
+            updater.addService((updater) -> {
+                GUIMaster.addFromFile("assets/gui/promotion.xml");
+                GUIMaster.applyActionEventToGroup("promotion", (element) -> {
+                    updater.promotedPiece = element.getId();
+                    GUIMaster.removeGroup(element.getGroup());
+                    synchronized (updater) {updater.notify();}
+                });
+            });
+
+            while (updater.promotedPiece.equals("")) {
                 try {
-                    lock.wait();
+                    updater.wait();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
             }
         }
 
-        return pm.getPiece().toUpperCase();*/
-
-        updater.addService(updater -> GUIMaster.addFromFile("assets/gui/dropdown.xml"));
-
-        return "";
+        return updater.promotedPiece;
     }
 
     @Override

@@ -10,7 +10,7 @@ import userlayers.GUIUserLayer;
 public class Main {
     public static void main(String[] args) {
 
-        Board board = BoardFactory.standardBoardAgainstBadAI(new G3DUserLayer());
+        Board board = BoardFactory.checkTest(new G3DUserLayer());
         board.updateUserLayer();
 
         board.play();

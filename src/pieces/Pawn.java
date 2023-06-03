@@ -23,8 +23,11 @@ public class Pawn extends Piece {
 
         // if promoting
         if (position.y == this.promotionRank) {
-            String str = board.getUserLayer().getPromotion();
-            Piece piece = PieceFactory.promotePawn(str, this);
+            String str = null;
+            // todo this will tank performance; REMOVE
+            while (str == null)
+                str = board.getUserLayer().getPromotion();
+            Piece piece = PieceFactory.promotePawn(str.toUpperCase(), this);
             board.removePiece(this);
             piece.setPosition(position);
         }
