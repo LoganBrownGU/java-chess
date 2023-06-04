@@ -22,6 +22,7 @@ import renderEngine.OBJLoader;
 import textures.ModelTexture;
 import toolbox.Colours;
 import toolbox.MousePicker;
+import toolbox.Settings;
 import userlayers.G3DUserLayer;
 
 import java.io.BufferedWriter;
@@ -59,9 +60,11 @@ public class DisplayUpdater implements Runnable {
     private Player winner = null;
     private final ArrayList<Service> services = new ArrayList<>();
     public String dialogueResponse = "";
+    private boolean paused = false;
 
     private void init() {
-        DisplayManager.createDisplay("Chess", 1280, 720, false);
+        Settings.updateSettings("assets/settings.ini");
+        DisplayManager.createDisplay("Chess");
         renderer = new MasterRenderer("assets/shaders", "assets/default_textures/skyboxes/sea", camera);
         mousePicker = new MousePicker(renderer.getProjectionMatrix(), camera);
         renderer.disableFog();
@@ -293,8 +296,21 @@ public class DisplayUpdater implements Runnable {
         processTakenPieces();
     }
 
+    private void pause() {
+        GUIMaster.addFromFile("assets/gui/pause_menu.xml");
+        paused = true;
+
+        ((Button) GUIMaster.getElementByID("return")).setEvent((element) -> unPause());
+    }
+
+    private void unPause() {
+        paused = false;
+        GUIMaster.removeGroup("pausemenu");
+    }
+
     @Override
     public void run() {
+        // todo load settings from config file
         init();
         ArrayList<ArrayList<Long>> frameTimes = new ArrayList<>();
         final int sampleLength = 1000;
@@ -302,7 +318,7 @@ public class DisplayUpdater implements Runnable {
 
         while (!Display.isCloseRequested() && winner == null) {
             if ((System.currentTimeMillis() - startTime) / sampleLength >= frameTimes.size())
-                frameTimes.add(new ArrayList<Long>());
+                frameTimes.add(new ArrayList<>());
             long start = System.currentTimeMillis();
 
             camera.move(renderer.getProjectionMatrix());
@@ -312,7 +328,10 @@ public class DisplayUpdater implements Runnable {
             if (squares.isEmpty()) initBoard();
             processAll();
             checkMouse();
-            if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) GUIMaster.addFromFile("assets/pause_menu.xml");
+            if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE) && !paused) {
+                pause();
+                paused = true;
+            }
 
             runServices();
             GUIMaster.checkEvents();
