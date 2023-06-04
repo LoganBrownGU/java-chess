@@ -12,7 +12,7 @@ public class HumanPlayer extends Player {
     public Piece getPiece() {
         Piece pieceToMove = null;
 
-        while (pieceToMove == null || pieceToMove.getPlayer() != this)
+        while (pieceToMove == null)
             pieceToMove = board.getUserLayer().getPiece(this);
 
 
@@ -22,11 +22,10 @@ public class HumanPlayer extends Player {
     @Override
     public Coordinate getMove(Piece pieceToMove) {
         Coordinate movePosition = null;
-        ArrayList<Coordinate> moves = pieceToMove.possibleMoves();
 
         // userLayer.getMove should never return null EXCEPT when the player cancels a move
         // if the player does cancel a move, getMove will return null.
-        while (movePosition == null || !moves.contains(movePosition)) {
+        while (movePosition == null) {
             movePosition = board.getUserLayer().getMove();
             if (movePosition == null) break;
         }

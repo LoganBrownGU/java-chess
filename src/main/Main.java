@@ -13,6 +13,7 @@ public class Main {
         Board board = BoardFactory.checkTest(new G3DUserLayer());
         board.updateUserLayer();
 
-        board.play();
+        board.start();
+        System.out.println("end of main method");
     }
 }

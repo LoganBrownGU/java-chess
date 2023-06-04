@@ -397,6 +397,9 @@ public class DisplayUpdater implements Runnable {
         }
 
         parent.endGame();
+        if (selectingPiece) selectedPiece = board.getPieces().get(0);
+        if (selectingSquare) selectedSquare = new Coordinate(0, 0);
+        synchronized (this) {this.notify();}
     }
 
     public DisplayUpdater(Board board, int spacing, G3DUserLayer parent) {

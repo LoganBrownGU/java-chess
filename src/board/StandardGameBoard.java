@@ -6,6 +6,8 @@ import players.Player;
 import userlayers.CommandLineUserLayer;
 import userlayers.UserLayer;
 
+import java.util.ArrayList;
+
 public class StandardGameBoard extends Board {
 
     // todo add a way to cancel piece selection
@@ -73,16 +75,24 @@ public class StandardGameBoard extends Board {
             Player checking = null, checked = null;
 
             gameLoop: for (Player player : super.getPlayers()) {
+                if (checkForEnd()) return;
 
-                // todo could set both to null and while loop
                 Piece pieceToMove = null;
                 Coordinate move = null;
                 // since getMove could return null if player cancels move, we loop until getMove returns true
                 while (move == null) {
+                    if (checkForEnd()) return;
                     pieceToMove = player.getPiece();
+                    if (pieceToMove.getPlayer() != player) continue;
+
+                    if (checkForEnd()) return;
                     move = player.getMove(pieceToMove);
+                    ArrayList<Coordinate> possibleMoves = pieceToMove.possibleMoves();
+                    if (!possibleMoves.contains(move)) move = null;
                 }
+                checkForEnd();
                 Piece pieceAtMove = super.pieceAt(move);
+
 
                 if (pieceAtMove != null) {
                     super.getUserLayer().showPieceTaken(pieceAtMove);
@@ -121,6 +131,8 @@ public class StandardGameBoard extends Board {
                     checking = player;
                     getUserLayer().showCheck(checking, checked);
                 }
+
+                if (checkForEnd()) return;
             }
         }
 

@@ -20,7 +20,7 @@ public class G3DUserLayer implements UserLayer {
     private Board board;
 
     public void endGame() {
-        System.exit(0);
+        board.end();
     }
 
     @Override
@@ -32,8 +32,9 @@ public class G3DUserLayer implements UserLayer {
                 try {
                     updater.wait();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
+                System.out.println(updater.getSelectedPiece());
             }
         }
 
@@ -50,7 +51,7 @@ public class G3DUserLayer implements UserLayer {
             try {
                 updater.wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
 

@@ -7,14 +7,44 @@ import userlayers.UserLayer;
 
 import java.util.ArrayList;
 
-public abstract class Board {
+public abstract class Board implements Runnable {
     private final ArrayList<Piece> pieces;
     private final ArrayList<Player> players;
     private final UserLayer userLayer;
     public final int maxX, maxY;
     private Coordinate lastMove = null;
+    private final Thread thread;
+    public final ActiveToken token = new ActiveToken();
 
-    public abstract void play();
+    @Override
+    public void run() {
+        play();
+    }
+
+    protected boolean checkForEnd() {
+        synchronized (token) {
+            System.out.println("end" + !token.isActive);
+            return !token.isActive;
+        }
+    }
+
+    public void start() {
+        thread.start();
+        thread.setName("board thread");
+    }
+
+    public void end() {
+        synchronized (token) {
+            token.isActive = false;
+        }
+    }
+
+    /*
+    * play() should regularly call checkForEnd() to make sure that the userlayer hasn't called endGame().
+    * If checkForEnd() returns true then the board should return from the play() and then run() so that the thread
+    * exits safely.
+    * */
+    protected abstract void play();
 
     public boolean onBoard(Coordinate coord) {
         return coord.x >= 0 && coord.y >= 0 && coord.x < maxX && coord.y < maxY;
@@ -74,6 +104,8 @@ public abstract class Board {
 
         this.userLayer = userLayer;
         userLayer.setBoard(this);
+
+        thread = new Thread(this);
     }
 
     public void addPiece(Piece p) {
