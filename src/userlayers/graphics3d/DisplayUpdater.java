@@ -91,6 +91,7 @@ public class DisplayUpdater implements Runnable {
             try {
                 services.wait();
             } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
 
             services.add(service);
@@ -300,12 +301,41 @@ public class DisplayUpdater implements Runnable {
         GUIMaster.addFromFile("assets/gui/pause_menu.xml");
         paused = true;
 
-        ((Button) GUIMaster.getElementByID("return")).setEvent((element) -> unPause());
+        ((Button) GUIMaster.getElementByID("return")).setEvent(element -> unPause());
+        ((Button) GUIMaster.getElementByID("endgame")).setEvent(guiElement -> endGame());
     }
 
     private void unPause() {
         paused = false;
         GUIMaster.removeGroup("pausemenu");
+    }
+
+    private void endGame() {
+        highlightLights.clear();
+        highlights.clear();
+        if (winner != null)
+            GUIMaster.addElement(new TextField(Colours.BLACK, Colours.WHITE, new Vector2f(.5f, .5f), new Vector2f(.25f, .25f), winner.representation + " wins", 1));
+        while (winner != null && !Display.isCloseRequested()) {
+            checkMouse();
+            processAll();
+            ArrayList<Light> lights = new ArrayList<>();
+            lights.add(sun);
+            renderer.render(lights, camera);
+            GUIMaster.render(guiRenderer);
+            TextMaster.render();
+            DisplayManager.updateDisplay();
+        }
+
+        TextMaster.cleanUp();
+        renderer.cleanUp();
+        guiRenderer.cleanUp();
+        loader.cleanUp();
+        Display.destroy();
+
+        parent.endGame();
+        if (selectingPiece) selectedPiece = board.getPieces().get(0);
+        if (selectingSquare) selectedSquare = new Coordinate(0, 0);
+        synchronized (this) {this.notify();}
     }
 
     @Override
@@ -361,27 +391,6 @@ public class DisplayUpdater implements Runnable {
             frameTimes.get(frameTimes.size() - 1).add(gpuTime + cpuTime);
         }
 
-        highlightLights.clear();
-        highlights.clear();
-        if (winner != null)
-            GUIMaster.addElement(new TextField(Colours.BLACK, Colours.WHITE, new Vector2f(Display.getWidth() / 2, Display.getHeight() / 2), new Vector2f(Display.getWidth() / 4, Display.getHeight() / 4), winner.representation + " wins", 1));
-        while (winner != null && !Display.isCloseRequested()) {
-            checkMouse();
-            processAll();
-            ArrayList<Light> lights = new ArrayList<>();
-            lights.add(sun);
-            renderer.render(lights, camera);
-            GUIMaster.render(guiRenderer);
-            TextMaster.render();
-            DisplayManager.updateDisplay();
-        }
-
-        TextMaster.cleanUp();
-        renderer.cleanUp();
-        guiRenderer.cleanUp();
-        loader.cleanUp();
-        Display.destroy();
-
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter("assets/log.csv"));
             for (int i = 0; i < frameTimes.size(); i++) {
@@ -396,10 +405,7 @@ public class DisplayUpdater implements Runnable {
             e.printStackTrace();
         }
 
-        parent.endGame();
-        if (selectingPiece) selectedPiece = board.getPieces().get(0);
-        if (selectingSquare) selectedSquare = new Coordinate(0, 0);
-        synchronized (this) {this.notify();}
+        endGame();
     }
 
     public DisplayUpdater(Board board, int spacing, G3DUserLayer parent) {

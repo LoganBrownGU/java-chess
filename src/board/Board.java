@@ -23,7 +23,6 @@ public abstract class Board implements Runnable {
 
     protected boolean checkForEnd() {
         synchronized (token) {
-            System.out.println("end" + !token.isActive);
             return !token.isActive;
         }
     }

@@ -10,8 +10,6 @@ import java.util.ArrayList;
 
 public class StandardGameBoard extends Board {
 
-    // todo add a way to cancel piece selection
-
     public Player check(Player player) {        // returns player that player is checking or null if it is not
         for (Player other : this.getPlayers()) {
             if (other == player) continue;
