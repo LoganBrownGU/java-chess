@@ -3,18 +3,19 @@ package board;
 import main.Coordinate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import pieces.Pawn;
-import pieces.Piece;
-import pieces.Sovereign;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import pieces.*;
 import players.Player;
 import toolbox.FileHandler;
+import userlayers.UserLayer;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
 
-public class Saver {
-    private static void addMoves(ArrayList<Coordinate> moves, Element element) {
+public class SaveGame {
+    private static void addMovesToDOM(ArrayList<Coordinate> moves, Element element) {
         for (Coordinate coord : moves) {
             Element move = element.getOwnerDocument().createElement("move");
             move.setTextContent(coord.x + "," + coord.y);
@@ -22,7 +23,7 @@ public class Saver {
         }
     }
 
-    private static void addPieces(ArrayList<Piece> pieces, Element element) {
+    private static void addPiecesToDom(ArrayList<Piece> pieces, Element element) {
         for (Piece piece : pieces) {
             Element pieceElement = element.getOwnerDocument().createElement(piece.getType().toString().toLowerCase());
 
@@ -48,14 +49,14 @@ public class Saver {
             }
 
             Element moves = element.getOwnerDocument().createElement("moves");
-            addMoves(piece.getPreviousMoves(), moves);
+            addMovesToDOM(piece.getPreviousMoves(), moves);
             pieceElement.appendChild(moves);
 
             element.appendChild(pieceElement);
         }
     }
 
-    private static void addPlayers(ArrayList<Player> players, Element element) {
+    private static void addPlayersToDOM(ArrayList<Player> players, Element element) {
         for (Player player : players) {
             Element playerElement = element.getOwnerDocument().createElement("player");
 
@@ -87,8 +88,8 @@ public class Saver {
         Element players = doc.createElement("players");
         root.appendChild(players);
 
-        addPieces(board.getPieces(), pieces);
-        addPlayers(board.getPlayers(), players);
+        addPiecesToDom(board.getPieces(), pieces);
+        addPlayersToDOM(board.getPlayers(), players);
 
         Element max = doc.createElement("max_x");
         max.setTextContent(String.valueOf(board.maxX));
@@ -102,5 +103,30 @@ public class Saver {
         root.appendChild(lastMove);
 
         FileHandler.writeXML(path, doc);
+    }
+
+    private static ArrayList<Piece> addPiecesFromDOM(Element root, ArrayList<Player> players) {
+        ArrayList<Piece> pieces = new ArrayList<>();
+
+        ArrayList<Element> elements = FileHandler.getChildren(root);
+        for (Element element : elements) {
+            if (element.getTagName().equals("king"))
+                King piece = new King()
+        }
+
+        return pieces;
+    }
+
+    public static Board loadGame(String path, UserLayer userLayer) {
+        Document doc = FileHandler.readXML(path);
+        Element root = doc.getDocumentElement();
+
+        ArrayList<Piece> pieces = new ArrayList<>();
+
+        NodeList nodeList = root.getChildNodes();
+
+
+
+        return null;
     }
 }

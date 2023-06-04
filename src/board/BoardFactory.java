@@ -10,10 +10,6 @@ import userlayers.UserLayer;
 
 public class BoardFactory {
 
-    public static Board loadGame(String location) {
-        return null;
-    }
-
     private static StandardGameBoard standardBoard(StandardGameBoard board, Player player1, Player player2) {
 
         // add sovereigns
@@ -52,6 +48,7 @@ public class BoardFactory {
 
         return board;
     }
+
     public static StandardGameBoard standardBoard(UserLayer userLayer) {
         StandardGameBoard board = new StandardGameBoard(userLayer);
 
