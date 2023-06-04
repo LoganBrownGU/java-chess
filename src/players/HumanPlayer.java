@@ -34,6 +34,6 @@ public class HumanPlayer extends Player {
     }
 
     public HumanPlayer(char representation, Board board) {
-        super(representation, board);
+        super(representation, board, PlayerType.HUMAN);
     }
 }

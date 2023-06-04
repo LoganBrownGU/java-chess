@@ -2,6 +2,7 @@ package main;
 
 import board.Board;
 import board.BoardFactory;
+import board.Saver;
 import players.PlayerType;
 import userlayers.CommandLineUserLayer;
 import userlayers.G3DUserLayer;
@@ -10,10 +11,10 @@ import userlayers.GUIUserLayer;
 public class Main {
     public static void main(String[] args) {
 
-        Board board = BoardFactory.checkTest(new G3DUserLayer());
+        Board board = BoardFactory.checkTest(new CommandLineUserLayer());
         board.updateUserLayer();
-
         board.start();
-        System.out.println("end of main method");
+
+        Saver.saveGame("assets/savegames/save.xml", board);
     }
 }

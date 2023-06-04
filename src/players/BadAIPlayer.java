@@ -35,7 +35,7 @@ public class BadAIPlayer extends Player {
     }
 
     public BadAIPlayer(char representation, Board board) {
-        super(representation, board);
+        super(representation, board, PlayerType.BAD_AI);
     }
 
 }

@@ -10,6 +10,10 @@ import userlayers.UserLayer;
 
 public class BoardFactory {
 
+    public static Board loadGame(String location) {
+        return null;
+    }
+
     private static StandardGameBoard standardBoard(StandardGameBoard board, Player player1, Player player2) {
 
         // add sovereigns
@@ -122,7 +126,7 @@ public class BoardFactory {
 
         for (int i = 0; i < board.getPlayers().size(); i++) {
             Player pc = board.getPlayers().get(i);
-            Player playerClone = new Player(pc.representation, clone) {
+            Player playerClone = new Player(pc.representation, clone, pc.type) {
                 @Override
                 public Piece getPiece() {
                     return null;
