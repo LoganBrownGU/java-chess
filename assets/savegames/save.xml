@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<board>
+<board type="standard">
     <pieces>
         <king>
             <position>3,7</position>
@@ -119,7 +119,6 @@
             <position>0,1</position>
             <player>w</player>
             <direction>1</direction>
-            <promotionRank>7</promotionRank>
             <moves>
                 <move>0,1</move>
             </moves>
@@ -128,7 +127,6 @@
             <position>0,6</position>
             <player>b</player>
             <direction>-1</direction>
-            <promotionRank>0</promotionRank>
             <moves>
                 <move>0,6</move>
             </moves>
@@ -137,7 +135,6 @@
             <position>1,1</position>
             <player>w</player>
             <direction>1</direction>
-            <promotionRank>7</promotionRank>
             <moves>
                 <move>1,1</move>
             </moves>
@@ -146,7 +143,6 @@
             <position>1,6</position>
             <player>b</player>
             <direction>-1</direction>
-            <promotionRank>0</promotionRank>
             <moves>
                 <move>1,6</move>
             </moves>
@@ -155,7 +151,6 @@
             <position>2,1</position>
             <player>w</player>
             <direction>1</direction>
-            <promotionRank>7</promotionRank>
             <moves>
                 <move>2,1</move>
             </moves>
@@ -164,7 +159,6 @@
             <position>2,6</position>
             <player>b</player>
             <direction>-1</direction>
-            <promotionRank>0</promotionRank>
             <moves>
                 <move>2,6</move>
             </moves>
@@ -173,7 +167,6 @@
             <position>3,1</position>
             <player>w</player>
             <direction>1</direction>
-            <promotionRank>7</promotionRank>
             <moves>
                 <move>3,1</move>
             </moves>
@@ -182,7 +175,6 @@
             <position>3,6</position>
             <player>b</player>
             <direction>-1</direction>
-            <promotionRank>0</promotionRank>
             <moves>
                 <move>3,6</move>
             </moves>
@@ -191,26 +183,30 @@
             <position>4,1</position>
             <player>w</player>
             <direction>1</direction>
-            <promotionRank>7</promotionRank>
             <moves>
                 <move>4,1</move>
             </moves>
         </pawn>
         <pawn>
-            <position>4,5</position>
+            <position>4,6</position>
+            <player>b</player>
+            <direction>-1</direction>
+            <moves>
+                <move>4,6</move>
+            </moves>
+        </pawn>
+        <pawn>
+            <position>5,1</position>
             <player>w</player>
             <direction>1</direction>
-            <promotionRank>7</promotionRank>
             <moves>
                 <move>5,1</move>
-                <move>4,5</move>
             </moves>
         </pawn>
         <pawn>
             <position>5,6</position>
             <player>b</player>
             <direction>-1</direction>
-            <promotionRank>0</promotionRank>
             <moves>
                 <move>5,6</move>
             </moves>
@@ -219,7 +215,6 @@
             <position>6,1</position>
             <player>w</player>
             <direction>1</direction>
-            <promotionRank>7</promotionRank>
             <moves>
                 <move>6,1</move>
             </moves>
@@ -228,7 +223,6 @@
             <position>6,6</position>
             <player>b</player>
             <direction>-1</direction>
-            <promotionRank>0</promotionRank>
             <moves>
                 <move>6,6</move>
             </moves>
@@ -237,7 +231,6 @@
             <position>7,1</position>
             <player>w</player>
             <direction>1</direction>
-            <promotionRank>7</promotionRank>
             <moves>
                 <move>7,1</move>
             </moves>
@@ -246,7 +239,6 @@
             <position>7,6</position>
             <player>b</player>
             <direction>-1</direction>
-            <promotionRank>0</promotionRank>
             <moves>
                 <move>7,6</move>
             </moves>
@@ -262,7 +254,4 @@
             <type>HUMAN</type>
         </player>
     </players>
-    <max_x>8</max_x>
-    <max_y>8</max_y>
-    <last_move>4,5</last_move>
 </board>

@@ -88,7 +88,7 @@ public class Pawn extends Piece {
     }
 
     public Pawn(Player player, Coordinate position, int direction, Board board) {
-        super(player, position, PieceType.PAWN, board, "pn");
+        super(player, position, PieceType.PAWN, board, "cn");
         this.direction = direction;
         this.promotionRank = direction == 1 ? board.maxY - 1 : 0;
     }

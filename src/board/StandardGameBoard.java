@@ -138,14 +138,14 @@ public class StandardGameBoard extends Board {
     }
 
     public StandardGameBoard() {
-        super(8, 8, new CommandLineUserLayer());
+        super(8, 8, new CommandLineUserLayer(), BoardType.STANDARD);
     }
 
     public StandardGameBoard(UserLayer userLayer) {
-        super(8, 8, userLayer);
+        super(8, 8, userLayer, BoardType.STANDARD);
     }
 
     public StandardGameBoard(UserLayer userLayer, int maxX, int maxY) {
-        super(maxX, maxY, userLayer);
+        super(maxX, maxY, userLayer, BoardType.STANDARD);
     }
 }

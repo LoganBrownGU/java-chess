@@ -6,13 +6,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import pieces.*;
+import players.HumanPlayer;
 import players.Player;
+import players.PlayerFactory;
 import toolbox.FileHandler;
 import userlayers.UserLayer;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class SaveGame {
     private static void addMovesToDOM(ArrayList<Coordinate> moves, Element element) {
@@ -38,10 +41,6 @@ public class SaveGame {
             if (piece instanceof Pawn pawn) {
                 pieceAttr = element.getOwnerDocument().createElement("direction");
                 pieceAttr.setTextContent(String.valueOf(pawn.direction));
-                pieceElement.appendChild(pieceAttr);
-
-                pieceAttr = element.getOwnerDocument().createElement("promotionRank");
-                pieceAttr.setTextContent(String.valueOf(pawn.promotionRank));
                 pieceElement.appendChild(pieceAttr);
             } else if (piece instanceof Sovereign sovereign) {
                 pieceAttr = element.getOwnerDocument().createElement("sovereign");
@@ -81,6 +80,7 @@ public class SaveGame {
         }
 
         Element root = doc.createElement("board");
+        root.setAttribute("type", board.type.toString().toLowerCase());
         doc.appendChild(root);
 
         Element pieces = doc.createElement("pieces");
@@ -91,27 +91,52 @@ public class SaveGame {
         addPiecesToDom(board.getPieces(), pieces);
         addPlayersToDOM(board.getPlayers(), players);
 
-        Element max = doc.createElement("max_x");
-        max.setTextContent(String.valueOf(board.maxX));
-        root.appendChild(max);
-        max = doc.createElement("max_y");
-        max.setTextContent(String.valueOf(board.maxY));
-        root.appendChild(max);
-
-        Element lastMove = doc.createElement("last_move");
-        lastMove.setTextContent(board.getLastMove().x + "," + board.getLastMove().y);
-        root.appendChild(lastMove);
+        if (board.getLastMove() != null) {
+            Element lastMove = doc.createElement("last_move");
+            lastMove.setTextContent(board.getLastMove().x + "," + board.getLastMove().y);
+            root.appendChild(lastMove);
+        }
 
         FileHandler.writeXML(path, doc);
     }
 
-    private static ArrayList<Piece> addPiecesFromDOM(Element root, ArrayList<Player> players) {
+    private static ArrayList<Player> addPlayersFromDOM(Element root, Board board) {
+        ArrayList<Player> players = new ArrayList<>();
+
+        ArrayList<Element> elements = FileHandler.getChildren(root);
+        for (Element element : elements) {
+            char representation = element.getElementsByTagName("representation").item(0).getTextContent().charAt(0);
+            players.add(PlayerFactory.playerFromString(element.getElementsByTagName("type").item(0).getTextContent().toUpperCase(), representation, board));
+        }
+
+        return players;
+    }
+
+    private static ArrayList<Piece> addPiecesFromDOM(Element root, Board board) {
         ArrayList<Piece> pieces = new ArrayList<>();
 
         ArrayList<Element> elements = FileHandler.getChildren(root);
         for (Element element : elements) {
-            if (element.getTagName().equals("king"))
-                King piece = new King()
+            Piece piece;
+            String[] posText = element.getElementsByTagName("position").item(0).getTextContent().split(",");
+            Coordinate position = new Coordinate(Integer.parseInt(posText[0]), Integer.parseInt(posText[1]));
+            Player player = board.playerWithRep(element.getElementsByTagName("player").item(0).getTextContent().charAt(0));
+
+
+            switch (element.getTagName()) {
+                case "king" -> {
+                    piece = new King(player, position, board);
+                    player.setSovereign((Sovereign) piece);
+                }
+                case "pawn" -> {
+                    int direction = Integer.parseInt(element.getElementsByTagName("direction").item(0).getTextContent());
+                    piece = new Pawn(player, position, direction, board);
+                }
+                default -> piece = PieceFactory.pieceFromString(element.getTagName().toUpperCase(), player, position, board);
+            }
+
+            if (element.getElementsByTagName("sovereign").getLength() > 0)
+                player.setSovereign((Sovereign) piece);
         }
 
         return pieces;
@@ -121,12 +146,19 @@ public class SaveGame {
         Document doc = FileHandler.readXML(path);
         Element root = doc.getDocumentElement();
 
-        ArrayList<Piece> pieces = new ArrayList<>();
+        Board board = BoardFactory.boardFromString(root.getAttribute("type").toUpperCase(), userLayer);
+        addPlayersFromDOM((Element) root.getElementsByTagName("players").item(0), board);
 
-        NodeList nodeList = root.getChildNodes();
+        for (Piece piece : addPiecesFromDOM((Element) root.getElementsByTagName("pieces").item(0), board))
+            board.addPiece(piece);
 
+        if (root.getElementsByTagName("last_move").getLength() > 0) {
+            String[] lastMoveText = root.getElementsByTagName("last_move").item(0).getTextContent().split(",");
+            board.setLastMove(new Coordinate(Integer.parseInt(lastMoveText[0]), Integer.parseInt(lastMoveText[1])));
+        }
 
+        board.setUserLayerActive(true);
 
-        return null;
+        return board;
     }
 }

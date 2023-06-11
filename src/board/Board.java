@@ -16,6 +16,8 @@ public abstract class Board implements Runnable {
     private final Thread thread;
     public final ActiveToken token = new ActiveToken();
 
+    public final BoardType type;
+
     @Override
     public void run() {
         play();
@@ -94,7 +96,7 @@ public abstract class Board implements Runnable {
         else throw new RuntimeException("USERLAYER IN BOARD HAS NOT BEEN INITIALISED");
     }
 
-    public Board(int maxX, int maxY, UserLayer userLayer) {
+    public Board(int maxX, int maxY, UserLayer userLayer, BoardType type) {
         this.pieces = new ArrayList<>();
         this.players = new ArrayList<>();
 
@@ -103,6 +105,7 @@ public abstract class Board implements Runnable {
 
         this.userLayer = userLayer;
         userLayer.setBoard(this);
+        this.type = type;
 
         thread = new Thread(this);
     }

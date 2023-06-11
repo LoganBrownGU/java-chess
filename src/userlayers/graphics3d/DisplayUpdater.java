@@ -80,10 +80,10 @@ public class DisplayUpdater implements Runnable {
         highlightModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/highlight.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), true));
         checkmarkModel = new TexturedModel(OBJLoader.loadObjModel("assets/default_models/checkmark.obj", loader), new ModelTexture(loader.loadTexture("assets/default_textures/y.png"), false));
 
-        for (int i = 0; i < 30; i++) {
+        /*for (int i = 0; i < 30; i++) {
             takenPiece = board.getPieces().get(i);
             processTakenPieces();
-        }
+        }*/
     }
 
     public void addService(Service service) {
@@ -340,7 +340,7 @@ public class DisplayUpdater implements Runnable {
 
     @Override
     public void run() {
-        // todo load settings from config file
+        // todo exception occurs when end game called from pause menu
         init();
         ArrayList<ArrayList<Long>> frameTimes = new ArrayList<>();
         final int sampleLength = 1000;

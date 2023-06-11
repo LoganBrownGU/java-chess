@@ -6,14 +6,17 @@ import players.Player;
 
 public class PieceFactory {
     public static Piece pieceFromString(String str, Player player, Coordinate position, Board board) {
-        return switch (str) {
-            case "ROOK" -> new Rook(player, position, board);
-            case "QUEEN" -> new Queen(player, position, board);
-            case "KNIGHT" -> new Knight(player, position, board);
-            case "KING" -> new King(player, position, board);
-            case "BISHOP" -> new Bishop(player, position, board);
-            default -> null;
-        };
+        Piece piece;
+        switch (str) {
+            case "ROOK" -> piece = new Rook(player, position, board);
+            case "QUEEN" -> piece = new Queen(player, position, board);
+            case "KNIGHT" -> piece = new Knight(player, position, board);
+            case "KING" -> piece = new King(player, position, board);
+            case "BISHOP" -> piece = new Bishop(player, position, board);
+            default -> throw new RuntimeException("piece " + str + " not recognised");
+        }
+
+        return piece;
     }
 
     public static Piece promotePawn(String str, Pawn pawn) {

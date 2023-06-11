@@ -8,6 +8,8 @@ import players.Player;
 import players.PlayerType;
 import userlayers.UserLayer;
 
+import java.util.ArrayList;
+
 public class BoardFactory {
 
     private static StandardGameBoard standardBoard(StandardGameBoard board, Player player1, Player player2) {
@@ -203,6 +205,17 @@ public class BoardFactory {
 
         board.setUserLayerActive(true);
 
+
+        return board;
+    }
+
+    public static Board boardFromString(String str, UserLayer userLayer) {
+        Board board;
+
+        switch (str) {
+            case "STANDARD" -> board = new StandardGameBoard(userLayer);
+            default -> throw new RuntimeException("board type " + str + " not recognised");
+        }
 
         return board;
     }
