@@ -1,6 +1,7 @@
 package userlayers.graphics3d;
 
 import board.Board;
+import board.SaveGame;
 import entities.*;
 import fontRendering.TextMaster;
 import gui.*;
@@ -303,6 +304,7 @@ public class DisplayUpdater implements Runnable {
 
         ((Button) GUIMaster.getElementByID("return")).setEvent(element -> unPause());
         ((Button) GUIMaster.getElementByID("endgame")).setEvent(guiElement -> endGame());
+        ((Button) GUIMaster.getElementByID("savegame")).setEvent(guiElement -> SaveGame.saveGame("assets/savegames/save.xml", this.board));
     }
 
     private void unPause() {

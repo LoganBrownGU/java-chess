@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class Pawn extends Piece {
 
+    // todo need to tell userlayer if piece was taken en passant
+
     public final int direction;
     public final int promotionRank;
     private final ArrayList<Coordinate> enPassantMoves = new ArrayList<>();
@@ -88,7 +90,7 @@ public class Pawn extends Piece {
     }
 
     public Pawn(Player player, Coordinate position, int direction, Board board) {
-        super(player, position, PieceType.PAWN, board, "cn");
+        super(player, position, PieceType.PAWN, board, "pn");
         this.direction = direction;
         this.promotionRank = direction == 1 ? board.maxY - 1 : 0;
     }
